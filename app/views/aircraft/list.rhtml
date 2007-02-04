@@ -1,0 +1,28 @@
+<%= link_to "Edit Aircraft Types", :controller => "aircraft_type", :action => "index" %><br/>
+<%= link_to "Aircraft Maintenance", :controller => "maintenance", :action => "index" %>
+<%= link_to "Swap Aircraft Reservations", :controller => "reservation", :action => "swap" %>
+
+<% for office in @offices %>
+<h2> <%=office.name%> </h2>
+<table>
+  <tr>
+	<th>Type</th>
+	<th>Identifier</th>
+	<th>Prioritized?</th>
+  </tr>
+<% for aircraft in @aircrafts %>
+  <% if aircraft.office.to_s == office.id.to_s %> 
+  <tr <%= aircraft.deleted ? 'style="text-decoration: line-through; color: gray;"' : '' %>>
+	<td><%=aircraft.type_name%></td>
+	<td><%=aircraft.identifier%></td>
+	<td><%=aircraft.prioritized%></td>
+	<td><%= link_to 'Edit', :action => 'edit', :id => aircraft %></td>
+    <td><%= link_to 'Add Reservation Block',:controller =>'schedule', :action => 'create_aircraft_block', :aircraft_id => aircraft.id %></td>
+  </tr>
+  <% end %>
+<% end %>
+</table>
+<br />    
+<% end %>  
+
+<%= link_to 'New aircraft', :action => 'new' %>

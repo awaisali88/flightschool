@@ -1,0 +1,241 @@
+
+<div style="height:20px"></div>
+
+<script type="text/javascript">
+	Droppables.drops = []
+</script>
+
+
+<%
+   msie_width_fix = isMSIE? ? 0: -2;
+   msie_pos_fix = isMSIE? ? 1:1;
+   msie_height_fix = isMSIE? ? 1:0;
+
+   @days = 1
+	@aircraft_count = @aircrafts.size
+   air_height = 20
+   type_height = 17
+   graph_height = @aircraft_count*air_height+(@types.length+1)*type_height+@instructors.length*air_height 
+   graph_width = 680
+   label_width = 100.0
+   tops = {}
+   offset = 0
+   width_per_second = (graph_width-label_width-1)/(@days*16*60*60)
+   width_per_day = (graph_width-label_width-1)/(@days)
+   width_per_hour = width_per_second*60*60
+
+	@from = @date
+	@to = @date
+   @fixfrom = Time.local(@from.year,@from.month,@from.day,7)
+   tmp = @to 
+   @fixto = Time.local(tmp.year,tmp.month,tmp.day,23)
+   %>
+<!-- main schedule painting area -->
+<div id="graph" 
+style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;max-width:100%;height:<%=graph_height%>px">
+
+<!-- vertical background bars -->
+
+<% (0..@days-1).each{|x|%>
+	<div class="vbar" id="vbar1<%=x%>" 
+    style="top:-36px; height:20px; width:<%=width_per_day+2%>px;
+           left:<%=label_width+x*width_per_day%>px; 
+			border-left: 1px solid black;
+     		border-top: 1px solid black;
+			text-align: center;
+           ">
+    </div>
+   <div class="vbar" id="vbar1<%=x%>" 
+    style="top:-15px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+           left:<%=label_width+x*width_per_day%>px; background:#f0f5ff;
+			border-left:1px solid black;
+     		text-align: left;
+           ">
+    </div>
+	<% (1..15).each{|i| %>
+	   <div class="vbar" id="vbar3<%=x%>" 
+	    style="top:-15px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
+	     		text-align: left;
+	           ">
+	    </div>
+	<%	} %>
+    
+<% } %>
+
+<% can_see_names =  (can_approve_reservations? || instructor? || @is_admin) %>
+<!-- aircraft section -->
+	<% @types.each{|type| %>
+	    <div id="over<%=type.id%>" class="type_label_over" style="top:<%=offset%>px; width:<%=graph_width%>px">
+	        <div class="shift_right"><%= type.type_name %></div>
+	    </div>
+	    <% offset += type_height %>
+		<% @aircrafts.each{|aircraft| %>
+		    <% if aircraft.type.id != type.id 
+	    	       next
+		       end %>
+		    <div id="aircraft<%=aircraft.id%>" style="border-bottom: 1px solid black; height:<%=isMSIE? && !@master_schedule ? 20 : 14%>px;width:<%=graph_width%>px; top:<%=offset%>px" 
+		         class="aircraft_name">
+		    </div>
+		    <% if can_approve_reservations?%>
+			   	<script type="text/javascript">
+					Droppables.add('aircraft<%=aircraft.id%>', {
+				    onDrop: function(element) 
+				     { 
+						element.style.display = "none";
+						new Ajax.Updater('master_schedule_wrap', '/schedule/drag_drop_reservation?master=<%=@master_schedule%>&sdate=<%=@from.to_date.to_s%>&drag=' + element.id + '&drop=a<%=aircraft.id%>', {asynchronous:true, evalScripts:true});           
+					 }});
+				</script>
+            <% end %>			
+			<%= drop_receiving_element("aircraft"+aircraft.id.to_s, :url =>
+			    { :controller => "schedule", :action => "drag_drop_reservation" }) %>
+	         <% tops["a#{aircraft.id}"] = offset %>
+		     <% offset += air_height %> 
+		<% } %>
+	<% } %>
+	
+<!-- instructor section -->
+	<div style="top:<%=offset%>px;width:<%=graph_width%>px"  
+	   class="type_label_over">
+	<div class="shift_right">Instructors</div></div>
+	
+    <% offset += type_height %>
+	 <% @instructors.each{|instructor| %>
+		    <div id="instructor<%=instructor.id%>" style="border-bottom: 1px solid black;height:14px; width:<%=graph_width%>px; top:<%=offset%>px" class="aircraft_name">
+		    </div>
+             <% tops["i#{instructor.id}"] = offset %>
+		    <% offset += air_height %>
+		<% } %>
+		
+        <% if @master_schedule%>        
+        <script type="text/javascript">
+             function autoposition_titles(){
+                $("top_bar").style.top = "-32px";
+                sc = getPageScroll()
+                $("left_bar").style.left = sc[0]+"px";
+                if(sc[1]>80){
+                    $("top_bar").style.top = sc[1]-120+"px";                    
+                }
+             }
+    
+            if (window.addEventListener) {
+                window.addEventListener("scroll", function (e) { autoposition_titles(); }, false);
+            } else if (window.attachEvent) {
+	            window.attachEvent('on' + "scroll", function (e) { autoposition_titles(); });
+            }
+        </script>
+        <% end %>
+
+
+<!-- sliding left panel -->
+		<div id="left_bar" style="height:<%=graph_height%>px;width:100px;position:absolute; top:0px; left:0px; text-align:left;"  height=<%=graph_height%>>
+		<% @aircrafts.each{|a|%>
+    		<% if tops["a#{a.id}"].nil? then next end %>
+		    <div style="width:95px;max-width:95px;overflow:hidden;position:absolute;top:<%=tops['a'+a.id.to_s]%>px" class="aircraft_name">
+		         <%= a.identifier%>
+		    </div>
+		<% } %>
+    	 <% @instructors.each{|i| %>
+		    <div style="width:95px;max-width:95px;max-height:20px;overflow:hidden;position:absolute;top:<%=tops['i'+i.id.to_s]%>px" class="aircraft_name">
+		         <%= i.full_name_rev.gsub(' ','&nbsp;')%>
+		    </div>
+		<% } %>
+        </div> 
+
+
+<!-- sliding top panel -->
+
+<div id="top_bar" style="position:absolute; left:0px; top:-35px;"> 
+<% (0..@days-1).each{|x|%>
+	<div class="vbar" id="vbar5<%=x%>" 
+    style="background:#2255aa;width:<%=width_per_day%>px;       left:<%=label_width+x*width_per_day+1%>px; 		text-align: center;">
+		
+		
+		<%= start_form_tag({:action => '#',:controller => '#'},{:id => 'schedule_time_form',:style=>"margin:0px;padding:0px"})%>
+		<div style="float:left">
+		<label style="padding:2px;color:white;font-size:10pt">Schedule for: </label> 
+
+
+			<input name="date" id="date" value="<%=@date%>" style="display:none"/>
+			<input id="trigger" type="submit" value="<%=@date%>" onclick="return false;">
+		</div>
+		
+		<% if admin? %>
+			<div style="float:right; padding-top:5px;padding-right:5px">
+			<% if session[:schedule][:filter]=='false' %>
+			<a style="color:white" href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=true'})" >
+				Show <%=current_user.default_office.name%> Only</a>
+			<% else %>
+			<a style="color:white"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=false'})" >
+			Show All Offices</a>
+			<% end %>
+			<a href="#" style="color:white"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
+			</div>
+		<% end %>
+		
+		
+		
+		<div style="padding-top:4px">
+		<a href="#" style="color:white" 
+		   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule',{asynchronous:true, evalScripts:true, parameters:'date=' + previous_schedule_date});">	<< </a> &nbsp&nbsp&nbsp
+		
+		<a href="#" style="color:white" 
+		   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + next_schedule_date})
+		;"> >></a>
+		</div>
+		
+		<%= end_form_tag %>		
+    </div>
+
+   <div class="vbar"  
+    style=" top:23px;width:<%=width_per_hour+2%>px;
+           left:<%=label_width+x*width_per_day%>px; background:#f0f5ff;
+     		text-align: left;			border-left:1px solid black;
+     		
+           ">
+		<%= @days < 5 ? 7: nil%>
+    </div>
+
+
+	<% (1..15).each{|i| %>
+	   <div class="vbar" id="vbar3<%=x%>" 
+	    style="top:23px;width:<%=width_per_hour+2%>px;
+	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
+	     		text-align: left;
+	           ">
+			<%= @days < 5 ? (i+6)%12+1: nil%>
+	    </div>
+	<%	} %>
+<% } %>
+</div>
+   	
+</div>
+
+ 
+	<script type="text/javascript">
+	    Calendar.setup({
+	        inputField     :    "date",     // id of the input field
+	        ifFormat       :    "%Y-%m-%d",     // format of the input field (even if hidden, this format will be honored)
+	        button         :    "trigger",       
+	        daFormat       :    "%Y-%m-%d",   // format of the displayed date
+	        align          :    "Tl",           // alignment (defaults to "Bl")
+	        singleClick    :    true,
+			onClose	   :   function(cal){ 
+					cal.hide();
+                    show_loading_indicator('graph'); 
+					new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + $('date').value})
+				 }
+	    });
+	
+		
+		graph_height = <%= graph_height %>
+		graph_width = <%= graph_width %>
+		label_width = <%= label_width %>
+		tops = $H(<%= tops.to_json %>)
+		width_per_second = <%= width_per_second %>
+		width_per_day = <%= width_per_day %>
+		width_per_hour = <%= width_per_hour %>		
+		admin = <%= admin? %>
+		
+		new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + '<%= @date.to_s %>'})
+	</script>

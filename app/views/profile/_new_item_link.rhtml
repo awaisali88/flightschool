@@ -1,0 +1,10 @@
+<% case item_type 
+	when 'phone' %>
+	<%= link_to_remote 'New Phone Number', :url=>{:action=>'new_item',:new=>true,:item_type=>item_type} %>
+	<% when 'address' %>
+	<%= link_to_remote 'New Address', :url=>{:action=>'new_item',:new=>true,:item_type=>item_type} %>
+	<% when 'certificate' %>
+	<%= link_to_remote 'New Pilot Certificate', :url=>{:action=>'new_item',:new=>true,:item_type=>item_type} %>
+	<% when 'creditcard' %>
+    <%= link_to_remote 'New Credit Card', :url=>{:action=>'new_item',:new=>true,:item_type=>item_type} %>
+<% end %>

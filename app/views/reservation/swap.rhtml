@@ -1,0 +1,26 @@
+<%= start_form_tag :action=>'swap' %>
+<table>
+<tr><td><label>First Aircraft: </label></td>
+<td><select name="aircraft1"><%= options_for_select(options_for_aircrafts) %></select></td></tr>
+
+<tr><td><label>Second Aircraft</label></td>
+<td><select name="aircraft2"><%= options_for_select(options_for_aircrafts) %></select></td></tr>
+<tr><td><label>From:</label></td><td>
+    <select name="s_year">
+    <%= options_for_select [Time.new.year,Time.new.year+1],Time.now.year%>
+    </select>
+    <select name="s_month">
+    <%= options_for_select (1..12).map{|x| x},Time.now.month%>
+    </select>
+    <select name="s_day">
+    <%= options_for_select (1..31).map{|x| x},Time.now.day%>
+    </select>
+    <select name="s_hour">
+    <%= options_for_select [['12 am',0]]+(1..11).map{|x| [x.to_s+' am',x]}+[['12 pm',12]]+(1..11).map{|x| [x.to_s+' pm',x+12]}
+            %>
+    </select>
+</td></tr>
+<tr><td colspan="2">
+	<%= submit_tag 'Swap Aircraft Reservations' %>
+</td></tr></table>
+<%= end_form_tag %>

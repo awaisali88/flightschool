@@ -1,0 +1,33 @@
+<%= error_messages_for 'aircraft' %>
+
+<!--[form:aircraft]-->
+<p><label for="aircraft_office">Aircraft Location:</label><br/>
+<%= select('aircraft','office',options_for_offices) %></p>
+
+<p><label for="aircraft_aircraft_type">Aircraft Type</label><br/>
+<%= select 'aircraft', 'aircraft_type',options_for_aircraft_types  %></p>
+
+<p><label for="aircraft_identifier">Identifier</label><br/>
+<%= text_field 'aircraft', 'identifier'  %></p>
+
+<p><label for="aircraft_type_equip">Type/Equip</label><br/>
+<%= text_field 'aircraft', 'type_equip'  %></p>
+
+<p><label for="aircraft_color">Color</label><br/>
+<%= text_field 'aircraft', 'color'  %></p>
+
+<p><label for="aircraft_equipment_description">Equipment Description</label><br/>
+<%= text_area 'aircraft', 'equipment_description'  %></p>
+
+<p><label for="aircraft_prioritized">Prioritize the aircraft for reservations?</label><br/>
+<%= check_box 'aircraft', 'prioritized'  %></p>
+
+<p><label for="aircraft_tach">Tachometer reading on the aircraft</label><br/>
+<%= text_field 'aircraft', 'tach'  %></p>
+
+<p><label for="aircraft_hobbs">Hobb's meter reading on the aircraft</label><br/>
+<%= text_field 'aircraft', 'hobbs'  %></p>
+
+
+<!--[eoform:aircraft]-->
+

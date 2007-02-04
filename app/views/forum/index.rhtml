@@ -1,0 +1,38 @@
+
+<table width="100%" cellpadding="5" cellspacing="0" id="forum_table">
+<th width="55%">Topic</th>
+<th width="5%">Replies</th>
+<th width="13%">Last Post</th>
+<th width="12%">By</th>
+
+<% for topic in @topics %>
+	<% if topic.status =='approved' or admin?  %>
+		<tr valign="top">	
+		<% reply_count = topic.reply_count%>
+		<% latest_post = topic.latest_post %>
+
+		<td><div style=" max-width:550px; overflow: hidden; font-weight:bold ">
+		<%= link_to h(topic.one_line_summary), :action => 'view' , :topic => topic %></div></td>
+		<td><%=reply_count.to_s%></td>
+		<td><%=latest_post.creation_time %></td>
+		<td><%=latest_post.creator.short_name%></td>
+	
+		<%if admin? %>
+			<% if topic.status=='approved' %>
+				<td width="5%"><%= link_to "Hide",:action => 'hide_topic', :id => topic %></td>
+			<% else %>
+				<td width="5%"><%= link_to "Show",:action => 'show_topic', :id => topic %></td>
+			<% end %>
+		<%end%>
+		</tr>
+	<% end %>
+<% end %>
+
+</table>
+
+<%= link_to 'Previous page', {:forum_name=>params[:forum_name],:page => @pages.current.previous } if @pages.current.previous %>
+<%= link_to 'Next page', { :forum_name=>params[:forum_name],:page => @pages.current.next } if @pages.current.next %> 
+
+<script type="text/javascript">
+ color_table('forum_table')
+</script>

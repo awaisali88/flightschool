@@ -1,0 +1,15 @@
+<%= start_form_tag :action=>'update_exceptions', :controller=>'reservation_rules', :user => @user_id%>
+<p><i>Uncheck the rules that should not apply to this user
+</i></p>
+<table>
+<% @rules.each{|rule| %>
+    <tr><td style="text-align:left;">
+    <label><%=rule.description%></label>
+    </td><td>
+    <%=check_box_tag "rules[#{rule.id}]",'true', !@rule_exceptions.include?(rule.id)%>
+    </td></tr>
+<% } %>
+</table>
+
+<%= submit_tag 'Save Changes'%>
+<%= end_form_tag%>

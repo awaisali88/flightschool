@@ -1,0 +1,137 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+
+<h3>Unapproved users and profile changes</h3>
+
+<p><%= link_to 'Back', :action => 'users'%></p>
+
+<% if @group_users.empty? %>
+<p><b>No Pending Memberships</b></p>
+<% else %>
+<div id="user_table">
+<h4>Unapproved user groups</h4>
+<table>
+<th><%= link_to 'Name', :action => 'unapproved', :order_by => 'last_name' %></th>
+<th><%= link_to 'Email', :action => 'unapproved', :order_by => 'email' %></th>
+<th><%= link_to 'Verified', :action => 'unapproved', :order_by => 'email_verified' %></th>
+<th>Unapproved Roles</th>
+<th><%= link_to 'Created On', :action => 'unapproved', :order_by => 'created_at' %></th>
+<colgroup span="3"></colgroup>
+<colgroup span="1" width="100px"></colgroup>
+
+<% i=1 %>
+<% @group_users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.email%></td>
+<td><%=user.email_verified%></td>
+<td><%user.user_group_links.each{|link|%>
+        <% if !link.approved %>
+        <%= @groups[link.group_id].group_name + (link.approved ? '': '(*)')%>
+        <% end %>
+     <%}%>
+</td>
+
+<td><%=user.created_at.to_date.to_s%></td>
+</tr>    
+<% }%>
+</table>
+</div>
+<% end %>
+
+<% if @certificate_users.empty? %>
+<p><b>No Pending Certificates</b></p>
+<% else %>
+<div id="user_table">
+<table>
+<h4>Unapproved certificates</h4>
+<th><%= link_to 'Name', :action => 'unapproved', :order_by => 'last_name' %></th>
+<th><%= link_to 'Email', :action => 'unapproved', :order_by => 'email' %></th>
+
+<% i=1 %>
+<% @certificate_users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.email%></td>
+</tr>    
+<% }%>
+</table>
+</div>
+<% end %>
+
+
+
+<% if @email_users.empty? %>
+<b>No Pending Email</b>
+<% else %>
+<div id="user_table">
+<h4>Unapproved email addresses</h4>
+<table>
+<th><%= link_to 'Name', :action => 'unapproved', :order_by => 'last_name' %></th>
+<th><%= link_to 'Email', :action => 'unapproved', :order_by => 'email' %></th>
+<th><%= link_to 'Verified', :action => 'unapproved', :order_by => 'email_verified' %></th>
+<th><%= link_to 'Created On', :action => 'unapproved', :order_by => 'created_at' %></th>
+<colgroup span="3"></colgroup>
+<colgroup span="1" width="100px"></colgroup>
+
+<% i=1 %>
+<% @email_users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.email%></td>
+<td><%=user.email_verified%></td>
+<td><%=user.created_at.to_date.to_s%></td>
+</tr>    
+<% }%>
+</table>
+</div>
+<% end %>
+
+<% if @birthdate_users.empty? %>
+<b>No Pending Birthdates</b>
+<% else %>
+<div id="user_table">
+<h4>Unapproved birthdates</h4>
+<table>
+<th><%= link_to 'Name', :action => 'unapproved', :order_by => 'last_name' %></th>
+<th><%= link_to 'Email', :action => 'unapproved', :order_by => 'email' %></th>
+<th>Birthdate</th>
+
+<% i=1 %>
+<% @birthdate_users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.email%></td>
+<td><%=user.extra_user_info.birthdate%></td>
+</tr>    
+<% }%>
+</table>
+</div>
+<% end %>
+
+<% if @physical_users.empty? %>
+<b>No Pending FAA Physicals</b>
+<% else %>
+<div id="user_table">
+<h4>Unapproved FAA Physicals</h4>
+<table>
+<th><%= link_to 'Name', :action => 'unapproved', :order_by => 'last_name' %></th>
+<th><%= link_to 'Email', :action => 'unapproved', :order_by => 'email' %></th>
+<th>FAA Physical Date</th>
+
+<% i=1 %>
+<% @physical_users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.email%></td>
+<td><%=user.extra_user_info.faa_physical_date%></td>
+</tr>    
+<% }%>
+</table>
+</div>
+<% end %>

@@ -1,0 +1,56 @@
+<div class="reservation_box">
+
+    <label>Pilot:</label> <%= reservation.creator.full_name%><br/>
+    
+  
+    <label>Aircraft: </label> <%= reservation.aircraft.nil? ? 'No Aircraft/Ground School' : (reservation.aircraft.type.type_name+'('+
+                reservation.aircraft.type_equip+') '+
+                reservation.aircraft.identifier)%> <br/>
+    <label>Instructor: </label><%= 
+        reservation.instructor.nil? ? 'No Instructor' :
+    reservation.instructor.full_name%><br/>
+	<label>Time: </label>
+	<% if reservation.time_start.to_date == reservation.time_end.to_date %>
+   		<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %Y %I%p")%>-<%= reservation.time_end.strftime("%I%p") %>
+	<% else  %>
+		<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %Y %I%p")%>-<%= reservation.time_end.strftime("%a&nbsp;%b&nbsp;%d, %Y %I%p") %>
+	<% end %>
+   
+  
+    
+    <div style="position:absolute; top:10px; padding:5px; right:15px; background: #276cac; text-align:center">       
+   		<a style="color:white" href="#" onclick="new Ajax.Updater('reservation_sidebar', '/reservation/edit?id=<%= reservation.id %>', {asynchronous:true, evalScripts:true})">Edit Reservation</a>
+			 <br/>
+	       	<input type="button"  style="margin:4px" value="Cancel Reservation" 
+			onClick="new Ajax.Updater('reservation_sidebar','/reservation/cancel?id=<%= reservation.id %>',{asynchronous:true, evalScripts:true});"/>
+			 <br/>
+	       	<input type="button" style="margin:4px" value="Approve Reservation"
+			onClick="	new Ajax.Updater('reservation_sidebar','/reservation/approve?id=<%= reservation.id %>',{asynchronous:true, evalScripts:true});"/>
+ 	   	 	
+     </div>
+    
+        <br/><label>Automatic Verification:</label><br/>    
+        <% rules = reservation.violated_rules %>
+        <% rules.each{|rule|%>
+          	<a onclick="new Ajax.Updater('reservation_sidebar','/reservation/add_rule_exception?reservation_id=<%= reservation.id %>&rule_id=<%= rule.id %>&user_id=<%=reservation.pilot.id %>',{asynchronous:true, evalScripts:true});"/>Add an Exemption For This Pilot</a>
+		     <%}%>
+        <% if rules.size==0%>
+            <div>No problems found</div>
+        <% end %>
+        <br/><label>Comments:</label><br/>
+        <% reservation.comments.each{|comment|%>
+            <div>
+            <label>(<%=comment.created_at.strftime("%b %d %Y - %H:%M:%S ")%>) 
+                    <%= comment.creator.full_name %>:</label>
+            <span style="font-style: italic"><%= h comment.body%></span>            
+            </div>
+        <%}%>
+
+	   <%= form_remote_tag(:url => {:controller=>'reservation',:action => "add_comment",:id=>reservation.id}, :update => 'reservation_sidebar') %>
+            <table><tr>
+            <td><%= text_area_tag 'comment',nil,:size=>'55x2' %></td>
+            <td><%= submit_tag 'Add Comment'%></td>
+            </tr></table>
+        <%= end_form_tag %>
+        
+  </div>

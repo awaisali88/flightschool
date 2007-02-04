@@ -1,0 +1,11 @@
+<% content_for 'afterscript' do %>
+<script>
+draw_schedule(<%=@aircrafts.to_json%>,<%=@instructors.to_json%>,<%=@days%>);
+</script>
+<% end %>
+
+
+<%= link_to_remote 'test',:url=>{:controller=>'schedule',:action=>'reservation_data' ,:date=>@date+@days}%>
+
+<span style="cursor:pointer;" onclick="Ajax.Request('/schedule/reservation_data?date=<%=@date+@days%>',{asynchronous:true, evalScripts:true})">>></span>
+<div id="graph" style="position:relative; text-align:left; width:100%;max-width:100%;"></div>

@@ -1,0 +1,126 @@
+
+ <h3> Basic Information </h3>
+ <table>
+<% if not(@extra_info.nil?) && @extra_info.portrait_id != nil %>
+ <tr class="even_row"><td><label>Portrait:</label></td><td><img src="/image/show/<%=@extra_info.portrait_id%>"/></td></tr>
+<% end %>
+ <tr class="even_row"><td><label>Member Since:</label></td><td><%= @user.created_at.strftime("%a %b %d, %Y")%></td></tr>
+ <tr class="odd_row"><td><label>Last Login:</label></td><td><%= @user.last_login.strftime("%a %b %d, %Y")%></td></tr>
+
+ <tr class="even_row"><td><label>Default Location:</label></td><td><%= h @user.default_office.name %></td></tr>
+ 
+<% if not @extra_info.nil? %>
+ <tr class="odd_row"><td><label>Biography:</label></td><td><%= @extra_info.user_biography %></td></tr>
+ <tr class="even_row"><td><label>Birthday:</label></td><td><%= @extra_info.birthdate %></td></tr>
+ <tr class="odd_row"><td><label>Last Medical Date:</label></td><td><%= @extra_info.faa_physical_date %></td></tr>
+ <tr class="even_row"><td><label>Currency Date:</label></td><td><%= @extra_info.last_biennial_or_certificate_date %></td></tr>
+ <tr class="odd_row"><td><label>Pilot Certification:</label></td><td>
+   <% @user.user_certificate.each{|certificate| %>
+	<div id="certificate<%=certificate.id%>">
+		<%= render_partial 'profile/certificate', :item => certificate, :edit => false %>
+	</div>
+<% } %>
+ </td></tr>
+<% end %> 
+ </table>
+ 
+<h3> Contact Information </h3>
+<table width="100%">
+ <tr class="odd_row"><td><label>Email:</label></td><td><%= h @user.email %></td></tr>
+<tr><td valign="top">
+<label>Phone Numbers:</label>
+<% @user.user_phone_number.each{|phone| %>
+	<div id="phone<%=phone.id%>">
+	<%= render_partial 'profile/phone', :item => phone, :edit => false %>
+	</div>
+<% } %>
+</td>
+<td valign="top">
+<label>Addresses:</label>
+<% @user.user_address.each{|address| %>
+	<div id="address<%=address.id%>">
+		<%= render_partial 'profile/address', :item => address, :edit => false %>
+	</div>
+<% } %>
+</td>
+</tr>
+</table>
+
+<h3> Reservation and Billing Information </h3>
+ <table width="100%">
+ <tr><td>
+ <table>
+ <tr class="even_row"><td><label>Total Reservations:</label></td><td><%= @reservations_total%></td></tr>
+ <tr class="odd_row"><td><label>Total Non-Canceled Reservations:</label></td><td><%= @reservations_noncanceled%></td></tr>
+ <tr class="even_row"><td><label>Reservations in Last Month:</label></td><td><%= @reservations_month%></td></tr>
+ </table>
+ </td>
+ <td>
+ <table>
+ <tr class="even_row"><td><label>Current Balance:</label></td><td><%= @balance%></td></tr>
+ <tr class="odd_row"><td><label>Average Balance Over Past Month:</label></td><td><%= @balance_avg%></td></tr>
+ <tr class="even_row"><td><label>Number of Transactions in Past Month:</label></td><td><%= @transaction_count%></td></tr>
+ </table>
+ </td>
+ </tr>
+ </table>
+ 
+ <h3> Billing Activity </h3>
+ 
+ <% if @charges.size==0 %>
+<h5>No recorded charges.</h5>
+<% else %>
+
+<table>
+<th>Date</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Balance</th>
+
+<% @charges.each{|charge|%>
+<%@i||=0; @i=@i+1%><tr class="<%=@i.odd? ? "even_row" : "odd_row" %>" >
+<td style="width:100px"><%= charge.created_at.to_date%> </td>
+<td><div>
+<% var = charge.charge_type%>
+<% case var
+   when 'flight'%>
+	Flight on <%=charge.flight_date%>. Aircraft: <%=charge.aircraft.identifier%>
+	<% if not charge.instructor_id.nil?%>  
+	, w. <%=charge.instructor.full_name%>.
+	<% end %> 
+<% when 'deposit'%> Balance Deposit
+<% when 'headset'%> Headset Rental
+<% when 'simulation'%> Simulator Use
+<% when 'supplies'%> Supplies
+<% when 'correction'%> Correction
+<% when 'depit'%> Balance Depit
+<% when 'ground'%> Ground Fee
+<% when 'fee'%> Fee charge
+<% end %>
+</div>
+<% if (not charge.notes.nil?) && charge.notes!="" %>
+	<div><label>Note:</label> <%= charge.notes%></div>
+<% end %>
+</td>
+<td style="text-align:right;width:70px"><%= Kernel.sprintf("%.2f",charge.charge_amount) %></td>
+<td style="text-align:right;width:70px"><%= Kernel.sprintf("%.2f",charge.running_total) %></td>
+</tr>    
+<% }%>
+</table>
+<% end %>
+ 
+ 
+ <h3> Forum Activity </h3>
+  <table>
+ <tr class="even_row"><td><label>Total Forum Posts:</label></td><td><%= @posts.size%></td></tr>
+ <tr class="even_row"><td><label>Recent Posts:</label></td><td></td></tr>
+ </table> 
+<% i = 0%>
+ <table>
+ <% @posts.each{|post|%>
+ <% if i>10 then break end %>
+ <% i = i+1%>
+ <tr class=<%=i.even? ? '"even_row"' : '"odd_row"'%><td><div style="font-weight:bold"><%=post.parent.one_line_summary%></div>
+ <div><%=post.body[0..200] + (post.body.size>200?"...":"") %></div></td></tr>
+ <% }%>
+ </table>

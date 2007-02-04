@@ -1,0 +1,9 @@
+<h1>Editing reservation_rule</h1>
+
+<%= start_form_tag :action => 'update', :id => @reservation_rule %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<%= end_form_tag %>
+
+<%= link_to 'Show', :action => 'show', :id => @reservation_rule %> |
+<%= link_to 'Back', :action => 'list' %>

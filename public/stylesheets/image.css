@@ -1,0 +1,48 @@
+#image_pick_or_upload form{
+    border: none;
+    margin:0px;
+    padding: 0px;
+}
+#image_topbar{
+    text-align: right;
+    width: 800px;
+    background: #276cac;
+    margin-bottom: 5px;
+}
+#image_topbar_heading{
+    color: white;
+    padding-left: 5px;
+    font-weight: bold;
+    float:left;
+}
+
+#image_topbar a{
+    color: white;
+    padding: 5px;
+}
+
+#overlay{
+    width:800px;
+    height:400px;
+    background: #f0f5ff;
+    border:2px solid lightblue;
+	z-index: 255;
+}
+
+#image_value_field{
+    background: red;
+    display: none;
+}
+
+img{
+    border: 2px solid #276cac;
+}
+
+.image_browser{
+	margin: 5px;
+	border: 1px solid #276cac;
+}
+
+#image_selector{
+	padding: 10px;
+}

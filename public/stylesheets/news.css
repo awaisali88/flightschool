@@ -1,0 +1,32 @@
+.news_body{
+    padding-left:20px;
+    padding-right:20px; 
+    text-align: left;     
+}
+
+.news_body p{
+    font-family: arial;
+    font-size: 1em;
+    margin:0px;
+    padding: 0px;
+    margin:5px;
+}
+
+.news_body img{
+    border: 2px solid #276cac;
+    padding: 3px;
+}
+
+.link_bar a{
+	width: 100%;
+	font-weight: bold;
+	text-decoration: none;
+	color: white;
+	cursor: pointer;
+}
+
+.link_bar td{
+	background: #2255aa;
+	border: 1px solid black;
+	text-align: center;
+}

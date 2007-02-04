@@ -1,0 +1,87 @@
+
+
+<%content_for 'sidebar' do%>
+	<div id="reservation_sidebar" style="position:absolute">
+		<%= render_component(:controller => 'schedule', :action => 'quickpick')%>
+	</div>
+	<div style="height:500px"></div>
+	
+<% end %>
+
+<script type="text/javascript">
+      function autoposition_reservation_sidebar(){
+         sc = getPageScroll()
+         $("reservation_sidebar").style.top = "160px";
+         if(sc[1]>160){
+             $("reservation_sidebar").style.top = sc[1]+"px";                    
+         }
+      }
+
+     if (window.addEventListener) {
+         window.addEventListener("scroll", function (e) { autoposition_reservation_sidebar(); }, false);
+     } else if (window.attachEvent) {
+         window.attachEvent('on' + "scroll", function (e) { autoposition_reservation_sidebar(); });
+     }
+ </script>
+
+
+<% if not params[:showall] %>
+    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
+<% end %>
+
+<table  width="100%" id="reservation_table">
+
+<tr><th colspan="2"></th></tr>
+
+<% @reservations = @reservations.reverse %>
+<% if @reservations.size == 0 %>
+<tr><td>No Upcoming Reservations.</td></tr>	
+<% end %>
+<% @reservations.in_groups_of(2){|pair| %>
+
+<tr>
+	<% pair.each{|reservation| %>
+		<% if reservation.nil? then next end %>
+	<td style="">
+	<% expired = reservation.time_end<Time.now %>
+	<table><tr><td>		
+    <div style="border: 1px solid black; height:10px;width:10px; background:<%=expired ? 'black' : (reservation.status=='approved' ? 'lightgreen' : (reservation.status=='canceled' ? '#f2a3a0' : '#eeee00'))%>;"> </div>
+	</td>
+	<td>
+	   <a href="#" onclick="new Ajax.Updater('reservation_sidebar', '/reservation/edit?id=<%= reservation.id %>', {asynchronous:true, evalScripts:true,parameters:'return_to='+escape('<%= request.env['REQUEST_URI'] %>')})">
+		<% if reservation.time_start.to_date == reservation.time_end.to_date %>
+	   		<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %I%p")%>-<%= reservation.time_end.strftime("%I%p") %>
+		<% else  %>
+   			<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %I%p")%>-<%= reservation.time_end.strftime("%a&nbsp;%b&nbsp;%d, %I%p") %>
+		<% end %>
+	   <% pilot = reservation.pilot%>
+	       w. <%= pilot.first_names+' '+pilot.last_name[0..0]+'.'%>
+	   </a>
+	</td></tr></table>
+</td>
+<% } %>
+</tr>
+<%}%>
+<tr><th colspan="2"></th></tr>
+
+</table>
+
+<% if params[:showall] %>
+<div style="text-align:center">
+    <%= link_to 'Older Reservations', { :user=>params[:user],:showall=>true,:page => @reservation_pages.current.next } if @reservation_pages.current.next %> 
+    <%= link_to 'Newer Reservations', {:user=>params[:user],:showall=>true,:page => @reservation_pages.current.previous } if @reservation_pages.current.previous %>
+</div>
+<% else %>
+    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
+<% end %>
+
+<div style="padding-left:80px">
+<table cellspacing="10px"><tr>
+<td style="text-align:center;width:100px"><div style="padding-top:5px;display:marker; height:30px;  background: lightgreen;"><label style="color:#001b57">Approved</label></div></td>
+<td style="text-align:center;width:100px"><div style="padding-top:5px;display:marker; height:30px; background: #eeee00;"><label style="color:#001b57">Awaiting Approval</label></div></td>
+<td style="text-align:center;width:100px"><div style="padding-top:5px;display:marker; height:30px; background: #f2a3a0;"><label style="color:#001b57">Cancelled</label></div></td>
+<td style="text-align:center;width:100px"><div style="padding-top:5px;display:marker; height:30px; background: black;"><label style="color:#71b4d0">Expired</label></div></td>
+</tr></table>
+</div>
+
+<script type="text/javascript">color_table('reservation_table')</script>

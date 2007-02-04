@@ -1,0 +1,4 @@
+<%= render_partial 'charges_table' %>
+<%= link_to 'Previous page', {:user=>params[:user],:page => @pages.current.previous } if @pages.current.previous %>
+<%= link_to 'Next page', { :user=>params[:user],:page => @pages.current.next } if @pages.current.next %> 
+

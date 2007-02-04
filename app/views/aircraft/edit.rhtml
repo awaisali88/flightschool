@@ -1,0 +1,12 @@
+<% if @aircraft.deleted %>
+	<%= link_to "Bring Back This Aircraft (Undo Delete)", :action => "undelete", :id=>@aircraft.id %>
+<% else %>
+	<%= link_to "Delete This Aircraft", :action => "delete", :id=>@aircraft.id %>
+<% end %>
+
+<%= start_form_tag :action => 'update', :id => @aircraft %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %>
+<%= end_form_tag %>
+
+<%= link_to 'Cancel', :action => 'list' %>

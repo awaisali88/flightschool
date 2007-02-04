@@ -1,0 +1,25 @@
+<% i=0 %>
+<% for post in @posts %>
+	<% if post.status=='rejected' %>
+		<% if admin? %>
+			<%= render_partial 'layouts/display_item',
+				:heading=>'<div class="heading_link">'+link_to('Show Post',:action=>'show_post',:id=>post.id)+'</div>'+"#{post.creator.full_name} on #{post.creation_time}:", 
+				:content=>(h post.body).gsub(/$/,'<br/>') %>
+		<% end %>
+	<% else %>
+		<%= render_partial 'layouts/display_item',
+			:heading=>((admin? and i>0) ? '<div class="heading_link">'+link_to('Hide Post',:action=>'hide_post',:id=>post.id)+'</div>' : '')+"#{post.creator.full_name} on #{post.creation_time}:", 
+			:content=>(h post.body).gsub(/$/,'<br/>') %>
+	<% end %>
+	<% i=i+1 %>
+<% end %>
+
+<%= pagination_links(@post_pages,:params => {:topic => @topic.id })%>
+
+<%= start_form_tag :action => 'create_post', :topic => @topic %>
+	<label for="post_body">Add Reply</label><br/>
+	<%= text_area 'post', 'body', :cols=> 80 %><br/>
+	<%= submit_tag "Add Reply" %>
+	<%= link_to 'Back to '+ @forum.description, :action => 'index', :forum_name => @forum.name%>
+<%= end_form_tag %>
+

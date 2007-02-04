@@ -1,0 +1,15 @@
+<table>
+  <tr>
+  <% for column in BillingCharge.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for record in @records %>
+  <tr>
+  <% for column in BillingCharge.content_columns %>
+    <td><%=h record.send(column.name) %></td>
+  <% end %>
+  </tr>
+<% end %>
+</table>

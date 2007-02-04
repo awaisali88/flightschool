@@ -1,0 +1,28 @@
+<%content_for 'sidebar' do%>
+	<div id="reservation_sidebar" style="position:absolute">
+	</div>
+	<div style="height:500px"></div>
+	
+<% end %>
+
+<script type="text/javascript">
+      function autoposition_reservation_sidebar(){
+         sc = getPageScroll()
+         $("reservation_sidebar").style.top = "160px";
+         if(sc[1]>160){
+             $("reservation_sidebar").style.top = sc[1]+"px";                    
+         }
+      }
+
+     if (window.addEventListener) {
+         window.addEventListener("scroll", function (e) { autoposition_reservation_sidebar(); }, false);
+     } else if (window.attachEvent) {
+         window.attachEvent('on' + "scroll", function (e) { autoposition_reservation_sidebar(); });
+     }
+ </script>
+
+<%@reservations.each{|reservation|%>
+    <div id="reservation<%=reservation.id%>">
+    <%=render_partial 'reservation', :reservation => reservation, :editable => false,:allow_approves => true%>
+    </div>
+<%}%>

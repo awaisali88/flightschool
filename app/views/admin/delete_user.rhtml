@@ -1,0 +1,7 @@
+<p><i>WARNING: This will PERMANENTLY delete a user along with any reservation and billing records they might have. Use 'suspend user' instead of this unless you are absolutely sure that you want to completely remove the record.</i></p>
+<%= start_form_tag%>
+<label>ID</label> <%= text_field_tag 'id',nil,:size=>'4'%>
+<label>First</label> <%= text_field_tag 'first',nil,:size=>'20'%>
+<label>Last</label> <%= text_field_tag 'last',nil,:size=>'20'%>
+<%= submit_tag 'DELETE'%>
+<%= end_form_tag%>

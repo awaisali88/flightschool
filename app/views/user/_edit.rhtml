@@ -1,0 +1,32 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+
+<div class="user_edit">
+  <table>
+    <%= form_input :text_field, "First Name", "first_names" %>
+    <%= form_input :text_field, "Last Name","last_name" %>
+    <%= form_input :text_field, "Email", "email", :size => 30 %>
+    <%= form_input :text_field, "Birthdate", "birthdate" %>
+    <%= form_input :check_box, "US Citizen", "is_us_citizen"%>
+ </table>
+   <%= render_partial 'password', :submit => false %>
+   <h3>Primary Phone Number</h3>
+   <%= render_partial 'profile/user_phone_number', :submit => false %>
+   <h3>Primary Address</h3>
+   <%= render_partial 'profile/user_address', :submit => false %>
+   <h3>Extra Information</h3>
+  <table>
+    <%= form_input :text_field, "Last FAA Physical date", "faa_physical_date", :size => 30 %>
+    <%= form_input :text_field, "Last Biennial Date (or Rating or Certificate)", "currency_date" %>
+ </table>
+  <h3>Miscellaneous</h3>
+  <div><table>
+    <%= form_input :text_area, "About You: ", "user_biography", :size =>'50x10' %>
+    <%= form_input :check_box, "Share Contact Information?","is_contact_info_shared" %>
+ </table></div>
+ 	
+   
+    <% if submit %>
+      <%= form_input :submit_button, (user.new_record? ? 'Signup' : 'Change Settings'), :class => 'two_columns' %>
+    <% end %>
+</div>

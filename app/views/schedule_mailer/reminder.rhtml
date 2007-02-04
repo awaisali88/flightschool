@@ -1,0 +1,9 @@
+Dear <%= @name %>,
+
+This is a reminder that you have following reservation(s) scheduled for tomorrow: 
+
+<% @reservations.each{|reservation|%>--------------------------------------------------------
+Aircraft: <%=reservation.aircraft.nil? ? 'No Aircraft/Ground School' : reservation.aircraft.type_and_identifier %> <%=reservation.instructor_id.nil? ? '' : "\nInstructor: #{reservation.instructor.full_name}"%>
+<% if reservation.time_start.to_date == reservation.time_end.to_date then%>On: <%= reservation.time_start.strftime("%a %b %d")%> (<%= reservation.time_start.strftime("%I%p")%> - <%= reservation.time_end.strftime("%I%p")%>) <% else %>From: <%= reservation.time_start.strftime("%a %b %d %I%p")%>
+To: <%= reservation.time_end.strftime("%a %b %d %I%p")%><% end %>
+<%}%>

@@ -1,0 +1,23 @@
+
+<%= error_messages_for 'user' %>
+
+Please enter new name/email for <%= @user.full_name %>
+
+<%= start_form_tag :action=>'edit_user', :id => @user.id %>
+<table><tr><td>
+<label>First Name(s)</label></td><td><%= text_field 'user', 'first_names' %></td></tr><tr><td>
+<label>Last Name</label></td><td><%= text_field 'user', 'last_name' %></td></tr><tr><td>
+<label>Email</label></td><td><%= text_field 'user', 'email' %></td></tr>
+</table>
+<%= submit_tag 'Update'%>
+<%= end_form_tag%>
+
+Change user's password:
+<%= start_form_tag :action=>'edit_password', :id => @user.id %>
+<table>
+<tr><td>
+<label>Password</label></td><td><%= password_field 'user', 'password' %></td></tr><tr><td>
+<label>Confirm Password</label></td><td><%= password_field 'user', 'password_confirmation' %></td></tr>
+</table>
+<%= submit_tag 'Update'%>
+<%= end_form_tag%>

@@ -1,0 +1,32 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+<%= form_remote_tag(:update => @div_name, 
+					:url => {:action => :edit_entry, :profile_id => @user_id, :item_id =>@item_id, :item_type => @item_t, :new=>@new_entry, :div_name=>@div_name, :real_div=>@real_div})  %>
+<table>
+	<tr>
+	  <td>Screenname:</td> <td><%= text_field(@item_t,"screenname", :value=>@item.screenname) %></td>
+	</tr>
+	<tr>
+	  <td>Service:</td> <td><%=collection_select(@item_t,"service", @services,"to_s","to_s", 'aol', :selected=>@item.service)%></td>
+	</tr>
+</table>
+
+<% if @new_entry %>
+  <%= submit_tag 'Submit New Address' %>
+<%= end_form_tag %>
+
+<p>
+<%= link_to_remote("Cancel",
+				   :update => @div_name,
+				   :url => { :action => :show_list, :item_type => @item_t, :profile_id => @user_id, :div_name => @div_name}) %>
+				   </p>
+<% else %>
+  <%= submit_tag 'Submit Edit' %>
+<%= end_form_tag %>
+
+<p>
+<%= link_to_remote("Cancel",
+				   :update => @div_name,
+				   :url => { :action => :show_entry, :item_type => @item_t, :profile_id => @user_id, :div_name => @div_name, :real_div => @real_div, :item_id => @item_id}) %>
+					</p>
+<% end %>

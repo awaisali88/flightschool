@@ -1,0 +1,20 @@
+
+<%= render_partial 'layouts/sidebox', :box_title => 'New Reservation',
+    :box_contents => """
+<div id=\"reservation_editor\">
+	#{start_form_tag ({:action => "create"}, {:id=>'reservation_create_form'}) }
+		#{render :partial=>'reservation_editor'}
+		<table width=\"170px\">
+		<tr>
+			<th style=\"text-align:center\">
+				#{submit_tag 'Create Reservation',:class=>'button',:style=>'width:150px'}
+			</th>
+		</tr>					
+		</table>
+	#{ end_form_tag }
+</div>
+""" %>
+
+<script type="text/javascript">
+	displaying_new_reservation_form = true //for automatic date widget adjustments on create reservation form
+</script>

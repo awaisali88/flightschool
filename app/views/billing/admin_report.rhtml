@@ -1,0 +1,43 @@
+<% if @earliest.nil? %>
+	No flight records exist.
+<% else %>
+	<%= start_form_tag ({:action => 'admin_report'},{:method=>'get'}) %>
+	<p>Start from: <select name="date[year]">
+	<%= options_for_select (@earliest.created_at.year..Time.new.year).map{|x| x}, Time.new.year %>
+	</select>
+	<select name="date[month]">
+	<%= options_for_select [['January',1],['February',2],['March',3],['April',4],['May',5],['June',6],['July',7],['August',8],['September',9],['October',10],['November',11],['December',12]], Time.new.month%>
+	</select> 
+	Show: <select name="date[range]">
+	<%= options_for_select [['1 month',1],['6 months',6],['1 year',12]],1 %> 
+	</select>
+	 <%= submit_tag 'Show' %>
+
+	<%= end_form_tag %>
+<% end %>
+
+<% if not params[:date].nil? %>
+
+<table>
+<h4>Aircraft flight statistics</h4>
+<th>Aircraft</th>
+<th>Solo hours flown</th>
+<th>Dual hours flown</th>
+<th>Total hours flown</th>
+<th>Total charges</th>
+<colgroup span="3"></colgroup>
+<colgroup span="1"></colgroup>
+
+<% i=1 %>
+<% @aircrafts.each{|airc|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td style="text-align:right"><%= airc.identifier %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@solo[airc]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@duo[airc]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@solo[airc]||0).to_f+(@duo[airc]||0).to_f%></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.2f",(@charges[airc]||0).to_f %></td>
+</tr>    
+<% }%>
+</table>
+<% end %>

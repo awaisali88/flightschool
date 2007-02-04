@@ -1,0 +1,9 @@
+<div id="pending_reservation_browser">
+<%= render :partial=>'need_approval' %>
+</div>
+
+<script type="text/javascript">
+function refreshContent(){
+	new Ajax.Updater('pending_reservation_browser', '<%= request.env['REQUEST_URI'] %>', {asynchronous:true, evalScripts:true})
+}
+</script>

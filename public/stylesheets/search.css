@@ -1,0 +1,30 @@
+#search_box, #search_box form{
+    padding: 0px;
+    margin: 0px;
+}
+
+
+#search{
+    height: 23px;
+    width: 112px;
+    margin: 3px;
+    margin-top:5px;
+    padding: 0px;
+    border: 1px solid gray;
+    vertical-align: center;
+}
+
+.submit_button{
+    margin: 2px;
+    margin-top: 6px;
+    padding: 3px;
+    border: none;
+    background: #001b57;
+    color: white;
+    font-weight: bold;
+    font-family: arial;
+}
+
+.submit_button:hover{
+    background: #276cac;
+}

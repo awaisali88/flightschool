@@ -1,0 +1,17 @@
+#news_page{
+	margin-right: 370px;
+}
+
+.news_item{
+	margin: 20px;
+}
+
+.news_headline{
+	font-style: bold;
+	font-size: 13pt;
+	background: #88ccff;
+}
+
+.news_body{
+	margin: 20px;
+}

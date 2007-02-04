@@ -1,0 +1,24 @@
+<form action="/file/save" enctype="multipart/form-data" method="post">
+ <label>Upload new file:</label> <%= file_field("file", "file",:size => "20") %> 
+ <%= submit_tag("Upload file") %>
+</form>
+
+<br/><br/>
+<table width="100%" id="file_table">
+	<tr><th width="30%">File Name</th><th width="30%">File Type</th><th width="30%">URL</th></tr>		
+<% @files.each{|file| %>
+	<tr>
+	<td><%= file['file_name'] %></td>
+	<td><%= file['file_type'] %></td>
+	<td><%= link_to "/file/get/#{file['id']}","/file/get/#{file['id']}"  %></td>
+	<td>
+		   <%= form_tag ({ :controller=>'file',:action=>'delete',:id=>file['id']},
+				{:onsubmit=>"return confirm('This will permanently delete the file. Proceed?')",:style=>"display:inline"})%>
+			<%= submit_tag 'Delete' %>
+			<%= end_form_tag %>
+	</td>
+	</tr>
+<%  } %>
+</table>
+<script type="text/javascript">color_table('file_table')</script>
+<%= pagination_links @pages %>

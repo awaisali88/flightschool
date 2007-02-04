@@ -1,0 +1,38 @@
+<div id="sidebar_nav">
+<dl>
+<% if admin? %>
+<dt class="sidebar_nav_header">Admin Links</dt>
+<dt><%= link_to 'Edit Static Pages', :action => 'edit', :controller =>'static' %></dt>			
+<dt><%= link_to 'Post News', :action => 'list', :controller =>'news' %></dt>			
+<dt><%= link_to 'Manage Users', :action => 'users', :controller =>'admin' %></dt>			
+<dt><%= link_to 'Manage Aircraft', :action => 'aircrafts', :controller =>'admin' %></dt>			
+<dt><%= link_to 'Approve Reservations', :action => 'need_approval', :controller =>'schedule' %></dt>			
+<dt><%= link_to 'Reservation Rules', :action => 'index', :controller =>'reservation_rules' %></dt>	
+<dt><%= link_to 'Billing', :action => 'index', :controller => 'billing' %>		
+<% end %>
+
+<% if instructor?%>
+<dt class="sidebar_nav_header">Instructor Links</dt>
+<dt><%= link_to 'Instructor Reservations', :action => 'instructor_reservations', :controller =>'schedule' %></dt>
+<dt><%= link_to 'Block Out Times', :action => 'create_instructor_block', :controller =>'schedule' %></dt>
+<% end %>
+
+<% if user?%>
+<dt class="sidebar_nav_header">User Links</dt>
+<dt><%= link_to 'Master Schedule', :action => 'master_schedule', :controller =>'schedule' %></dt>			
+<dt><%= link_to 'Search Users', :action => 'find', :controller =>'profile' %></dt>
+<dt><%= link_to 'Change Password', :action => 'change_password', :controller =>'user' %></dt>
+<% else %>
+
+<dt class="sidebar_nav_header">Main Navigation</dt>
+<dt><%= link_to 'News', :action => 'index', :controller =>'news' %></dt>
+<% if not user?%>
+<dt><%= link_to 'Alternate Login', :action => 'alternate_login', :controller =>'user' %></dt>
+<dt><%= link_to 'Forgot Password', :action => 'forgot_password', :controller =>'user' %></dt>
+<% end %>
+
+<% end %>
+
+</dl>
+
+</div>

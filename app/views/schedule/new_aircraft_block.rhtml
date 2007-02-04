@@ -1,0 +1,12 @@
+Created block overlaps with following existing reservations. You may cancel these reservations and notify their creators.
+<% @not_editable = true #prevents the reservation partials from displaying edit controls %> 
+<% @conflicts.each { |r| %>
+	<div class="reservation_box"> 
+	<%= render_partial 'simple_reservation', :reservation => r %>
+	</div>
+<% } %>
+
+<%=  start_form_tag :controller => 'schedule',:action => 'save_aircraft_block', :s_time => @s_time, :e_time => @e_time, :aircraft_id => params[:aircraft_id] %>
+	<%= submit_tag 'Proceed with the Block' %> <i>This will cancel the overlapping reservations</i><br/><br/>
+	<%= link_to "Go Back", :controller => "schedule", :action => "create_aircraft_block",:aircraft_id=>params[:aircraft_id] %>
+<%= end_form_tag %>

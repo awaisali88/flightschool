@@ -1,0 +1,75 @@
+<h2>Schedule for <%=@month%>/<%=@day%>/<%=@year%></h2>
+<% day = Date.today %>
+<table cellpadding="0" cellspacing="0" width="100%">
+		<td style="width:100px;height:20px;max-width:100px;max-height:20px">  </td>
+	<% (7..22).each{|i|%>
+		<td style="border:1px solid lightblue;height:20px;width:6%;max-height:20px">
+			<%= i==12 ? 12 : i%12 %><%=i<12 ? 'am':'pm'%>
+		</td>
+	<% } %>
+	
+	<% @types.each{|type| %>
+		<tr><td colspan="17" style="border:2px solid black;"><div style="font-weight:bold;font-size:16pt;margin-left:50px;"> 
+			<%=type.type_name+'s' %> </div></td></tr>
+		<% @aircrafts.each{|aircraft| %>
+		    <% if aircraft.type.id != type.id then next end %>			
+			<tr>
+				<td style="width:100px;height:20px;max-width:100px;max-height:20px"> 
+					<div style="width:100px;height:20px;max-width:100px;max-height:20px;overflow:hidden; "> 
+						<%= aircraft.identifier%> 
+					</div>
+				</td>
+				<% i = 7 %>
+				<% begin %>
+					<% r = is_reserved @aircraft_reservations[aircraft.id], @year,@month,@day,i %>
+						<% if r %>
+							<% len = ((r.time_end-Time.local(@year,@month,@day,i))/3600).round %>
+							<% if len > 23-i then len = 23-i end %>
+							<% i = i+len%>
+							
+							<td colspan="<%=len%>" style="border:1px solid black; max-width:6%; overflow: hidden;">
+								<div style="position:relative;height:20px; overflow: hidden; ">
+									<div style="position:absolute;background:lightgrey;height:20px;width:5000px;"></div>
+									<div style="position:absolute; top:3px;left:3px;"> <%= r.creator.full_name_rev.gsub(' ','&nbsp;') %> </div> 
+								</div>							
+							</td>			
+						<% else %>
+							<% i = i+1 %>
+							<td style="border:1px solid black; max-width:6%; overflow: hidden;"><!-- --> &nbsp;
+							</td>			
+						<% end %>
+				<% end while i<23 %>
+			</tr>
+		<% } %>	
+	<% } %>
+		<tr><td colspan="17" style="border:2px solid black;"><div style="font-weight:bold;font-size:16pt;margin-left:50px;"> 
+		Instructors</div></td></tr>
+	<% @instructors.each {|instructor|%>
+		<tr>
+			<td style="width:100px;height:20px;max-width:100px;max-height:20px"> 
+				<div style="width:100px;height:20px;max-width:100px;max-height:20px;overflow:hidden; "> 
+					<%= instructor.full_name.gsub(' ','&nbsp;') %> 
+				</div>
+			</td>
+					<% i = 7 %>
+					<% begin %>
+						<% r = is_reserved @instructor_reservations[instructor.id], @year,@month,@day,i %>
+							<% if r %>
+								<% len = ((r.time_end-Time.local(@year,@month,@day,i))/3600).round %>
+								<% if len > 23-i then len = 23-i end %>
+								<% i = i+len%>
+								<td colspan="<%=len%>" style="border:1px solid black; max-width:6%; overflow: hidden;">
+									<div style="position:relative;height:20px; overflow: hidden; ">
+									<div style="position:absolute;background:lightgrey;height:20px;width:5000px;"></div>
+										<div style="position:absolute; top:3px;left:3px;"> <%= r.creator.full_name.gsub(' ','&nbsp;') %> </div> 
+									</div>							
+								</td>			
+							<% else %>
+								<% i = i+1 %>
+								<td style="border:1px solid black; max-width:6%; overflow: hidden;"><!-- --> &nbsp;
+								</td>			
+							<% end %>
+					<% end while i<23 %>
+		</tr>
+	<% } %>
+</table>

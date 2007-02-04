@@ -1,0 +1,8 @@
+<%= start_form_tag :action => 'new' %>
+  <%= render :partial => 'editor' %>
+  <%= submit_tag "Create Article" %>
+<%= end_form_tag %>
+
+<script type="text/javascript">
+  activate_on_load('document_one_line_summary')
+</script>

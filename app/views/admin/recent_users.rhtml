@@ -1,0 +1,11 @@
+<p>
+<%= form_tag ({:action=>'recent_users'}, {:method=>:get}) %>
+<label>Show users from </label>
+<select name="filter_office" style="width:150px">
+	<%= options_for_select(options_for_offices.map{|e| [e[0],e[1].to_s]}<<['All Offices','none'],session[:filter_office]) %>
+</select> 
+<%= submit_tag 'Filter'%>
+<%= end_form_tag %>
+</p>
+
+<%=render_partial 'user_table', :index=>:pages%>

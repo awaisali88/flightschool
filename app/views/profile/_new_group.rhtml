@@ -1,0 +1,10 @@
+<%= form_remote_tag :url => { :action => 'save_new_group_link' }%>
+
+Group: <%= select('item','group_name', {'Student'=>'student','Renter'=>'renter','Instructor'=>'instructor','Administrator'=>'admin','Dispatcher'=>'dispatcher','Mechanic'=>'mechanic','Site Owner'=>'site_owner','Aircraft Owner'=>'aircraft_owner'})%>
+
+<%= submit_tag 'Save' %>
+
+<%= end_form_tag %>
+
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_new_group} ) %>

@@ -1,0 +1,171 @@
+<table width="100%">
+	<tr>
+		<td>
+			<div style="float:left"><img style="margin-right:10px;margin-left:5px;" alt="" src="/image/thumb/<%= @user.portrait_id %>"/></div>
+
+			<% if @profile_editable %>
+			<div style="float:right" class="admin_toolbox">
+				<table>
+					<tr><th><%= admin? ? 'Administrative Tools' : 'Profile Tools' %></th></tr>
+					<tr><td><%= link_to "Edit Profile", :action => "edit",:id=>@user.id %></td></tr>
+					<tr><td><%= link_to "View Billing Records",:controller=>'billing', :action => "student_report",:user=>@user.id %></td></tr>
+					<% if admin? %>
+					<tr><td><%= link_to "Login as #{@user.full_name}", :controller=>'admin',:action => "login_as_user",:id=>@user.id %></td></tr>
+					<tr><td><%= link_to "Approve All User Items", :controller=>'admin', :action => "approve_user_items",:id=>@user.id %></td></tr>
+					<tr><td><%= link_to "Edit Reservation Rules for #{@user.full_name}",:controller=>'reservation_rules', :action => "exceptions",:id=>@user.id %></td></tr>
+					<tr><td><%= link_to "Edit User Name/Password",:controller=>'admin', :action => "edit_user",:id=>@user.id %></td></tr>
+					<% if @user.account_suspended %>
+					<tr><td><%= link_to "Unsuspend User", :controller=>'admin', :action => "unsuspend",:id=>@user.id %>
+				    <%= form_tag ({ :controller=>'admin',:action=>'delete_user',:id=>@user.id},
+						{:onsubmit=>"return confirm('This will PERMANENTLY delete the user and all associated records. Proceed?')",:style=>"display:inline"})%>
+					<%= submit_tag 'Delete this user' %>
+					<%= end_form_tag %>
+					</td></tr>
+					<% else %>
+					<tr><td><%= link_to "Suspend User", :controller=>'admin', :action => "suspend",:id=>@user.id %></td></tr>
+					<% end %>
+					<% end %>
+				</table>
+			</div>
+			<% end %>
+					<% @user.approved_groups.each{|group| %>
+						<label><%= group['group_name'].humanize %></label>,
+					<% } %>
+					<% @user.unapproved_groups.each{|group| %>
+						<label class="unapproved"><%= group['group_name'].humanize %></label>,
+					<% } %><br/>
+				<label>I Usually Fly From:</label> <%= @user.default_office.name %><br/><br/>
+				<%= h(@user.user_biography).gsub(/$/,'<br/>') %>
+			
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%">
+				<tr>
+					<th width="33%">Contact Information</th>
+					<th width="33%">Certificate Information</th>
+					<th width="33%">Pilot Information</th>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;">
+						<table width="100%">
+								<tr><td><label>email</label></td><td><a href="mailto:<%=h @user.email %>"><%= h @user.email %></a></td></tr>
+							<% @user.phone_numbers.each{|number| %>
+								<tr><td><label>phone</label></td><td><%= number.phone_number%><%=number.is_txt_capable ? '(+TXT)' : ''%></td></tr>
+							<% } %>
+							<% @user.addresses.each{|address| %>
+								<tr>
+									<td style="vertical-align:top;"><label>address</label></td>
+									<td>
+										<%= address.address_line1%><br/>
+										<% if address.address_line2.strip != '' %>
+											<%= address.address_line2%><br/>
+										<% end %>
+										<%= address.city+', '+address.state_province+' '+address.postal_code%><br/>
+										<%= address.country %>
+									</td>
+								</tr>
+							<% } %>
+						</table>
+					</td>
+					
+					<td style="vertical-align:top;">
+						<table width="100%">
+							<% @user.all_certificates.each{|certificate| %>
+								<tr>
+									<td style="vertical-align:top;">
+										<label <%= 'class="unapproved"' unless certificate.approved %>>
+											<%= certificate.certificate_category %>
+										</label>
+									</td>
+									<td style="vertical-align:top;">
+										<% if certificate.airplane_sel_rating %>
+										 <div>Airplane SEL</div>
+										<% end %>
+										<% if certificate.airplane_mel_rating %>
+										 <div>Airplane MEL</div>
+										<% end %>
+										<% if certificate.helicopter_rating%>
+										 <div>Helicopter</div>
+										<% end %>
+										<% if certificate.instrument_rating%>
+										 <div>Instrument</div>
+										<% end %>
+									</td>
+								</tr>
+							<% } %>
+						</table>
+					</td>
+					
+					<td style="vertical-align:top;">
+						<table width="100%">
+							<tr><td><label <%= 'class="unapproved"' unless @user.birthdate_approved %>>Birthdate</label></td><td><%= @user.birthdate%></td></tr>
+							<tr><td><label <%= 'class="unapproved"' unless @user.us_citizen_approved %>>US Citizen</label></td><td><%= @user.is_us_citizen ? "Yes" : "No"%></td></tr>
+							<tr><td><label <%= 'class="unapproved"' unless @user.physical_approved %>>Medical Date</label></td><td><%= @user.faa_physical_date%></td></tr>
+							<tr><td><label <%= 'class="unapproved"' unless @user.biennial_approved %>>Biennial/Certification Date</label></td><td><%= @user.last_biennial_or_certificate_date %></td></tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+
+
+
+<% if admin? %>
+<br/><br/>
+
+<div class="page_title">User Activity Summary</div>
+<table width="100%">
+	<tr><th> Reservation and Billing Information </th></tr>
+ <tr><td>
+ <table width="100%">
+ <tr><td>
+ <table>
+ <tr class="even_row"><td><label>Total Reservations:</label></td><td><%= @reservations_total%></td></tr>
+ <tr class="odd_row"><td><label>Total Non-Canceled Reservations:</label></td><td><%= @reservations_noncanceled%></td></tr>
+ <tr class="even_row"><td><label>Reservations in Last Month:</label></td><td><%= @reservations_month%></td></tr>
+ </table>
+ </td>
+ <td>
+ <table>
+ <tr class="even_row"><td><label>Current Balance:</label></td><td><%= @balance%></td></tr>
+ <tr class="odd_row"><td><label>Average Balance Over Past Month:</label></td><td><%= @balance_avg%></td></tr>
+ <tr class="even_row"><td><label>Number of Transactions in Past Month:</label></td><td><%= @transaction_count%></td></tr>
+ </table>
+ </td>
+ </tr>
+ </table>
+
+</td></tr> 
+
+ <tr><th> Billing Activity </th></tr>
+ <tr><td>
+
+<%= render_partial 'billing/charges_table' %>
+ 
+</td></tr> 
+
+ <tr><th> Forum Activity </th></tr>
+  <tr><td>
+ 
+<table>
+ <tr class="even_row"><td><label>Total Forum Posts:</label></td><td><%= @posts.size%></td></tr>
+ </table> 
+<% i = 0%>
+ <table>
+ <% @posts.each{|post|%>
+ <% if i>10 then break end %>
+ <% i = i+1%>
+ <tr class=<%=i.even? ? '"even_row"' : '"odd_row"'%><td><div style="font-weight:bold"><%=post.topic.subject%></div>
+ <div><%=post.body[0..200] + (post.body.size>200?"...":"") %></div></td></tr>
+ <% }%>
+ </table>
+</td></tr> 
+</table>
+
+<% end %>

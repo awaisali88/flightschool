@@ -1,0 +1,38 @@
+<div style="position:relative; width:300px; max-width:300px;">
+<% if reservation.reservation_type == 'booking' %>
+	<% if (reservation.created_by == current_user.id || can_approve_reservations?) && !@not_editable %>
+		<div style="color:white;position:absolute; right:2px;top:2px; background:#276cac; padding:3px;display:inline;text-align:center;	width:33px;">
+			<%= link_to 'Edit', :action=>'reservations', :controller => 'schedule', :reservation_id => reservation.id%>
+		</div>
+	<% end %>
+	<label>Reservation ID:</label> <%= reservation.id%><br/>
+	    <label>Name:</label> <%= reservation.creator.full_name%><br/>
+ 
+	    <label>Aircraft: </label> <%=reservation.aircraft.nil? ? 'No Aircraft/Ground School' : (reservation.aircraft.type.type_name+'('+
+	                reservation.aircraft.type_equip+') '+
+	                reservation.aircraft.identifier)%> <br/>
+	    <label>Instructor: </label><%= 
+	        reservation.instructor.nil? ? 'No Instructor' :
+	    reservation.instructor.full_name%><br/>
+
+	    <label>From: </label> <%= reservation.time_start %><br/>
+
+	   <label>To: </label><%= reservation.time_end%><br/>
+<% else %>
+	<% if (reservation.created_by == current_user.id || can_approve_reservations?) && !@not_editable %>
+		<div style="color:white;position:absolute; right:2px;top:2px; background:#276cac; padding:3px;display:inline;text-align:center;	width:33px;">
+			<a href="#" onclick="new Ajax.Updater('master_schedule_wrap','/schedule/cancel_block?id=<%=reservation.id%>&'+Form.serialize('schedule_time_form')+'&master=<%=@master_schedule%>', {asynchronous:true, evalScripts:true});" >Delete</a>				
+		</div>
+	<% end %>
+	Blocked by <%=reservation.creator.full_name%>
+	<div>	
+		<% if reservation.time_start.to_date == reservation.time_end.to_date %>
+			<%= reservation.time_start.strftime("%a %b %d")%> (<%= int_to_time reservation.time_start.hour%> - <%= int_to_time reservation.time_end.hour%>)  
+		<% else %>
+			From: <%= reservation.time_start.strftime("%a %b %d")%><%= int_to_time reservation.time_start.hour%><br/>
+			To: <%= reservation.time_end.strftime("%a %b %d")%><%= int_to_time reservation.time_end.hour%> <br/>
+		<% end %>
+	</div>
+   	<div style="height:10px"></div>
+<% end %>
+</div>

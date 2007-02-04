@@ -1,0 +1,8 @@
+<div style="float:right;" class="image_browser">
+	<table width="100%"><tr><th>Image Browser</th></tr></table>
+<div id='image_selector'>
+</div>
+</div>
+<script type="text/javascript">
+new Ajax.Updater('image_selector', '/image/links_list', {asynchronous:true, evalScripts:true})
+</script>

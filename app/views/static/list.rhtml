@@ -1,0 +1,23 @@
+<table id="page_table" width="100%">
+    <th>Static Page</th>
+    <th>URL</th>
+    
+ <% for document in @documents %>
+  <tr>
+    <td><%=link_to (h(document.one_line_summary).strip=="" ? "[no title]" : h(document.one_line_summary)) , {:action => 'edit', :id => document}%></td>
+	<td><%=link_to '/content/'+document.url_name,'/content/'+document.url_name %></td>
+	<td width="10%">  
+		 <%= form_tag ({ :controller=>'static',:action=>'delete',:id=>document['id']},
+			{:onsubmit=>"return confirm('This will permanently delete the document. Proceed?')",:style=>"display:inline"})%>
+		<%= submit_tag 'Delete' %>
+		<%= end_form_tag %>
+	</td>
+  </tr>
+<% end %>
+
+</table>
+
+
+<script type="text/javascript">
+	color_table('page_table')
+</script>

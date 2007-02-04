@@ -1,0 +1,14 @@
+<table>
+<tr><th>User Name</th><th>Number of posts</th></tr>
+<% i=1 %>
+<% @users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :profile_id=>user.id%></td>
+<td><%=user.post_count%></td>
+</tr>    
+<% }%>
+</table>
+
+
+

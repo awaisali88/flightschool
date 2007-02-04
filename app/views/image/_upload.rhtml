@@ -1,0 +1,27 @@
+<div id="image_pick_or_upload">
+<div id="image_topbar">    
+    <div id="image_topbar_heading">Pick or Upload an Image</div>
+    <%=  link_to_remote 'close',:url=>{:controller=>'image',:action=>'cancel_upload'}%>
+</div>
+<div>
+<form action="/image/save" target="UploadTarget" enctype="multipart/form-data" method="post" onsubmit="image_upload_setup()">
+<iframe id="UploadTarget" name="UploadTarget" src="" style="width:0px;height:0px;border:0"></iframe>
+
+ <label>Image:</label> <%= file_field("image", "image",:size => "20") %> 
+ <label>Caption:</label> <%= text_field("image", "caption",:size => "40") %> 
+ <%= submit_tag("Upload image") %>
+ <div id="UploadStatus"></div>
+<%= end_form_tag %>
+</div>
+
+<div style="padding:0px;">
+<% @images.each{|img| %>
+
+   <div class = "img_block" style="padding:4px;text-align:center;float:left;height:105px;width:105px;">
+   <%= link_to_remote '<img src= "/image/thumb/'+img.id.to_s+'"/>',:url=>{:controller=>'image',:action=>'pick_image' ,:id=> img.id}%>
+	
+   </div>
+<% } %>
+
+</div>
+</div>

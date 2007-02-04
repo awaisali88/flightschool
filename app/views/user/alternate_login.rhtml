@@ -1,0 +1,19 @@
+    <%= start_form_tag :action => 'login',:controller => 'user'  %>
+        <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px">
+        <tr>
+	        <td style=" padding:0px;">
+	           <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
+	           Email:</td><td> <%= text_field_tag "email",nil,:id=>'email_field' %>
+	           </td></tr><tr><td>
+	           Password:</td><td><%= password_field_tag "password", nil,:id =>"real_password_field"%>
+	           </td></tr></table>
+	        </td>
+	        </tr>
+	        <tr>
+	        <td style=" padding:0px;">
+	           <%= submit_tag 'Login' %> 
+	        </td>
+	    </tr>
+        </table>
+       <%= end_form_tag %>
+  </div>

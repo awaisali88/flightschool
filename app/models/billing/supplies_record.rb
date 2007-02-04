@@ -1,0 +1,2 @@
+class SuppliesRecord < BillingCharge
+end

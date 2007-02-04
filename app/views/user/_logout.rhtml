@@ -1,0 +1,12 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+ <div id="logout_box">
+    <div id="welcome_message">
+    Hi, <%= current_user.first_names%>
+	<% if session[:logged_in_as_different_user] %>
+		<br/>
+		<%= link_to "Switch back<br/> to Admin", :controller => "admin", :action => "logout_as_user" %>
+	<% end %>
+    </div>
+    <%= link_to 'Logout' , {:action => 'logout',:controller => 'user'}, :class =>"login_link" %>
+ </div>

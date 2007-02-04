@@ -1,0 +1,150 @@
+<%= error_messages_for :user %>
+<% (0..2).each{|i| %>
+	<% @phone = @phones[i] %>
+	<%= error_messages_for :phone %>
+<% } %>
+<% (0..2).each{|i| %>
+	<% @address = @addresses[i] %>
+	<%= error_messages_for :address %>
+<% } %>
+
+<small><i>Legend: <span style="color:grey;font-weight:bold;">optional fields</span>, <span class="unapproved">items pending approval</span></i></small>
+<table width="100%">
+	<tr><th>Personal</th></tr>
+	<tr><td>
+	<form action="/profile/set_portrait" enctype="multipart/form-data" method="post" style="margin:0px;padding:0px">
+	 <label>Profile picture:</label> <%= file_field("image", "image",:size => "20") %> 
+	 <input type="hidden" name="user" value="<%= @user.id %>"/>
+	 <%= submit_tag("Upload") %>
+	</form>
+	</td></tr>
+	<%= start_form_tag :action=>'edit',:id=>@user.id%>
+	
+	<tr><td> <label>About you:</label><br/><%= text_area :user, :user_biography,:cols=>'100',:rows=>'8'%></td></tr>
+	<tr>
+		<td>
+			<table width="100%">
+				<tr>
+					<th width="40%">Pilot Information</th>
+					<th width="60%">Contact Information</th>
+				</tr>
+				<tr>
+										
+					
+					<td style="vertical-align:top;">
+						<table width="100%">
+							<tr><td style="vertical-align:top;"><label  <%= 'class="unapproved"' unless @user.birthdate_approved %>>Birthdate</label>
+								</td><td><%= text_date_field @user,:user,:birthdate %></td></tr>
+							<tr>
+								<td style="vertical-align:top;"><label  <%= 'class="unapproved"' unless @user.physical_approved %>>Medical Date</label></td>
+								<td><%= text_date_field @user,:user,:faa_physical_date %></td>
+							</tr>
+							<tr>
+								<td style="vertical-align:top;"><label  <%= 'class="unapproved"' unless @user.biennial_approved %>>Biennial/Certification Date</label></td>
+								<td><%= text_date_field @user,:user,:last_biennial_or_certificate_date %></td>
+							</tr>
+							<tr><td><label  <%= 'class="unapproved"' unless @user.us_citizen_approved %>>US Citizen</label></td>
+								<td><div style="margin-left:2px;"><%= select :user, :is_us_citizen, [["Yes",true],["No",false]] %></div></td></tr>
+						</table>
+					</td>
+					<td style="vertical-align:top;">
+						<table>
+							<% (0..2).each{|i| %>
+							<% @phone = @phones[i] %>	
+							<tr>
+								<td style="vertical-align:top;">
+									<div style="margin-top:7px"><label <%= i>0 ? 'style="color:grey;"' : '' %>>phone&nbsp#<%= i+1 %></label></div>
+								</td>
+								<td>
+									<table><tr><td>
+										<%= text_field 'phone', :phone_number,:index=>i %>
+									</td><td>
+									 		<select name="phone[<%= i %>][is_txt_capable]"><%= options_for_select([["TXT Capable",'true'],
+													['Not TXT Capable','false']],@phone.is_txt_capable.to_s)%> </select>
+									</td></tr></table>
+								</td>
+							</tr>
+							<% } %>
+							<tr><td>  </td></tr>
+							<% (0..1).each{|i| %>
+							<% @address = @addresses[i] %>	
+							<tr>
+								<td style="vertical-align:top;">
+									<div style="margin-top:7px"><label <%= i>0 ? 'style="color:grey;"' : '' %>>address&nbsp#<%= i+1 %></label></div>
+								</td>
+								<td>
+									<table>
+									<tr><td colspan="6"><%= text_field('address',"address_line1",:size=>'50',:index=>i) %></td></tr>
+									<tr><td colspan="6"><%= text_field('address',"address_line2",:size=>'50',:index=>i) %></td></tr>
+									<tr><td><label <%= i>0 ? 'style="color:grey;"' : '' %>>City</label></td>
+										<td> <%= text_field('address',"city", :size=>'15',:index=>i) %></td>
+										<td><label <%= i>0 ? 'style="color:grey;"' : '' %>>State</label></td>
+										<td> <%= text_field('address',"state_province", :size=>'10',:index=>i) %></td>
+									
+										<td><label <%= i>0 ? 'style="color:grey;"' : '' %>>ZIP</label></td>
+										<td> <%= text_field('address',"postal_code", :size=>'5',:index=>i) %></td>
+									</tr>
+									</table>
+								</td>
+							</tr>
+							<% } %>
+						</table>
+					</td>	
+				</tr>
+				<tr>
+					<th>Group Membership</th><th>Pilot Certificates</th>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;">
+						<table>
+							<% @groups.each{|group| %>
+							<tr>
+								<% if @user_groups.include? group.id.to_s %>
+								<td><%= check_box_tag "groups[#{group.id}]", "true", true %></td>
+								<% else %>
+								<td><%= check_box_tag "groups[#{group.id}]", "true" %></td>
+								<% end %>
+								<td><label <%= (@user_unapproved_groups.include? group.id.to_s) ? 'class="unapproved"' : '' %>>
+									<%= group.group_name.humanize %></label></td>
+							</tr>
+							<% } %>
+						</table>
+					</td>
+					<td style="vertical-align:top;">
+						<table id="certificate_table" width="100%">
+							<% @certificates.each{|category| %>
+							<tr>
+								<% @certificate = nil %>
+								<% @user_certificates.each{|c| @certificate = c if c.certificate_category==category}%>
+								<td style="vertical-align:top;">
+								<div style="margin-top:7px">
+								<% if not @certificate.nil? %>
+									<%= check_box_tag "has_certificate[#{category}]", "true", true %>
+								<% else %>
+									<%= check_box_tag "has_certificate[#{category}]", "true" %>
+								<% end %>
+								<label <%=  @certificate.nil? or @certificate.approved==false ? 'class="unapproved"' : ''%> ><%= category%></label></div></td>
+								<td>
+									<table><tr>
+									<% @certificate = UserCertificate.new unless @certificate!=nil %>
+									<td><%=check_box('certificate',"airplane_sel_rating",:index=>category)%> Airplane Single Engine
+									</td><td><%=check_box('certificate',"helicopter_rating",:index=>category)%> Helicopter
+									</td></tr><tr><td><%=check_box('certificate',"airplane_mel_rating",:index=>category)%> Airplane Multiple Engine
+									</td><td><%=check_box('certificate',"instrument_rating",:index=>category)%> Instrument
+									</td></tr></table>
+								</td>
+							</tr>
+							<% } %>
+						</table>
+						<script type="text/javascript">color_table('certificate_table')</script>
+					</td>
+				</tr>				
+			</table>
+		</td>
+	</tr>		
+	<tr>
+		<th><div style="float:right"><%= link_to "Back to Profile",:action=>'view',:id=>@user.id %></div>
+		<%= submit_tag 'Save Changes'%>  
+			</th></tr>
+<%= end_form_tag%>		
+</table>

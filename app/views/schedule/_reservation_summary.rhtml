@@ -1,0 +1,37 @@
+<% if @reservations.size>0 %>
+
+<div style="background: #ffffaa;border:1px solid darkblue; padding:5px; width:635px;margin-left:15px; margin-bottom:10px;">
+<label>You have following upcoming 
+<% if instructor? %>
+<%=link_to 'instructor reservations',:controller=>'reservation',:action=>'instructor'%>,
+<% else %>
+<%=link_to 'reservations',:controller=>'reservation',:action=>'list'%>,
+<% end %>
+ <%= @user.first_names%>:</label>
+<% i = 0 %>
+<table width="100%">
+<tr>
+<% @reservations.reverse!%>
+<% num_reservations =[@reservations.size,8].min%>
+<% for i in (1..num_reservations)%>
+   <% reservation = @reservations[i%2==1 ? (i-1)/2 : i/2+(num_reservations-1)/2]%>
+   <% if reservation!=nil%>
+	   <td><a href="/reservation/<%= instructor? ? 'instructor' : 'list' %>/">
+	   <%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d")%>, <%= int_to_time reservation.time_start.hour%>
+	   <% person = instructor? ? reservation.creator : reservation.instructor%>
+	   <% if not person.nil?%>
+	       w. <%= person.first_names+' '+person.last_name[0..0]+'.'%>
+	   <% end %>
+	   </a></td>
+   <% else %>
+ 		<td></td>
+   <% end %>
+   <% if i%2 == 0%>
+        </tr><tr>
+   <% end %>
+<% end %>
+</tr>
+</table>
+</div>
+
+<% end %>
