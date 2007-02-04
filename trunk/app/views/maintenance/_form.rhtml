@@ -1,0 +1,18 @@
+<%= error_messages_for 'maintenance_date' %>
+
+<!--[form:maintenance_date]-->
+<label>Aircraft: </label><br/>
+<p><select name="maintenance_date[aircraft_id]" style="width:250px">
+<%= options_for_select(ScheduleHelper.options_for_aircrafts,@maintenance_date.aircraft_id) %>
+</select></p>
+
+<p><label for="maintenance_date_expires">Expires</label><br/>
+<%= text_field 'maintenance_date', 'expires'  %></p>
+
+<p><label for="maintenance_date_description">Description</label><br/>
+<%= text_area 'maintenance_date', 'description',:rows=>'2',:cols=>'60'  %></p>
+
+<p><label for="maintenance_date_comments">Comments</label><br/>
+<%= text_area 'maintenance_date', 'comments',:rows=>'2',:cols=>'60'  %></p>
+<!--[eoform:maintenance_date]-->
+

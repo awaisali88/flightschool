@@ -1,0 +1,22 @@
+<table>
+  <tr>
+  <% for column in AircraftType.content_columns %>
+	<% if column.name == 'picture' then next end %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for aircraft_type in @aircraft_types %>
+  <tr>
+  <% for column in AircraftType.content_columns %>
+	<% if column.name == 'picture' then next end %>
+    <td><%=h aircraft_type.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Edit', :action => 'edit', :id => aircraft_type %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Aircraft Type', :action => 'new' %>

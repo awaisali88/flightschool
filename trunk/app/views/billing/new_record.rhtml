@@ -1,0 +1,68 @@
+
+<%= form_tag ({:action => 'new_record'},{:id=>'record_form'})%>
+<table class="simple_form" style="padding:10px"><tr><td>
+<tr>
+	<td><label>Record Type:</label></td>
+	<td><%=select_tag 'record[type]',options_for_select ([['Balance Deposit','DepositRecord'],['Fee Charge ','FeeRecord'],['Ground Fee','GroundRecord'],['Supplies','SuppliesRecord'],['Correction','CorrectionRecord']]),:class=>'billing_input'%></td>
+</tr>
+
+<%= make_row '<label>Pilot: </label>','<input class="billing_input" id="pilot" autocomplete="off" size="30" type="text" value="'+"#{@pilot}"+'" onclick="this.select()"/>
+<div class="page_name_auto_complete" id="pilot_list" style="display:none"></div>'%>
+<input name="record[user_id]" id="pilot_id" autocomplete="off" type="hidden"/>
+
+<script type="text/javascript">
+new Autocompleter.Local('pilot', 'pilot_list', <%=user_array @users%>,
+ 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
+	afterUpdateElement:function(text,li){
+		$('pilot_id').value = li.id;
+}});
+</script>
+
+<tr>
+	<td ><label style="vertical-align:top;padding-right:20px">Note: </label> </td>
+	<td><%= text_area('record','notes',:rows=>'2',:cols=>'60',:class=>'billing_input')%> <br/></td>
+</tr>
+
+<tr>
+	<td colspan="2" >
+		<label style="color:green">Amount Charged </label> <%= text_field_tag('charge',"0.00",:size=>'6',:id=>"charge",:class=>'billing_input')%> + 
+ 		<%= text_field_tag('tax',"0.00",:size=>'4',:id=>'tax',:class=>'billing_input')%>(Tax) =  <input type="text" name="record[charge_amount]" value="" id="record_charge_amount" size="6" readonly="readonly" />
+	   <%= submit_tag 'Add Record', :id=>'submit', :style=>'margin-left:100px;'%> 
+	</td>
+</tr>
+
+<tr>
+	<td colspan="2"><span style="font-style:italic;font-size:10pt;">Amount Charged is always the amount SUBTRACTED from account balance.<br/> Therefore Balance Deposits must be entered as negative values.</span></td>
+</tr>
+
+</table>
+<%= end_form_tag %>
+
+<script type="text/javascript">
+  new Form.Element.Observer('charge',0.1,function(){
+		var val;
+		if($F('record[type]') == 'SuppliesRecord'){
+			val = eval($F('charge'))*0.05;
+			val = Math.round(val*100)/100.0;
+			if(val+''=='NaN') val=0;
+			$('tax').value = val;
+		}
+		val = eval($F('charge'))+eval($F('tax'));
+		val = Math.round(val*100)/100.0;
+		if(val+''=='NaN') val=0;
+		$('record_charge_amount').value = val
+	});
+	
+	new Form.Element.Observer('tax',0.1,function(){
+		var val = eval($F('charge'))+eval($F('tax'));
+		val = Math.round(val*100)/100.0;
+		if(val+''=='NaN') val=0;
+		$('record_charge_amount').value = val		
+	});
+	
+   if (window.addEventListener) {
+        window.addEventListener("load", function () { 	Field.activate($('pilot'));	 }, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('on' + "load", function () { 	Field.activate($('pilot'));	 });
+    }
+</script>

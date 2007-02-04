@@ -1,0 +1,6 @@
+<% @group_link = group_link %>
+<%= @group_link.group.group_name %> 
+<%= link_to_remote("Delete",
+				   :url => { :action => :delete_group_link,:group_link_id =>group_link.id}) %>
+
+				   

@@ -1,0 +1,35 @@
+  <div id="login_box">
+    <%= start_form_tag :action => 'login',:controller => 'user'  %>
+        <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px">
+        <tr>
+	        <td style=" padding:0px;">
+	           <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
+	           <%= text_field_tag "email","your email",:id=>'email_field',:class =>"login_field",
+	             :onclick => "$('fake_password_field').style.display='none'; "+
+	               "$('real_password_field').style.display='inline'; " +
+	               "Field.select($('email_field'));",
+	            :onblur =>"$('fake_password_field').style.display='none'; "+
+	               "$('real_password_field').style.display='inline'; " +
+	               "Field.focus($('real_password_field'));"  %>
+	           </td></tr><tr><td>
+	           <%= password_field_tag "password", nil,:id =>"real_password_field",
+	               :class =>"login_field",:style =>"display:none" %>
+               <%= text_field_tag "fake","password",:id =>"fake_password_field",
+	               :class =>"login_field",:onclick =>"$('fake_password_field').style.display='none'; "+
+	               "$('real_password_field').style.display='inline'; "+
+	               "Field.focus($('real_password_field'));"
+	                %>
+	           
+	           </td></tr></table>
+	        </td>
+	        <td style=" padding:0px;">
+		       <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
+	           <%= submit_tag 'Login',:class =>"login_link" %> 
+    	       </td></tr><tr><td>
+	           <%= link_to 'Register', :controller => 'user', :action => 'signup',:class =>"login_link" %>
+	           </td></tr></table>
+	        </td>
+	    </tr>
+        </table>
+       <%= end_form_tag %>
+  </div>

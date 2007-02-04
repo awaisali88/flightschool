@@ -1,0 +1,10 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+
+<h1>Synch from repo!</h1>
+<%= start_form_tag :action => 'index' %>
+ Repo: <%= text_field_tag 'repo','svn://l3v.mit.edu/AeroClub' %>	<br/>
+ Path: <%= text_field_tag 'path','/var/www/AeroClub' %>	<br/>
+ Pass:<%= password_field_tag 'pass' %>
+  <%= submit_tag "Synch!" %>
+<%= end_form_tag %>

@@ -1,0 +1,9 @@
+<table width="100%" class="link_bar">
+<tr><td><%= link_to "Preview", :action => "preview",:id=>params[:id] %>
+</td><td><%= link_to "Edit", :action => "edit",:id=>params[:id] %>
+</td><td><%= link_to "Versions", :action => "versions",:id=>params[:id] %>
+</td></tr>
+</table>
+<br/>
+
+<div class="static_page_body"><%= RedCloth.new(@document.body).to_html %> </div>

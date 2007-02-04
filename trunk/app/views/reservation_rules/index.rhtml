@@ -1,0 +1,8 @@
+<h3>Following Rules must be satisfied for a reservation to be auto-approved:</h3>
+<ul>
+<% @reservation_rules.each{|rule|%>
+    <li><label><%=rule.description%></label> </li>
+<% } %>
+</ul>
+<p><b>Note:</b><i> Editing of the rules must only be done by a person familiar with the documentation
+for this web application. Please refer to documentation pages for more information about editing the rules.</i> </p>

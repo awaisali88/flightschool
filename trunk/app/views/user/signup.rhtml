@@ -1,0 +1,23 @@
+<div title="<%= title_helper %>" class="form">
+  <%= error_messages_for 'user' %>
+
+  <div class="form-padding">
+    <%= start_form_tag :action => 'signup' %>
+    <table>
+
+        <%= make_row ('<label>Account Type:</label>', radio_button_tag ("account_type", "renter") + 
+         ' <label>Renter</label>'+ radio_button_tag ("account_type", "student") + 
+         ' <label>Student</label> ' + radio_button_tag("account_type", "instructor")+' <label>Instructor</label>') %>  
+       	<%= make_row '<label>Office</label>', select('user','office',options_for_offices())  %>
+	 	<%= make_row '<label>First Name(s)</label>', text_field('user',"first_names")  %>
+        <%= make_row '<label>Last Name</label>', text_field('user',"last_name")  %>
+        <%= make_row '<label>email</label>', text_field('user',"email")  %>
+    </table>
+   <%= render_partial 'password', :submit => false %>
+
+      <div class="button-bar">
+        <%= submit_tag 'Signup' %>
+      </div>
+    <%= end_form_tag %>
+  </div>
+</div>

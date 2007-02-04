@@ -1,0 +1,8 @@
+<% if user? %>
+<h3> Verification Successful! </h3>
+<p> Your email has been verified. Your account will be fully active when administrator approves your registration. You may edit your 
+<%= link_to "profile", :controller => "profile", :action => "view" %> and browse <%= link_to "forums", :controller => "forum", :action => "index",:forum_name=>'general' %> until then.	</p>
+<% else %>
+<h3> Logged out! </h3>
+<p> See you soon </p>
+<% end %>

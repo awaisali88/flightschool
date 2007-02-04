@@ -1,0 +1,19 @@
+<%content_for 'sidebar' do%>
+    		<%=  render_component(:controller => 'schedule', :action => 'quickpick')%>
+<% end %>
+
+<%if user? %>
+ 	<%= render_component(:controller => 'schedule', :action => 'reservation_summary')%>
+<% end %>
+
+<% if user? %>
+<div id = "news_page">
+<% for article in @news %>
+<%= render_partial 'news', :document=>article %>
+<% end %>
+</div>
+
+<%= pagination_links(@news_pages)%>
+<% else %>
+<%=render_component(:controller => 'static', :action => 'index')%>
+<% end %>

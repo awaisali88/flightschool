@@ -1,0 +1,38 @@
+
+<div class="form-padding">
+    <%= start_form_tag :action => 'find'%>
+		<label>Name: </label> <%= text_field_tag  'user_name'%>
+		<%= submit_tag 'Find' %>
+    <%= end_form_tag %>
+</div>
+
+
+
+<% if not @users.nil? %>
+	<% if @users.size>0 %>
+		<table id="results_table" width="100%">
+			<tr><th>Name</th><th>email</th><th>Phone</th></tr>
+			<%  @users.each{ |user|%>
+			<tr>
+				<td>
+					<%= link_to user.full_name, :controller=>'profile',:action => 'view', :id => user.id %>
+				</td>
+				<td>
+					<a href="mailto:<%=h user.email %>"><%= user.email %></a>
+				</td>
+				<td>
+					<% numbers = user.phone_numbers %>
+					<%= numbers.empty? ? '' : numbers[0].phone_number %>
+				</td>
+			<tr>
+			<% } %>
+		</table>
+	<% else %>
+		<label>Sorry, no results found.</label>
+	<% end %>
+<% end %>
+
+<script type="text/javascript">color_table('results_table')</script>
+<script type="text/javascript">
+  activate_on_load('user_name')
+</script>

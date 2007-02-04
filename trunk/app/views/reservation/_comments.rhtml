@@ -1,0 +1,14 @@
+
+<% @reservation.comments.each{|comment|%>
+    <div style="width:150px">
+    <label> <%= comment.creator.full_name %>:</label><br/>
+    <span style="font-style: italic"><%= h comment.body%></span>            
+    </div>
+<%}%>
+
+<%= form_remote_tag(:url => {:controller=>'reservation',:action => "add_comment",:id=>@reservation.id}, :update => 'reservation_sidebar') %>
+    <table><tr>
+    <td><%= text_area_tag 'comment',nil,:style=>'width:150px' %></td></tr><tr>
+    <th style="text-align:center"><%= submit_tag 'Add Comment', :style=>'width:150px'%></th>
+    </tr></table>
+<%= end_form_tag %>

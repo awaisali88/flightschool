@@ -1,0 +1,38 @@
+<div id="user_table">
+<table width="100%">
+<tr>
+<th>Name</th>
+<th>email</th>
+<th>Roles</th>
+<th>Created</th>
+</tr>
+<% i=1 %>
+<% @users.each{|user|%>
+<%i = i+1%>
+<tr class="<%=i.even? ? "even_row" : "odd_row" %>" >
+<td><%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :id=>user.id%></td>
+<td><%= user.email_verified ? "#{user.email}" : "<span class=\"unapproved\">#{user.email}</span>" %></td>
+<td><%user.approved_groups.each{|group|%>
+		<%= group['group_name']%>
+     <%}%>
+    <%user.unapproved_groups.each{|group|%>
+	        <span class="unapproved"><%= group['group_name']%></span>
+	     <%}%>
+	 <% if user.account_suspended then%><span class="suspended">suspended</span><%end%> 
+</td>
+<td><%=user.created_at.to_date.to_s%></td>
+</tr>    
+<% }%>
+</table>
+
+<% if index == :alphabet %>
+<p>
+	<% ("A"[0].."Z"[0]).each{|c| %>
+		<%= link_to "#{c.chr}", :action => "users",:letter=>"#{c.chr}" %>
+	<% } %>
+</p>
+<% elsif index == :pages%>
+	<%= pagination_links @pages %>
+<% end %>
+<p><label>Legend:</label> <span class="unapproved">unapproved items</span></p>
+</div>

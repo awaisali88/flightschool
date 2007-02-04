@@ -1,0 +1,35 @@
+<%= error_messages_for :user %>
+<%= start_form_tag :action => 'create_user' %>
+<table>
+	<tr>
+	<td>
+ 	 <table>
+		  <%= make_row '<label>Office</label>', select('user','office',options_for_offices())  %>
+	      <%= make_row '<label>First Name(s)</label>', text_field('user',"first_names")  %>
+	      <%= make_row '<label>Last Name</label>', text_field('user',"last_name")  %>
+	      <%= make_row '<label>email</label>', text_field('user',"email")  %>
+	  </table>
+ 	<%= render_partial 'user/password', :submit => false %>
+
+    <div class="button-bar">
+      <%= submit_tag 'Create User' %>
+    </div>
+
+
+
+	</td>
+	<td style="vertical-align:top;">
+		<table>
+			<% @groups.each{|group| %>
+			<tr>
+				<td><%= check_box_tag "groups[#{group.id}]", "true" %></td>
+				<td><label><%= group.group_name.humanize %></label></td>
+			</tr>
+			<% } %>
+		</table>
+	</td>
+	</tr>
+</table>
+  <%= end_form_tag %>
+
+

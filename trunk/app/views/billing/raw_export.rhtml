@@ -1,0 +1,6 @@
+<%= start_form_tag :action=>'raw_export'%>
+<table><tr><td>
+ <label>From:</label>&nbsp;<%=select_year  @from.year, :field_name => 'year',:prefix=>'from' %> <%=select_month  @from.month, :field_name => 'month',:prefix=>'from' %> </td><td>
+ <label>To:</label>&nbsp;<%=select_year  @to.year, :field_name => 'year',:prefix=>'to' %> <%=select_month  @to.month, :field_name => 'month',:prefix=>'to' %></td><td>
+ <%= submit_tag 'Generate Report'%> </td></tr></table>
+<%= end_form_tag%>

@@ -1,0 +1,2 @@
+page.replace_html 'add_new_page', :partial => 'new_page_link'
+page.visual_effect :highlight, 'add_new_page', :duration => 1

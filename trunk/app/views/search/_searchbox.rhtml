@@ -1,0 +1,6 @@
+<div id="search_box">
+	<%= start_form_tag :controller => '/search/search', :action => 'search'%>
+	<%= text_field_tag 'query', nil, :size =>'12'%>
+	<%= submit_tag 'Find', :class => 'submit_button'%>
+	<%= end_form_tag %>
+</div>

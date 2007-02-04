@@ -1,0 +1,37 @@
+<% if @master_schedule %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<%= stylesheet_link_tag('ecac') %>
+	<%= stylesheet_link_tag('news') %>
+	<%= stylesheet_link_tag('search') %>
+	<%= stylesheet_link_tag('schedule') %>
+	<%= stylesheet_link_tag('billing') %>
+	<%= stylesheet_link_tag('image') %>
+	<%= stylesheet_link_tag('scaffold') %>
+	<%= stylesheet_link_tag('forum') %>
+	<%= stylesheet_link_tag('profile') %>
+	<%= stylesheet_link_tag('calendar-blue') %>
+
+	<%=javascript_include_tag :defaults %>
+	<%=javascript_include_tag "Tooltip" %>
+	<%=javascript_include_tag "popup" %>
+	<%=javascript_include_tag "test" %>
+	<%=javascript_include_tag "calendar" %>
+	<script type="text/javascript" src="/javascripts/calendar-en.js"></script>
+	<%=javascript_include_tag "calendar-setup" %>
+
+<title> <%= @page_title +  " - #{current_school.name}"%> </title>
+</head>
+<body>
+	<div id="page_title"><%=@page_title %></div>
+<% end %>
+
+<div id="master_schedule_wrap">
+    <%= render_partial "master_schedule"%>
+</div>
+
+<% if @master_schedule %>
+</body>
+</html>
+<% end %>

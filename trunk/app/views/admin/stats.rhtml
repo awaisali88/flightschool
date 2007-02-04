@@ -1,0 +1,29 @@
+<!-- 
+admin/index.rhtml
+@authors levpopov@mit.edu, bdglide@mit.edu
+template page for admin site statistics summary page
+-->
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+
+<h3>Users registered within last week</h3>
+<dl>
+<% @recent_users.each{|user| %>
+	<dt><%= link_to user.first_names+' '+user.last_name, :controller => 'profile', 
+	   	:action => 'index', :user_id=>user.id %></dt>
+<% } %>
+</dl>
+
+<h3>Users waiting for approval</h3>
+<dl>
+<% @need_approval.each{|user| %>
+	<dt><%= link_to user.first_names+' '+user.last_name, :controller => 'profile', 
+	   	:action => 'index', :user_id=>user.id %></dt>
+<% } %>
+</dl>
+
+<h3>Users Statistics</h3>
+<table>
+<tr><td># Registered Within Last Week</td><td><%=@last_week_count %></td></tr>
+<tr><td># Registered Total</td><td><%=@total_count %></td></tr>
+</table>

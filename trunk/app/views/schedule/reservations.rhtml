@@ -1,0 +1,76 @@
+<% if current_user.user_phone_number.size == 0 %>
+  <h3>Please provide some contact information on your <%=link_to 'profile', :controller=>'profile',:action=>'view'%> before making reservations.
+  This page will be activated once you provide at least a phone number (providing full contact information is strongly encouraged).
+  </h3>
+<% else %>
+
+<%content_for 'sidebar' do%>
+	<%if user? && session[:permissions].size > 0%>
+	<%= render_component(:controller => 'schedule', :action => 'quickpick')%>
+	<% end %>
+<% end %>
+
+
+<div style="text-align:left;">
+<%= link_to 'Make New Reservation', {:controller => "schedule", :action => "fullpick"},
+		{:style=>'font-weight:bold;font-size:12pt;text-decoration:underline !important;'} %>
+</div>
+
+<% if @reservations.size == 0 %>
+	No Reservations Made. 
+    <% if not params[:showall] %>
+        <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
+    <% end %>
+
+<% else %>
+	<div style="padding-left:80px">
+	<table cellspacing="10px"><tr>
+	<td style="text-align:center;width:100px"><div style="display:marker; height:40px;  background: lightgreen;"><label style="color:#001b57">Approved</label></div></td>
+	<td style="text-align:center;width:100px"><div style="display:marker; height:40px; background: #eeee00;"><label style="color:#001b57">Awaiting Approval</label></div></td>
+	<td style="text-align:center;width:100px"><div style="display:marker; height:40px; background: #f2a3a0;"><label style="color:#001b57">Cancelled</label></div></td>
+	<td style="text-align:center;width:100px"><div style="display:marker; height:40px; background: #d6d3c9;"><label style="color:#71b4d0">Expired</label></div></td>
+	</tr></table>
+	</div>
+
+<% if not params[:showall] %>
+    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
+<% end %>
+
+<table>
+<% t = Time.new
+   @reservations.each{|reservation|
+   if reservation.time_start < t
+     expired = 1
+   else
+     expired = 0
+   end%>
+   
+   <tr><td style="width:700px;">
+   <div id="reservation<%=reservation.id%>" style="cursor: pointer; text-align:left; border: 1px <%= expired==1? 'grey' : 'solid darkblue' %>; padding:10px; margin:10px; background:<%=expired==1 ? '#d6d3c9' : (reservation.status=='approved' ? 'lightgreen' : (reservation.status=='canceled' ? '#f2a3a0' : '#eeee00'))%>" onclick="window.location='/schedule/reservations?reservation_id=<%=reservation.id%>'">
+	
+	<div style="float:right"><label style="cursor: pointer;color:#001b57"><%=reservation.aircraft.nil? ? 'No Aircraft/Ground School' : reservation.aircraft.type_and_identifier%> </label>
+	 <%=reservation.instructor_id.nil? ? '' : "(w. <label style=\"cursor: pointer;color:#001b57\">#{reservation.instructor.full_name}</label>)"%></div>
+	
+	<div>	
+		<% if reservation.time_start.to_date == reservation.time_end.to_date %>
+			<%= reservation.time_start.strftime("<label style=\"cursor: pointer;color:#001b57\">%a %b %d</label>")%> (<label style="cursor:pointer;color:#001b57"><%= int_to_time reservation.time_start.hour%> - <%= int_to_time reservation.time_end.hour%></label>)  
+		<% else %>
+			<%= reservation.time_start.strftime("<label style=\"cursor: pointer;color:#001b57\">%a %b %d ")%><%= int_to_time reservation.time_start.hour%></label> <br/>
+			<%= reservation.time_end.strftime("<label style=\"cursor: pointer;color:#001b57\">%a %b %d ")%><%= int_to_time reservation.time_end.hour%></label> <br/>
+		<% end %>
+	</div>
+   
+   </div></td></tr>
+<%}%>
+</table>
+
+<% if params[:showall] %>
+    <%= link_to 'Previous page', {:user=>params[:user],:showall=>true,:page => @reservation_pages.current.previous } if @reservation_pages.current.previous %>
+    <%= link_to 'Next page', { :user=>params[:user],:showall=>true,:page => @reservation_pages.current.next } if @reservation_pages.current.next %> 
+<% else %>
+    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
+<% end %>
+
+<% end %>
+
+<% end %>

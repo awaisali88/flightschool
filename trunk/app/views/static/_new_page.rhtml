@@ -1,0 +1,5 @@
+<%= form_remote_tag :url => {:action => 'create'}%>
+New Page: <%= text_field_tag 'url_name' %>
+<%= submit_tag 'Create' %>
+<%= link_to_remote 'cancel', :url => {:action => 'cancel_new'} %>
+<%= end_form_tag %>

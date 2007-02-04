@@ -1,0 +1,5 @@
+<%= form_tag ({:action=>'zero_activity_users'},{:onsubmit=>"return confirm('This will PERMANENTLY delete all suspended users on this page. Proceed?')"})%>
+<input type="hidden" name="suspended" value="<%= @suspended %>"/>
+<%= submit_tag 'Delete all suspended users on this page' %>
+<%= end_form_tag %>
+<%=render_partial 'user_table', :index=>:none%>

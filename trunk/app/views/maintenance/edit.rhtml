@@ -1,0 +1,6 @@
+<%= start_form_tag :action => 'update', :id => @maintenance_date %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<%= end_form_tag %>
+
+<%= link_to 'Back', :action => 'list' %>

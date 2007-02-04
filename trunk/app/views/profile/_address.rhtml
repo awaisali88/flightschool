@@ -1,0 +1,32 @@
+<% @item = item %>
+<% if edit %>
+<%= form_remote_tag :url=>{:action => 'save_new_item',:item_type=>'address',:item_id=>item.id}%>
+<%= text_field('item',"address_line1", :value => item.address_line1,:size=>'45') %><br/>
+<%= text_field('item',"address_line2", :value => item.address_line2,:size=>'45') %><br/>
+<table>
+<tr><td>City:</td><td> <%= text_field('item',"city", :value => item.city,:size=>'15') %></td></tr>
+<tr><td>State/Province:</td><td> <%= text_field('item',"state_province", :value => item.state_province,:size=>'15') %></td></tr>
+<tr><td>Postal Code:</td><td> <%= text_field('item',"postal_code", :value => item.postal_code,:size=>'10') %></td></tr>
+</table>
+<%= country_select('item',"country",["United States"])%></br>
+<%= submit_tag 'Save' %>
+
+<% if not item.new_record? %>
+<%= link_to_remote("Delete",
+				   :url => { :action => :delete_item,:item_id =>item.id, :item_type => 'address'}) %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_edit_item,:item_id =>item.id, :item_type => 'address'} ) %>
+<% else %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_new_item,:item_type => 'address'} ) %>
+<% end %>
+<%= end_form_tag %>
+
+<% else %>
+<%= item.address_line1%><br/>
+<% if item.address_line2 != '' %>
+<%= item.address_line2%><br/>
+<% end %>
+<%= item.city+', '+item.state_province+' '+item.postal_code%><br/>
+<%= item.country %>
+<% end %>

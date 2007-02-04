@@ -1,0 +1,5 @@
+<% if params[:id] == nil %>
+<%= link_to_remote image_tag('noimage.png'),:url=>{:controller=>'image',:action=>'popup'} %>
+<% else %>
+<%= link_to_remote '<img src= "/image/thumb/'+params[:id].to_s+'"/>',:url=>{:controller=>'image',:action=>'popup'} %>
+<% end %>

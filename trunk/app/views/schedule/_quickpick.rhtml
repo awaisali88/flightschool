@@ -1,0 +1,136 @@
+<div id="quick_reservation" style="position:relative">
+
+<%= start_form_tag ({:action => 'create',:controller => 'reservation',:render_layout => 'true'},
+      {:id => 'quickpick_form'}) %>
+
+	<div class="reservation_options" id="date_controls">
+
+	<input name="reservation[date]" id="date" value="<%=@reservation.time_start.to_date.to_s%>" style="display:none"/>
+	<input id="trigger" type="submit" value="<%=@reservation.time_start.to_date.to_s%>" onclick="return false;">
+	<script type="text/javascript">
+	    Calendar.setup({
+	        inputField     :    "date",     // id of the input field
+	        ifFormat       :    "%Y-%m-%d",     // format of the input field (even if hidden, this format will be honored)
+	         button         :    "trigger",   
+	        daFormat       :    "%Y-%m-%d",// format of the displayed date
+	        align          :    "Tl",           // alignment (defaults to "Bl")
+	        singleClick    :    true,
+			onClose	   :   function(cal){ 
+						cal.hide();
+						show_loading_indicator('quick_reservation'); 
+					new Ajax.Updater('quick_reservation_wrap', '/schedule/quickpick_update?'+Form.serialize('quickpick_form'), {asynchronous:true, evalScripts:true});    
+				 }
+	    });
+	</script>
+	
+	</div>
+	
+	<div class="reservation_options">
+		Aircraft Type: 
+		<!-- ugly definition due to bug in Rails select method ignoring html_options param -->
+		<select name="reservation_aircraft_type" id="reservation_aircraft_type" style="width:150px">
+		<%= options_for_select(options_for_aircraft_types(),@aircraft_type) %>
+		</select>
+	</div>
+
+    <div class="schedule_area">
+    <div id="schedule_table">
+	<table cellspacing="0" cellpadding="0">
+        <tr>
+           <td></td>
+	       <td class="header_cell" colspan="3"> 7<span class="smallfont">am</span> </td> 
+	       <td class="header_cell" colspan="3"> 10<span class="smallfont">am</span> </td> 
+	       <td class="header_cell" colspan="3"> 1<span class="smallfont">pm</span> </td> 
+	       <td class="header_cell" colspan="3"> 4<span class="smallfont">pm</span> </td> 
+	       <td class="header_cell" colspan="3"> 7<span class="smallfont">pm</span> </td> 
+           <td class="header_cell"></td>        
+        </tr>
+	    <% @aircrafts.each{|aircraft|%>
+	        <tr>  
+            <td class="<%=aircraft.prioritized ? 'radio_cell_prioritized' : 'radio_cell'%>"><%= radio_button('reservation',"aircraft_id", aircraft.id) %></td>
+		    <% (7..22).each{|y|%>
+		        <% if is_reserved(@aircraft_reservations[aircraft.id],@reservation.time_start.year,@reservation.time_start.month,@reservation.time_start.day,y) %>
+	       	       <td class="reserved_cell">  </td> 
+                <% else %>		    
+    		       <td class="open_cell">  </td> 
+                <% end %>
+		    <% } %>
+	        </tr>
+	    <% } %>
+	</table>
+	</div>
+	<div class="label_table">
+	<table cellspacing="1" cellpadding="0">
+	    <% @aircrafts.each{|aircraft|%>
+	        <tr>    
+		       <td class="label_tag" <%=if isKHTML? then 'style="height:23px;"' end %>> <%=aircraft.identifier+" - "+aircraft.type_equip  %></td> 
+		    </tr> 
+	    <% } %>
+	</table>
+	</div>
+    </div>
+    
+    
+    <div class="reservation_options" id="quick_schedule_instructor_controls">
+	   	Instructor: 
+	   	<!-- ugly definition due to bug in Rails select method ignoring html_options param -->
+		<select id="quickpick_instructor_select" name="reservation[instructor_id]" style="width:150px">
+		<%= options_for_select(options_for_instructor(@instructors),@reservation.instructor_id) %>
+		</select>
+	</div>
+	
+	<% if @instructor != nil %>
+	<div class="schedule_area">
+	
+	    <table cellspacing="0" cellpadding="0">
+		    <tr>
+	           <td ></td>
+		       <td class="header_cell" colspan="3"> 7<span class="smallfont">am</span> </td> 
+		       <td class="header_cell" colspan="3"> 10<span class="smallfont">am</span> </td> 
+		       <td class="header_cell" colspan="3"> 1<span class="smallfont">pm</span> </td> 
+		       <td class="header_cell" colspan="3"> 4<span class="smallfont">pm</span> </td> 
+		       <td class="header_cell" colspan="3"> 7<span class="smallfont">pm</span> </td> 
+	           <td class="header_cell"></td>        
+	        </tr>
+		    <tr>
+		    <td  class="radio_cell"></td>
+		    <% (7..22).each{|y|%>
+		        <% if is_reserved(@instructor_reservations,@reservation.time_start.year,@reservation.time_start.month,@reservation.time_start.day,y) %>
+           	       <td class="reserved_cell">  </td> 
+                <% else %>		    
+    		       <td class="open_cell">  </td> 
+                <% end %>
+            <% } %>
+		    </tr>
+		</table>
+	   <div class="label_table">
+	       <table cellspacing="1" cellpadding="0">
+		        <tr>    
+			       <td class="label_tag"> <%=@instructor_name %></td> 
+			    </tr> 
+		   </table>
+	   </div>
+	</div>
+    <% end %>		
+    <div class="reservation_options" id="quick_schedule_controls">
+	<table>
+	<tr><td>From:</td><td>To:</td></tr>
+	
+	<tr><td> <%= select 'reservation','from', (7..11).map{|x| x.to_s+' am'}+['12 pm']+(1..10).map{|x| x.to_s+' pm'} %></td>
+	<td> <%= select 'reservation', 'to', (8..11).map{|x| x.to_s+' am'}+['12 pm']+(1..11).map{|x| x.to_s+' pm'} %></td></tr>
+	</table>
+	</div>
+	<%= submit_tag 'Reserve',:class => 'quick_reservation_submit_button'%> 
+    
+<%= end_form_tag %>
+
+<script type="text/javascript">
+new Form.Element.EventObserver('reservation_aircraft_type', function(element, value) {show_loading_indicator('quick_reservation'); new Ajax.Updater('quick_reservation_wrap', '/schedule/quickpick_update', {asynchronous:true, evalScripts:true, parameters:Form.serialize("quickpick_form")})})
+new Form.Element.EventObserver('quickpick_instructor_select', function(element, value) {show_loading_indicator('quick_reservation');; new Ajax.Updater('quick_reservation_wrap', '/schedule/quickpick_update', {asynchronous:true, evalScripts:true, parameters: Form.serialize("quickpick_form")})})
+</script>
+
+    
+</div>
+<script  type="text/javascript">
+    quickpick_fix_selects('<%=@aircraft_type%>','<%=@reservation.instructor_id%>')
+</script>

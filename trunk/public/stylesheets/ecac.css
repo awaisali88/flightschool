@@ -1,0 +1,405 @@
+/**
+ * ecac.css - stylesheet for the main layout page
+ * @author: levpopov@mit.edu
+ */
+
+body{
+    background: white;
+    text-align: center; 
+	font-family: helvetica;
+}
+#wrap{
+    background:white;
+    margin: 0 auto;
+    width: 900px;
+    text-align: left;
+}
+
+
+#header{
+    position: relative;
+    height: 123px;
+    width: 900px;
+	border-bottom: 2px solid #000000;
+    background: url(/images/ecac/header.jpeg);
+	font-family: arial;
+}
+
+#sub_navbar a{
+	color:#ffeeee;
+	font-size: 9pt;
+	margin-left:10px;
+	margin-right:10px;
+	font-weight: bold;
+	text-decoration: none;
+	font-family: verdana;
+	vertical-align: center;
+}
+
+#sub_navbar{
+	background:#555555;
+	color:#ffeeee;
+	border: none;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	height: 17px;
+	border-bottom: 1px solid black;
+	vertical-align: center;
+}
+
+.active_navtab{
+	background: #555555;
+}
+
+.active_navtab a{
+    padding: 5px;
+    display: block;
+    color: white;
+    font-weight: bold;
+    font-size: 11pt;
+    text-decoration: none;    
+}
+
+
+#main{
+    border: 2px solid lightgrey;
+    padding: 0px;
+    margin: 0px;
+}
+
+#content_td{
+    vertical-align: top;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 10px;
+    width: 695px;
+}
+
+
+#sidebar{
+    padding-top: 20px;
+    vertical-align: top;
+    background: #e7e7e7;
+    width: 195px;
+}
+
+.page_title{
+    font-size: 18pt;
+    font-weight: bold;
+    color: #2255aa;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+/* login/logout controls styles */
+
+#logout_box{
+    margin:6px;
+}
+
+#login_area{
+    position: absolute;
+    top: 1px;
+    right: 0px;
+    margin: 0px;
+}
+
+
+#welcome_message{
+    color: white;
+    font-size: 11pt;
+    position:absolute;
+    top:2px;
+    right: 50px;
+    padding: 0px;
+    width: 150px;
+    margin: 0px;
+}
+
+.login_field {
+    background: white;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    width: 127px;
+    max-width: 127px;
+    border: none;
+    padding: 0px;
+    padding-left:3px;
+    padding-right:6px;
+    margin: 0px;
+}
+
+html>body .login_field{
+    width:118px;
+    background-attachment:scroll;
+}
+
+.login_link, #login_box a, #logout_box a{
+    text-align: left;
+    background: #001b57;
+    color: white;
+    font-weight: bolder;
+    font-size: 11pt;
+    text-decoration: none;
+    border: none; 
+    padding: 1px;
+    cursor: pointer;
+    z-index: 200;
+}
+
+.login_link{
+    background: #276cac;
+    border: 1px solid lightblue;
+}
+
+.login_link:hover, #login_box a:hover{
+    color: #ddeeff;
+}e;
+
+.spacer{
+    display: block;
+    height: 5px;
+    background: red;
+    clear: both;
+}
+
+
+/* Navigation tab styles */
+
+#nav_top{
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#nav_top li{
+    float: left;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 10px;
+}
+
+.horz_line{
+    background: white;
+    height: 1px;
+}
+.vert_line{
+    background: white;
+    width: 1px;
+}
+
+.tab_dot{
+    background: white;
+    width: 1px;
+    height: 1px;
+}
+
+.tab_center{
+}
+
+.tab_center a{
+    padding: 5px;
+    display: block;
+    color: white;
+    font-weight: bold;
+    font-size: 11pt;
+    text-decoration: none;    
+}
+.tab_center a:hover{
+    background: #276cac;
+}
+
+#sidebar_nav{
+    margin: 0px;
+    margin-bottom:5px;
+}
+#sidebar_nav dl{
+    margin:0px;
+    padding:0px;
+}
+#sidebar_nav a{
+    color: #276cac;
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 10pt;
+}
+.sidebar_nav_header{
+    padding-top:15px;
+    margin-left:5px;
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+/* forms */
+label{
+    font-weight: bold;
+    font-size: .9em;
+    color: #276cac;
+    vertical-align: center;
+}
+select{
+    padding: 1px;
+    margin: 0px;
+}
+
+.boxed_form{
+    background: #f0f5ff;
+    padding: 10px;
+    margin:20px;
+    border: 1px solid lightblue;
+}
+
+#content{
+	padding-left:5px;
+	padding-right:5px;
+}
+
+th{
+    text-align: left;
+    font-weight: bold;
+    font-size: .9em;
+    color: white;
+ 
+    background: #2255aa;
+    padding: 3px;
+
+    border: 1px solid black;
+}
+
+.content th a{
+    font-weight: bold;
+    color: white;
+}
+
+.content td{
+    text-align: left;
+}
+
+.content a{
+    color: #003377;
+    font-size: 1em;
+}
+
+.simple_form{
+    background:  #f0f5ff;
+    border: none;
+    margin:0px;
+    padding: 0px;
+}
+
+.warning_text{
+    color: red;
+    font-weight:bold;
+    
+}
+
+form{
+    margin: 5px;
+    padding: 0px;
+}
+
+.tooltip{
+    position: absolute;
+    visibility: hidden;
+    background:  #f0f5ff;
+    border: 2px solid lightblue;    
+}
+
+.tooltip a{
+    display:block;
+    width: 100%;
+    background: #276cac;
+    color: white !important;
+    font-size: 10pt !important;
+}
+
+#notice{
+	font-size: 10pt;
+	font-weight: bold;
+    padding: 2px;
+    margin-left: 10px;
+	color:green;
+}
+
+#warning{
+	font-size: 10pt;
+	font-weight: bold;
+    padding: 2px;
+    margin-left: 10px;
+	color:red;
+}
+
+tr.even_row{
+    background: #dddddd;
+}
+
+tr.odd_row{
+    background: white;
+}
+
+input[type="text"]{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+textarea{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+input[type="select"]{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+input[type="checkbox"]{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+input[type="password"]{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+input[type="file"]{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+select{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+.field_hint{
+	color: grey;
+	font-size:8pt;
+}
+
+.unapproved{
+	color: purple;
+}
+.suspended{
+	color: red;
+}
+
+#user_table form{
+	padding:0px;
+	margin: 0px;
+}
+
+.button{
+    padding: 0 .25em 0 .25em 0;
+    width: 0;
+    overflow:visible;
+}
+
+.button[class] {  /* IE ignores [class] */
+    width: auto;  /* cancel margin fix for other browsers */
+}

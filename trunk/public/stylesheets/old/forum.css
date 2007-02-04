@@ -1,0 +1,15 @@
+.thread_topic{
+	background: #88ccff;
+	border: 1px solid darkblue;
+	padding: 5px;
+}
+
+.post{
+	background: #88ccff;
+	border: 1px solid darkblue;
+	padding: 5px;
+}
+
+.post_details{
+	color: darkblue;
+}

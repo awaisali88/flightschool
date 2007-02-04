@@ -1,0 +1,13 @@
+<%= error_messages_for 'aircraft_type' %>
+
+<!--[form:aircraft_type]-->
+<p><label for="aircraft_type_type_name">Aircraft Type Name</label><br/>
+<%= text_field 'aircraft_type', 'type_name',:size=>20  %></p>
+
+<p><label for="aircraft_type_passenger_capacity">Passenger Capacity</label><br/>
+<%= select 'aircraft_type', 'passenger_capacity', [1,2,3,4] %></p>
+
+<p><label for="aircraft_type_sort_value">Schedule Position (higher value will move this type up)</label><br/>
+<%= text_field 'aircraft_type', 'sort_value',:size=>3  %></p>
+<!--[eoform:aircraft_type]-->
+

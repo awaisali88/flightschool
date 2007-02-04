@@ -1,0 +1,2 @@
+class DepositRecord < BillingCharge
+end

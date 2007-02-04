@@ -1,0 +1,255 @@
+
+#quick_reservation{
+    text-align: center;
+}
+
+.schedule_area{
+    top:6px;
+    position: relative;
+    padding-bottom:10px;
+}
+
+.label_table{
+    position: absolute;
+    top: 1em;
+    left: 1em;    
+}
+
+.reservation_options{
+    text-align: center;
+    font-family: arial;
+    font-weight: bold;
+    font-size: .9em;
+    color: #001b57;    
+    background: lightblue;
+    padding: 1px;
+    padding-bottom: 6px;
+    margin: 3px;
+    margin-bottom:1px;
+}
+
+.reservation_options table{
+    text-align: center;
+    width: 90%;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+.reservation_options select{
+    padding: 0px;
+    margin: 0px;
+}
+
+.quick_reservation_submit_button{
+    border: none;
+    background: #001b57;
+    padding: 3px;
+    color: white;
+    font-weight: bold;
+    font-family: arial;
+}
+
+
+.header_cell{
+    background: lightblue;
+    height: 1em;
+    font-family: arial;
+    font-weight: bold;
+    font-size: .9em;
+    border-right: 1px solid #ddeeff; 
+    color: #001b57;
+ 
+}
+
+.smallfont{
+    font-size: .6em;
+}
+
+.open_cell{
+    width: 8px;
+    height: 1em;
+    background: lightgreen;
+    border-right: 1px solid #ddeeff; 
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+.reserved_cell{
+    width: 8px;
+    height: 1em;
+    background: #f2a3a0;
+    border-right: 1px solid #ddeeff; 
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+html>body .open_cell{
+    width: 9px;
+    height: 1em;
+    background: lightgreen;
+    border-right: 1px solid #ddeeff; 
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+html>body .reserved_cell{
+    width: 9px;
+    height: 1em;
+    background: #f2a3a0;
+    border-right: 1px solid #ddeeff; 
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+.schedule_area input{
+    padding: 0px;
+    margin: 0px;
+}
+
+.radio_cell{
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    width: 15px;
+    height: 22px;
+    background: lightblue;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+.radio_cell_prioritized{
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    width: 15px;
+    height: 22px;
+    background: yellow;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+}
+
+.label_tag{
+    width: 150px;
+    text-align: center;
+    font-family:arial;
+    font-weight: bold;
+    font-size: 10pt;
+    color: #001b57;
+    height: 21px;
+}
+
+#quick_schedule_instructor_controls{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#quick_reservation form{
+    padding: 0px;
+    margin: 0px;
+}
+
+.reservation_box{
+   background: #f0f5ff;
+    margin-right: 5px;
+	padding: 3px;
+    border: 1px solid lightblue;
+    position: relative;
+}
+
+.aircraft_name{
+   position:absolute;
+   font-weight: bold;
+   font-size: .75em;
+   padding: 2px;
+   margin:1px;
+   color: black;
+}
+ 
+html>body .aircraft_name{
+   font-size: .7em;
+}
+
+.type_label_over{
+   position:absolute;
+   background: #276cac;
+   color: white;
+   font-weight: bold;
+   text-align: left;
+}
+
+.shift_right{
+    padding-left:10px;
+}
+
+
+.reservation_bar{
+   position: absolute;
+   height:16px; 
+   border: 1px solid black;
+   cursor: pointer;
+   overflow: hidden;
+   font-size: 8pt;
+}
+
+.approved_booking_reservation_bar{
+   position: absolute;
+   height:16px; 
+   border: 1px solid black;
+   cursor: pointer;
+   overflow: hidden;
+   font-size: 8pt;
+   background: lightgreen;
+}
+
+.created_booking_reservation_bar{
+   position: absolute;
+   height:16px; 
+   border: 1px solid black;
+   cursor: pointer;
+   overflow: hidden;
+   font-size: 8pt;
+   background: yellow;
+}
+
+.approved_instructor_block_reservation_bar,.approved_aircraft_block_reservation_bar{
+   position: absolute;
+   height:16px; 
+   border: 1px solid black;
+   cursor: pointer;
+   overflow: hidden;
+   font-size: 8pt;
+   background:tan;
+}
+
+
+html>body .reservation_bar{
+   height:15px; 
+}
+
+.vbar{
+   position:absolute;
+    z-index: 0;
+    font-weight: bold;
+    font-size: .8em;
+ }
+
+.error_box{
+	border: 1px solid red;
+	background: #f0f0f0;
+	color: #aa3333;
+	
+	font-size: 8pt;
+	font-weight:bold;
+	padding: 2px;
+}
+
+.error_box_header{
+	background: red;
+	color: white;
+	padding-top:2px;
+	padding-left:2px;
+	margin:0;
+	font-size: 8pt;
+	font-weight:bold;
+}

@@ -1,0 +1,25 @@
+<%= start_form_tag :action => 'update_status', :id => @document %>
+
+<table id="article_table" width="100%">
+    <th>Article</th>
+    <th>Status</th>
+    
+ <% for document in @documents %>
+  <tr>
+    <td><%=link_to (h(document.one_line_summary).strip=="" ? "[no title]" : h(document.one_line_summary)) , {:action => 'edit', :id => document},
+ 		:style=>(document.status=="submitted" ? 'color:black' : '') %></td>
+	<td><%=select_tag 'status'+document.id.to_s, options_for_select([['Hidden','submitted'],['Published','approved']],[document.status])%></td>
+  </tr>
+<% end %>
+
+</table>
+
+<%= link_to 'Previous page', { :page => @document_pages.current.previous } if @document_pages.current.previous %>
+<%= submit_tag 'Save Status Changes' %>
+<%= link_to 'Next page', { :page => @document_pages.current.next } if @document_pages.current.next %> 
+<%= end_form_tag %>
+
+
+<script type="text/javascript">
+	color_table('article_table')
+</script>

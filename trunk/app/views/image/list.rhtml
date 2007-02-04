@@ -1,0 +1,27 @@
+<form action="/image/save" enctype="multipart/form-data" method="post">
+ <label>Upload new image:</label> <%= file_field("image", "image",:size => "20") %> 
+ <%= submit_tag("Upload image") %>
+</form>
+
+<table>
+<% i = 0 %>
+<tr>
+<% @images.each{|image| %>
+	<% if i%5 == 0 %>
+		</tr><tr>
+	<% end %>
+	<% i = i+1 %>
+	<td>
+	<table style="display:inline;"><tr><td>
+	<img src='/image/thumb/<%= image['id'] %>'>
+	</td></tr><tr><td>
+		   <%= form_tag ({ :controller=>'image',:action=>'delete',:id=>image['id']},
+				{:onsubmit=>"return confirm('This will permanently delete the image. Proceed?')",:style=>"display:inline"})%>
+			<%= submit_tag 'Delete' %>
+			<%= end_form_tag %>
+	</td></tr></table>
+	</td>
+<%  } %>
+</tr>
+</table>
+<%= pagination_links @pages %>

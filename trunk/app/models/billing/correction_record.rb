@@ -1,0 +1,2 @@
+class CorrectionRecord < BillingCharge
+end

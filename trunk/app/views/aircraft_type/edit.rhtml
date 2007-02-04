@@ -1,0 +1,5 @@
+<%= start_form_tag :action => 'update', :id => @aircraft_type %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<%= end_form_tag %>
+<%= link_to 'Back', :action => 'list' %>

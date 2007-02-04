@@ -1,0 +1,23 @@
+<%content_for 'sidebar' do%>
+	<div id="reservation_sidebar" style="position:absolute;">
+		<%= render :partial => 'edit_reservation' %>
+	</div>
+<% end %>
+
+<%= render :partial=>'schedule_browser' %>
+
+<script type="text/javascript">
+      function autoposition_reservation_sidebar(){
+         $("reservation_sidebar").style.top = "160px";
+         sc = getPageScroll()
+         if(sc[1]>160){
+             $("reservation_sidebar").style.top = sc[1]+"px";                    
+         }
+      }
+
+     if (window.addEventListener) {
+         window.addEventListener("scroll", function (e) { autoposition_reservation_sidebar(); }, false);
+     } else if (window.attachEvent) {
+         window.attachEvent('on' + "scroll", function (e) { autoposition_reservation_sidebar(); });
+     }
+ </script>

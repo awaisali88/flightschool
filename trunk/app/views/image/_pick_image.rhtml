@@ -1,0 +1,8 @@
+<%= text_field_tag params[:field_name],@image_id,{:id=>"image_value_field"}%>
+<% if params[:show_picture] != nil%>
+	<div id="image_drop_area">
+	<%= render_partial 'image_link', :id =>@image_id%>
+	</div>
+<% else %>
+    <%= link_to_remote 'insert image',:url=>{:controller=>'image',:action=>'popup'} %>
+<% end %>

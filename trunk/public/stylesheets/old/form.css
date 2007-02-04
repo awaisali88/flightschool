@@ -1,0 +1,62 @@
+.form_tab{
+	border-bottom: 1px solid white;
+	padding: 0px;
+}
+
+.form_tab_content{
+//	border: 2px solid darkblue;
+}
+
+.form_tab_content a{
+	color: blue;
+}
+
+
+.form_field{
+	padding-top: 5px;
+	vertical-align: top;
+	font-weight: bold;
+}
+
+.form_tab_title{
+	background: darkblue;
+	color: white;	
+}
+
+.form_tab_title a{
+	color: white;
+	font-size: 13pt;
+	font-style: bold;
+	text-decoration: none;
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+}
+.form_tab_title a:hover{
+	background: blue;
+}
+#form_spacer{
+	height: 2px;
+	clear:both;
+}
+#right_form{
+	margin-left: 20px;
+	float: left;
+	width: 350px;
+}
+#left_form{
+	width: 500px;
+	float: left;
+}
+.profile_item{
+	margin-bottom:7px;
+}
+
+#profile_edit_submit input{
+	width: 300px;
+	height: 30px;	
+	margin-top: 30px;
+	margin-left: 20%;
+	margin-right: 20%;
+}

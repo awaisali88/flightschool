@@ -1,0 +1,61 @@
+div.page_name_auto_complete {
+	width: 100px;
+	background: #fff;
+	display: inline;
+}
+
+div.page_name_auto_complete ul {
+	border: 1px solid #888;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	list-style-type: none;
+}
+
+div.page_name_auto_complete ul li {
+	margin: 0px;
+	padding: 3px;
+}
+
+div.page_name_auto_complete ul li.selected { 
+	background-color: #ffb; 
+}
+
+div.page_name_auto_complete ul strong.highlight { 
+	color: #800; 
+	margin: 0;
+	padding: 0;
+}
+
+#record_table input{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+#record_table th{
+	font-size: 9pt;
+}
+
+
+.billing_input{
+	background: #ffffee;
+	border: 1px solid black;	
+}
+
+
+.informal{
+	color: grey;
+	font-size:8pt;
+	margin: 0px;
+	padding: 0px;
+}
+
+.input_with_error{
+	border: 2px solid red;
+}
+
+.notification{
+	border: none;
+	color: green;
+	padding: 10px;
+}

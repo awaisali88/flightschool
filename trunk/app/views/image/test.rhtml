@@ -1,0 +1,9 @@
+<% content_for("include") do %>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag 'popup' %>
+<% end %>
+
+<div id="upload_test">
+<%=render_partial 'upload_link'%>
+</div>
+

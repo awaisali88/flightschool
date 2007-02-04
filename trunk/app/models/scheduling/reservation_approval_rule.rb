@@ -1,0 +1,2 @@
+class ReservationApprovalRule < ReservationRule
+end

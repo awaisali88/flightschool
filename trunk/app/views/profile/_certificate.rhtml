@@ -1,0 +1,43 @@
+<%= @read_it %>
+<% @item = item %>
+<% if edit %>
+<%= form_remote_tag :url=>{:action => 'save_new_item',:item_type=>'certificate',:item_id=>item.id}%>
+
+<%=select('item',"certificate_category", [
+["Private","Private"],["Instrument", "Instrument"],["Commercial", "Commercial"],
+["Certified Flight Instructor", "CFI"],
+["Certified Instrument Instructor", "CFII"],
+["Airline Transport Pilot", "ATP"]], :selected => item.certificate_category)%><br/>
+<b>Ratings:</b><br/>
+<%=check_box('item',"airplane_sel_rating")%> Airplane Single Engine<br/>
+<%=check_box('item',"airplane_mel_rating")%> Airplane Multiple Engine<br/>
+<%=check_box('item',"helicopter_rating")%> Helicopter<br/>
+<%=check_box('item',"instrument_rating")%> Instrument<br/>
+<%= submit_tag 'Save' %>
+
+<% if not item.new_record? %>
+<%= link_to_remote("Delete",
+				   :url => { :action => :delete_item,:item_id =>item.id, :item_type => 'certificate'}) %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_edit_item,:item_id =>item.id, :item_type => 'certificate'} ) %>
+<% else %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_new_item,:item_type => 'certificate'} ) %>
+<% end %>
+<%= end_form_tag %>
+
+<% else %>
+<%= item.certificate_category %>
+<% if item.airplane_sel_rating %>
+ Airplane SEL
+<% end %>
+<% if item.airplane_mel_rating %>
+ Airplane MEL
+<% end %>
+<% if item.helicopter_rating%>
+ Helicopter
+<% end %>
+<% if item.instrument_rating%>
+ Instrument
+<% end %>
+<% end %>

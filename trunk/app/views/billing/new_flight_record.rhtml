@@ -1,0 +1,262 @@
+<!-- autotabbing code from http://www.tek-tips.com/viewthread.cfm?qid=1076079&page=9 -->
+<script language=javascript>
+var keyDown = true;
+function nextBox(e,obj, num,name) {
+   if (e.keyCode == 9 || e.keyCode==40) return;
+   if(!keyDown) return;
+   keyDown=false;	
+   if (obj.value.length >= num) {
+	Field.activate($(name));		
+   }
+}
+
+function addDot(obj,e) {
+   if (e.keyCode == 8 || e.keyCode == 9 || obj.value.length < 2) return;
+   if (obj.value.length == 2 && obj.value[0]!='.' && obj.value[1]!='.') {
+		obj.value = obj.value+'.'
+   }
+   if(obj.value[obj.value.length-1] == '.' && obj.value[obj.value.length-2] == '.')
+		obj.value = obj.value.substring(0,obj.value.length-1);
+   if(obj.value[obj.value.length-1] == '.' && obj.value.length<3)
+		obj.value = obj.value.substring(0,obj.value.length-1);		
+
+}
+</script>
+
+<div class="page_name_auto_complete" id="pilot_list" style="display:none"></div>
+<div class="page_name_auto_complete" id="instructor_list" style="display:none"></div>
+<div class="page_name_auto_complete" id="aircraft_list" style="display:none"></div>
+
+<script  language=javascript>
+pilot_list = <%=user_array @users%>
+instructor_list = <%=user_array @instructors%>
+aircraft_list = <%=aircraft_array @aircrafts%>
+
+
+function row_changed(i){
+	hstart = parseFloat($('hobbs_start'+i).value)
+	hend = parseFloat($('hobbs_end'+i).value)
+	irate = parseFloat($('instructor_rate'+i).value)
+	arate = parseFloat($('aircraft_rate'+i).value)
+	gtime = parseFloat($('ground_time'+i).value)
+
+	var charge = 0;
+	var charge_ok = false;
+	if (notNaN(hend) && notNaN(hstart) && notNaN(irate) && notNaN(arate)){
+		charge += ((hend-hstart)<0 ? 100-hstart+hend : hend-hstart) * (irate+arate);
+		charge_ok = true;	
+	}else if(notNaN(hend) && notNaN(hstart) && notNaN(arate)){
+		charge += ((hend-hstart)<0 ? 100-hstart+hend : hend-hstart) * arate;
+		charge_ok = true;	
+	}		
+
+	if (notNaN(gtime) && notNaN(irate)){
+		charge += gtime*irate;
+		charge_ok = true;			
+	}
+
+	setElemClass($("charge_amount"+i),'input_normal')
+	setElemClass($("month"+i),'input_normal')
+	setElemClass($("day"+i),'input_normal')
+	setElemClass($("pilot"+i),'input_normal')
+	
+	if(charge_ok){
+		charge = charge.toFixed(2);
+//	  	charge = Math.round(charge*100) / 100.0
+	  	$("charge_amount"+i).value =charge 
+		new Effect.Highlight("charge_amount"+i,{restorecolor:'#ffffff'});
+	}else{
+	  	setElemClass($("charge_amount"+i),'input_with_error')
+		$("charge_amount"+i).value = ''
+	}
+	
+	if(!validate_date($('year').value,$('month'+i).value,$('day'+i).value)){
+		setElemClass($("month"+i),'input_with_error')
+		setElemClass($("day"+i),'input_with_error')
+	}
+	
+	var pilot_id = parseInt($('pilot_id_'+i).value);
+	if(isNaN(pilot_id))
+		setElemClass($("pilot"+i),'input_with_error')
+	
+}
+
+function addRow(src_iteration){
+	var table = $('record_table');
+
+	if(src_iteration+1 < table.rows.length)
+		return;
+		
+	var row = table.insertRow(table.rows.length);
+	var iteration = table.rows.length-1;
+	row.id = 'rec'+iteration;
+	
+	var cell = row.insertCell(0);
+	var el = document.createElement('input');
+	el.type = 'text';	el.name = 'month'+iteration;    el.id = 'month' + iteration; 	el.size = 2; el.value=iteration==1?'mm':$('month' + (iteration-1)).value;
+//	el.onfocus = function(){addRow(iteration)}; 
+	el.maxlength = 2; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){nextBox(event,this,2, "day"+iteration);};
+	cell.appendChild(el);
+	
+	cell = row.insertCell(1);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'day'+iteration;    el.id = 'day' + iteration;	el.size = 2; el.value=iteration==1?'dd':$('day' + (iteration-1)).value;
+	el.maxlength = 2; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){nextBox(event,this,2, "pilot"+iteration);};
+	cell.appendChild(el);
+	
+	cell = row.insertCell(2);
+	el = document.createElement('input');
+	el.type = 'text';  el.id = 'pilot' + iteration;	el.size = 24; 
+	el.value=iteration==1?'':$('pilot' + (iteration-1)).value
+	cell.appendChild(el);
+	el = document.createElement('input');
+	el.type = 'hidden';	el.name = 'rec'+iteration+'[user_id]';    el.id = 'pilot_id_' + iteration; 
+	el.value=iteration==1?'':$('pilot_id_' + (iteration-1)).value
+	cell.appendChild(el);
+	new Autocompleter.Local('pilot'+iteration, 'pilot_list', pilot_list,
+	 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
+		afterUpdateElement:function(text,li){
+			$('pilot_id_'+iteration).value = li.id;
+	}});
+
+	cell = row.insertCell(3);
+	el = document.createElement('input');
+	el.type = 'text';    el.id = 'instructor' + iteration;	el.size = 24; 
+	el.value=iteration==1?'':$('instructor' + (iteration-1)).value
+	cell.appendChild(el);
+	el = document.createElement('input');
+	el.type = 'hidden';	el.name = 'rec'+iteration+'[instructor_id]';    el.id = 'instructor_id_' + iteration; 
+	el.value=iteration==1?'':$('instructor_id_' + (iteration-1)).value
+	cell.appendChild(el);
+	new Autocompleter.Local('instructor'+iteration, 'instructor_list', instructor_list,
+	 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
+		afterUpdateElement:function(text,li){
+			$('instructor_id_'+iteration).value = li.id;
+	}});
+	new Form.Element.Observer('instructor_id_' + iteration, 0.25, function(element, value) {new Ajax.Request('/billing/set_instructor', {asynchronous:true, evalScripts:true, parameters:'instructor=' + escape(value)+'&rec_id='+iteration})});
+	
+		
+	cell = row.insertCell(4);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[hobbs_start]';    el.id = 'hobbs_start' + iteration;	el.size = 4; 
+	el.value=iteration==1?'':$('hobbs_end' + (iteration-1)).value
+	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "hobbs_end"+iteration);};
+	cell.appendChild(el);
+	
+	cell = row.insertCell(5);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[hobbs_end]';    el.id = 'hobbs_end' + iteration;	el.size = 4;
+	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_start"+iteration);};
+	cell.appendChild(el);
+	
+	cell = row.insertCell(6);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[tach_start]';    el.id = 'tach_start' + iteration;	el.size = 4; 
+	el.value=iteration==1?'':$('tach_end' + (iteration-1)).value
+	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_end"+iteration);};
+	cell.appendChild(el);
+
+	cell = row.insertCell(7);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[tach_end]';    el.id = 'tach_end' + iteration;	el.size = 4;
+	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "ground_time"+iteration);};
+	cell.appendChild(el);
+
+	cell = row.insertCell(8);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[ground_instruction_time]';    el.id = 'ground_time' + iteration;	el.size = 5;
+	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.onkeyup=function(event){ nextBox(event,this,4, "aircraft_rate"+iteration);};
+	cell.appendChild(el);
+	
+	cell = row.insertCell(9);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[aircraft_rate]';    el.id = 'aircraft_rate' + iteration;	el.size = 5; 
+	el.value=iteration==1?'':$('aircraft_rate' + (iteration-1)).value
+	cell.appendChild(el);
+	
+	cell = row.insertCell(10);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[instructor_rate]';    el.id = 'instructor_rate' + iteration;	el.size = 5;
+   el.value=iteration==1?'':$('instructor_rate' + (iteration-1)).value
+	cell.appendChild(el);
+	
+	cell = row.insertCell(11);
+	el = document.createElement('input');
+	el.type = 'text';	el.name = 'rec'+iteration+'[charge_amount]';    el.id = 'charge_amount' + iteration;	el.size = 6;
+	cell.appendChild(el);
+
+	new Form.Element.Observer('aircraft_rate' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('instructor_rate' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('ground_time' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('hobbs_start' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('hobbs_end' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('month' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('day' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('pilot_id_' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	
+}
+
+function trapKey(e){
+	if( keyDown && e['shiftKey'] && e.keyCode==40){ //Shift+Down Arrow 
+		addRow();
+		keyDown=false;
+		var row_id = $('record_table').rows.length-1
+		Field.activate($('month'+(row_id)))
+	}
+}
+document.onkeydown = trapKey;
+
+</script>
+
+<%= form_tag ({:action => '#',:controller => '#'},{:id=>'record_form', :onsubmit=>'return false;'})%>
+<label>Year </label> <input name="year" id="year" class="billing_input"  value="<%="#{Time.now.year}"%>" size="4" type="text" onclick="this.select()"/> 
+<label>Aircraft </label> <input id="aircraft" class="billing_input" autocomplete="off" size="20" type="text" onclick="this.select()"/>
+<input name="aircraft" id="aircraft_id" autocomplete="off" type="hidden"/>
+<%= observe_field('aircraft_id',:url =>{:action => 'set_aircraft',:controller=>'billing'},:with => "'aircraft=' + escape(value)",:frequency=>0.25)%>
+<small>Press Shift+Down Arrow to add a new row (copying the defaults from the last row).</small>
+<script type="text/javascript">
+new Autocompleter.Local('aircraft', 'aircraft_list', aircraft_list,
+ 	{fullSearch:true, partialChars:1, selector:autocomplete_selector,
+	afterUpdateElement:function(text,li){
+		$('aircraft_id').value = li.id;
+}});
+</script>
+<br/>
+<br/>
+
+<table id="record_table" width="100%">
+	<tr>
+	<th colspan=2>Date</th>
+	<th>Pilot</th>
+	<th>Instructor</th>
+	<th colspan=2>Hobb's(S/E)</th>
+	<th colspan=2>Tach (S/E)</th>
+	<th> Ground</th>
+	<th colspan=2>Rates(A/I)</th>
+	<th style="color:#eeeedd">Amount</th>
+	</tr>
+</table>
+<br/>
+<%= submit_tag 'Create Records',:id=>'commit', :onclick=>"Form.Element.disable('commit'); new Ajax.Request('/billing/create_records', {asynchronous:true, evalScripts:true, parameters:Form.serialize('record_form')})"%>
+<%= end_form_tag %>
+
+<script language=javascript>
+ addRow(1);
+</script>
+
+
+
+<script type="text/javascript">
+   if (window.addEventListener) {
+        window.addEventListener("load", function () { 	Field.activate($('aircraft'));	 }, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('on' + "load", function () { 	Field.activate($('aircraft'));	 });
+    }
+</script>

@@ -1,0 +1,2 @@
+class RootDocument < Document
+end

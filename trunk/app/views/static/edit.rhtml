@@ -1,0 +1,26 @@
+<table width="100%" >
+<tr><th>Edit</th></tr>
+<tr><td>
+	<%= start_form_tag :action => 'edit', :id => @document %>
+	  <%= render :partial => 'editor' %>
+	  <%= submit_tag 'Save' %>
+	<%= end_form_tag %>
+</td></tr>
+<tr><th>Preview</th></tr>
+<tr><td>
+	<div class="static_page_body"><%= RedCloth.new(@document.body).to_html %> </div>
+</td></tr>
+<tr><td>
+	<table cellpadding="5" cellspacing="0" width="100%" id="version_table" >
+	<th width='10%'>Version</th><th width='60%'>Time submitted</th><th width='30%'>Author</th>
+	<% @versions.each{|v| %>
+	    <tr valign="top">
+		<td><%=link_to v.version.to_s,:action=>'edit',:id=>v.id,:version=>v.version %></td>
+		<td><%=link_to v.last_updated_time,:action=>'edit',:id=>v.id,:version=>v.version %></td>
+		<td><%=link_to v.last_updater.full_name,:controller=>'profile',:action=>'view',:id=>v.last_updater.id %></td>
+		</tr>
+	<%}%>
+	</table>
+	<script type="text/javascript">color_table('version_table')</script>
+</td></tr>
+</table>

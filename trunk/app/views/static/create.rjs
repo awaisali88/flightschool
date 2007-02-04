@@ -1,0 +1,4 @@
+page.insert_html :bottom, 'children', 
+	link_to(@doc.url_name, :action => 'edit', :document => @doc.id)+"<br/>"
+page.replace_html 'add_new_page', :partial => 'new_page_link'
+page.visual_effect :highlight, 'children', :duration => 1

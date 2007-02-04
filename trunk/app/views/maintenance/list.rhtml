@@ -1,0 +1,30 @@
+<table>
+  <tr>
+    <th>Aircraft</th>
+    <th>Description</th>
+    <th>Current</th>
+    <th>Expires</th>
+    <th>Remaining</th>
+    <th>Comments</th>
+  </tr>
+  
+<% for maintenance_date in @maintenance_dates %>
+  <tr>
+	<td><%=maintenance_date.aircraft.identifier %></td>
+	<td><%=maintenance_date.description %></td>
+	<td><%=maintenance_date.aircraft.tach %></td>
+	<td><%=maintenance_date.expires %></td>
+	<td><%=x = maintenance_date.expires - maintenance_date.aircraft.tach; x>0 ? x : 'EXPIRED' %></td>
+	<td><%=maintenance_date.comments %></td>
+    <td><%= link_to 'Edit', { :action => 'edit', :id => maintenance_date } %> </td>
+    <td><%= link_to 'Remove', { :action => 'destroy', :id => maintenance_date }, :confirm => 'Are you sure?' %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @maintenance_date_pages.current.previous } if @maintenance_date_pages.current.previous %>
+<%= link_to 'Next page', { :page => @maintenance_date_pages.current.next } if @maintenance_date_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New Maintenance Counter', :action => 'new' %>

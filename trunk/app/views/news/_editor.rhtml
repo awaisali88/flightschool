@@ -1,0 +1,22 @@
+<%= error_messages_for 'document' %>
+<table><tr><td style="vertical-align:top">
+<!--[form:document]-->
+<label for="document_one_line_summary"> Summary </label>
+<table><tr><td>
+<%= text_field 'document', 'one_line_summary',:size =>"40"  %>
+</td>
+
+<td><label> Status </label><%=select 'document', 'status', [[@document.new_record? ? 'Publish Immediately' : 'Published','approved'],
+	[@document.new_record? ? 'Publish Later' : 'Hidden','submitted']]%></td>
+
+<td style="display:none"><label> Markup </label><%=select 'document', 'mime_type', [['Textile','text/textile'],['HTML','text/html']]%></td>	
+</tr></table>
+
+<p><label for="document_body">Body</label><br/>
+<%= text_area 'document', 'body',:rows=>'25',:cols=>'85' %></p>
+</p>
+</td>
+<td style="padding-left:10px;vertical-align:top">
+	<%= render_partial 'image/image_browser' %>
+</td></tr></table>
+<!--[eoform:document]-->

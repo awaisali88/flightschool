@@ -1,0 +1,30 @@
+body{
+	background: #ddd;
+}
+
+h3{
+	color: darkblue;
+	font-size: 20pt;
+}
+
+h2{
+	background: #99ccff;
+	font-size: 18pt;
+	padding: 3px;
+}
+                                                                                             
+#block{
+	padding-left: 20px;
+}
+
+p{
+	color: #006666;
+	font-size: 14pt;
+	font-style: bolder;
+
+}
+
+li{
+	padding-left: 10px;
+}
+

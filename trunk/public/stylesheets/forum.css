@@ -1,0 +1,40 @@
+.forum_body{
+    padding-left:20px;
+    padding-right:20px; 
+    text-align: left;     
+}
+
+.forum_body p{
+    font-family: arial;
+    font-size: 1em;
+    margin:0px;
+    padding: 0px;
+    margin:5px;
+}
+
+.forum_body img{
+    border: 2px solid #276cac;
+    padding: 3px;
+}
+
+.ListLine0 {
+background: #cceeff;
+}
+.ListLine1 {
+background: #ffffff;
+}
+
+#forum_link a{
+    color: #276cac;
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+.heading_link {
+	float: right;
+	padding-right:15px;
+}
+.heading_link a{
+	color: white;
+}

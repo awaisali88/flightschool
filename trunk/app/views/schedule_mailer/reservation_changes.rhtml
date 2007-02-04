@@ -1,0 +1,17 @@
+Dear <%= @name %>,
+
+Following changes were made to your reservation(s):
+
+<% @reservations.each{|reservation|%>--------------------------------------------------------<%a = reservation.attributes_before_type_cast%>
+ORIGINAL RESERVATION:
+Aircraft: <%= a["aircraft"].nil? ? 'None (Ground School)' : Aircraft.find(a["aircraft"]).type_and_identifier %> <%=a["instructor"].nil? ? '' : "\nInstructor: #{User.find(a['instructor']).full_name}"%>
+From: <%= a["from"].to_time.strftime("%a %b %d %I%p")%>
+To: <%= a["to"].to_time.strftime("%a %b %d %I%p")%>
+
+CHANGES:<%
+%><% if a["o_status"] != a["status"] then %><%="\n"%> Status changed to <%= reservation.status == 'created' ? 'awaiting approval' : reservation.status %> <% end %><%
+%><% if a["instructor"] != a["instructor_id"] then %><%="\n"%> Instructor changed to <%= reservation.instructor.nil? ? 'No Instructor' : reservation.instructor.full_name%> <% end %><%
+%><% if a["aircraft"] != a["aircraft_id"] then %><%="\n"%> Aircraft changed to <%= reservation.aircraft.nil? ? 'No Aircraft/Ground School' : reservation.aircraft.type_and_identifier %> <% end %><%
+%><% if a["from"] != a["time_start"] then %><%="\n"%> Start time changed to <%=reservation.time_start.strftime("%a %b %d %I%p") %> <% end %><%
+%><% if a["to"] != a["time_end"] then %><%="\n"%> End time changed to <%= reservation.time_end.strftime("%a %b %d %I%p")%> <% end %>
+<%}%>

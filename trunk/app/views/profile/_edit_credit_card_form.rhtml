@@ -1,0 +1,35 @@
+<% @sources ||= [] %>
+<% @sources << __FILE__%>
+<%= form_remote_tag(:update => @div_name, 
+					:url => {:action => :edit_entry, :profile_id => @user_id, :item_id =>@item_id, :item_type => @item_t, :new=>@new_entry, :div_name=>@div_name, :real_div=>@real_div})  %>
+<table>
+	<tr>
+	  <td>Card Type:</td> <td><%=select(@item_t,"card_type", {'Visa'=>'Visa','American Express'=>'American Express','Mastercard'=>'Mastercard','Discover'=>'Discover'}, :selected=>@credit_card.card_type)%></td>
+	</tr>
+	<tr>
+	  <td>Card Number:</td> <td><%= text_field(@item_t,"credit_card_number", :value=>@item.credit_card) %></td>
+	</tr>
+	<tr>
+	  <td>Expiration Date:</td> <td><%= select_month(@item.credit_card_expiration_month || Date.today, :use_month_numbers => true, :field_name => "credit_card_expiration_month", :prefix=>@item_t)%>
+	  							 <%= select_year(@item.credit_card_expiration_year || Date.today, :start_year => 2005 :end_year => 2020, :field_name =>"credit_card_expiration_year", :prefix=>@item_t)%></td>
+	</tr>
+</table>
+<% if @new_entry %>
+  <%= submit_tag 'Submit New Card' %>
+<%= end_form_tag %>
+
+<p>
+<%= link_to_remote("Cancel",
+				   :update => @div_name,
+				   :url => { :action => :show_list, :item_type => @item_t, :profile_id => @user_id, :div_name => @div_name}) %>
+				   </p>
+<% else %>
+  <%= submit_tag 'Submit Edit' %>
+<%= end_form_tag %>
+
+<p>
+<%= link_to_remote("Cancel",
+				   :update => @div_name,
+				   :url => { :action => :show_entry, :item_type => @item_t, :profile_id => @user_id, :div_name => @div_name, :real_div => @real_div, :item_id => @item_id}) %>
+					</p>
+<% end %>

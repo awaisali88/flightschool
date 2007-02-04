@@ -1,0 +1,70 @@
+<% if (params[:controller] == 'reservation' or params[:controller]=='schedule' or
+	 params[:controller]=='aircraft' or params[:controller]=='aircraft_type' or
+	 params[:controller]=='maintenance' or params[:action]=='aircrafts') %>
+	<%= link_to "New Reservation", :controller => "reservation", :action => "new" %>
+	<%= link_to "My Reservations", :controller => "reservation", :action => "list" %> 
+	<% if instructor? %>
+		|<%= link_to "Instructor Reservations", :controller => "reservation", :action => "instructor" %>
+		<%= link_to "Instr. Blocks", :controller => "schedule", :action => "create_instructor_block" %>
+	<% end %>
+	<% if admin? %>
+   		|<%= link_to "Pending Reservations", :controller => "schedule", :action => "need_approval" %>
+   		<%= link_to "Manage Aircraft", :controller => "aircraft", :action => "index" %>
+	<% end %>
+	<script type="text/javascript">$('scheduling_tab').className='active_navtab'</script>
+
+<% elsif params[:controller] == 'admin' or params[:controller] == 'reservation_rules' or (params[:controller]=='profile' and admin?)%>
+   <%= link_to "Manage Users", :controller => "admin", :action => "users" %>
+   <%= link_to "Recent Users", :controller => "admin", :action => "recent_users" %>
+   <%= link_to "Inactive Users", :controller => "admin", :action => "zero_activity_users" %>
+   <%= link_to "View Pending Edits", :controller => "admin", :action => "unapproved_users" %>
+   <%= link_to "Find Users", :controller => "admin", :action => "find" %> 
+   <%= link_to "Add New User", :controller => "admin", :action => "create_user" %>
+   <script type="text/javascript">$('admin_tab').className='active_navtab'</script>
+
+<% elsif params[:controller] == 'forum' and params[:forum_name]!='feedback' %>
+   <%= link_to "General Discussion", :controller => "forum", :action => "index",:forum_name=>'general' %>
+   <%= link_to "New Discussion Topic", :controller => "forum", :action => "create_topic",:forum_name=>'general' %>
+   <script type="text/javascript">$('community_tab').className='active_navtab'</script>
+
+<% elsif params[:controller] == 'forum' and params[:forum_name]=='feedback' %>
+   <%= link_to "Feedback Forum", :controller => "forum", :action => "index",:forum_name=>'feedback' %>
+   <%= link_to "New Feedback Topic", :controller => "forum", :action => "create_topic",:forum_name=>'feedback' %>
+   <script type="text/javascript">$('feedback_tab').className='active_navtab'</script>
+
+<% elsif ((	params[:controller] == 'file' or params[:controller] == 'image' or 
+			params[:controller] == 'news' or 
+			(params[:controller] == 'static' and params[:action]!='view')) and params[:action]!='index') %>
+	<%= link_to "View Posted News", :controller => "news", :action => "list" %>
+	<%= link_to "Post News", :controller => "news", :action => "new" %> |
+   <%= link_to "View Static Pages", :controller => "static", :action => "list" %>
+   <%= link_to "New Static Page", :controller => "static", :action => "new" %> |  
+   <%= link_to "Images", :controller => "image", :action => "list" %>   
+   <%= link_to "Files", :controller => "file", :action => "list" %>   
+   <script type="text/javascript">$('cms_tab').className='active_navtab'</script>
+
+<% elsif params[:controller] == 'billing' %>
+	<%= link_to "New Billing Sheet", :controller => "billing", :action => "new_flight_record" %>
+	<%= link_to "New Billing Record", :controller => "billing", :action => "new_record" %>
+	<%= link_to "Edit Billing Rates", :controller => "billing", :action => "edit_rates" %>
+	<%= link_to "Billing Report", :controller => "billing", :action => "admin_report" %>
+	<%= link_to "Export Billing Data", :controller => "billing", :action => "raw_export" %>
+   <script type="text/javascript">$('billing_tab').className='active_navtab'</script>
+
+<% elsif (params[:controller] == 'news' and params[:action]=='index') or (params[:controller]=='profile' and not admin?) %>
+	<%= link_to "Home", :controller => "news", :action => "index" %>
+	<%= link_to "My Profile", :controller => "profile", :action => "view" %>
+	<script type="text/javascript">$('dashboard_tab').className='active_navtab'</script>
+		
+<% elsif params[:controller] == 'static' or  params[:controller] == 'news' or (not user?) %>
+	<%= link_to "About Us", "/content/about_us"%>
+	<%= link_to "Instruction", "/content/instruction"%>
+	<%= link_to "FAQ", "/content/faq"%>
+	<%= link_to "Pilot Shop", "/content/pilot_shop"%>
+	<%= link_to "Resources", "/content/resources"%>
+	<%= link_to "Rental", "/content/rental"%>
+	<%= link_to "Fleet", "/content/fleet"%>
+	<%= link_to "Instructors", "/content/instructors" %> 
+   <script type="text/javascript">$('info_tab').className='active_navtab'</script>
+<% end %>
+

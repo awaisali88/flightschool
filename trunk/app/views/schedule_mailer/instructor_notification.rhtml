@@ -1,0 +1,8 @@
+Dear <%= @name %>,
+
+A new reservation have been made to which you are assigned as an instructor:
+<%a = @reservation%>
+Pilot: <%= a.creator.full_name%>
+Aircraft: <%= a.aircraft.nil? ? 'None (Ground School)' : a.aircraft.type_and_identifier %> 
+From: <%= a.time_start.strftime("%a %b %d %I%p")%>
+To: <%= a.time_end.strftime("%a %b %d %I%p")%>

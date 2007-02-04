@@ -1,0 +1,51 @@
+#user_table{
+    padding: 0px;
+    margin: 0 auto;
+}
+
+#user_table th, td, dt{
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: left;
+	clear: both;
+}
+
+#user_admin_sidebar{
+	font-size: 13pt;
+	padding: 10px;
+	width: 150px;
+	height: 150px;
+	float: right;
+	clear: both;
+	border-left: 5px darkblue solid;
+}
+
+#user_admin_sidebar dl{
+	margin: 0px;
+	padding: 5px;
+}
+
+#user_admin_sidebar a{
+	font-size: 13pt;
+	font-style: bold;	
+}
+
+#path_block{
+	border: 2px solid darkblue;
+	padding: 5px;
+}
+
+#path_block_path{
+	padding: 3px;
+	background: darkblue;
+	color: white;
+}
+
+#path_block_path a{
+	color: white;
+}
+
+#path_block_url{
+	float: right;
+	color: darkblue;
+}

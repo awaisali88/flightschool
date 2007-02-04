@@ -1,0 +1,112 @@
+
+.admin_toolbox{
+	background: #ffffee;
+	border: 1px solid black;
+}
+
+.profile_form table {
+    width:100%;
+    text-align: left;
+    font-weight: bold;
+    font-family: arial;
+    font-size: .9em;
+    color: #276cac;
+ 
+    background: #f0f5ff;
+    padding: 2px;
+    border: 1px solid lightblue;
+}
+
+#bottom_button {
+    position:absolute;
+    bottom:55px;
+}
+
+
+html>body #bottom_button {
+    position:absolute;
+    bottom:10px;
+}
+
+.personal_form {
+    text-align: left;
+    font-weight: bold;
+    font-family: arial;
+    font-size: .9em;
+    color: #276cac;
+
+   background-color: #f0f5ff;
+   border-style: solid;
+   border-width: 1px;
+   border-color: lightblue;
+}
+
+.multiple_items {
+   background-color: #f0f5ff;
+   border-style: solid;
+   border-width: 1px;
+   border-color: lightblue;
+}
+
+#profile_form td {
+    text-align: left;
+}
+
+#administration_tools {
+    text-align: left;
+    font-weight: bold;
+    font-family: arial;
+    font-size: .9em;
+    color: black;
+ 
+   background-color: #f0f5ff;
+   border-style: solid;
+   border-width: 1px;
+   border-color: black;
+}
+
+#administration_tools td {
+    text-align: left;
+}
+
+#multiple_form table {
+    width:100%;
+    text-align: left;
+    background: #f0f5ff;
+    padding: 2px;
+    border: 1px solid lightblue;
+}
+
+#multiple_form td {
+    text-align: left;
+}
+
+.profile_label {
+    text-align: left;
+    font-weight: bold;
+    font-family: arial;
+    font-size: 1.2em;
+    color: #f0f5ff;
+ 
+    background-color: #276cac;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
+
+}
+
+#profile_label td{
+
+    text-align: center;
+
+}
+
+#left_form table {
+    width:100%;
+    text-align: left;
+ }
+ 
+ #left_form td {
+    text-align: left;
+    text-valign: top;
+ }

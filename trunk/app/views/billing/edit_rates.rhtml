@@ -1,0 +1,28 @@
+<%= start_form_tag :action =>'edit_rates'%>
+	<table>
+		<tr><th>Aircraft</th><th>Instructors</th></tr>
+		<tr width="100%"><td>
+			<table style="margin-left:20px;margin-right:20px;">
+				<% @offices.each{|office| %>
+					<%= make_row "<label>#{office.name}</label>",'' %>
+					<% @aircrafts.each{|aircraft| %>
+						<% if aircraft.default_office != office then next end %>
+						<%= make_row (aircraft.type.type_name+' '+aircraft.identifier,text_field_tag("aircraft[#{aircraft.id}]",
+										aircraft.hourly_rate,:size=>5,:class=>"billing_input"))%>		
+					<% } %>
+				<% } %>
+			</table>
+		</td><td>
+			<table style="margin-left:20px;margin-right:20px;">
+				<% @offices.each{|office| %>
+					<%= make_row "<label>#{office.name}</label>",'' %>
+					<% @instructors.each{|instructor| %>
+						<% if instructor.default_office != office then next end %>
+						<%= make_row (instructor.full_name,text_field_tag("instructors[#{instructor.id}]",instructor.hourly_rate,:size=>5,:class=>"billing_input"))%>	
+					<% } %>
+				<% } %>
+			</table>
+		</td></tr>
+	<tr><th colspan="2">	<%= submit_tag 'Save Changes'%></th></tr>
+	</table>
+<%= end_form_tag %>

@@ -1,0 +1,41 @@
+<% if @charges.size==0 %>
+<h5>No recorded charges.</h5>
+<% else %>
+
+<table>
+<th>Date</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Balance</th>
+
+<% @charges.each{|charge|%>
+<%@i||=0; @i=@i+1%><tr class="<%=@i.odd? ? "even_row" : "odd_row" %>" >
+<td style="width:100px"><%= charge.created_at.to_date%> </td>
+<td><div>
+<% var = charge.type.to_s%>
+<% case var
+   when 'FlightRecord'%>
+	<%= charge.aircraft!=nil ? "Flight on" :  "Instruction on"%>
+	<%=charge.flight_date%> 
+	<%=charge.aircraft!=nil ? "Aircraft: #{charge.aircraft.identifier} (Hobb's: #{format_hobbs charge.hobbs_start}-#{format_hobbs charge.hobbs_end})": ''%>
+	<% if not charge.instructor_id.nil?%>  
+	, w. <%=charge.instructor.full_name%>.
+	 <%=charge.ground_instruction_time!=nil ? "Gnd. instruction: #{charge.ground_instruction_time}hrs": ''%>
+	<% end %> 
+<% when 'DepositRecord'%> Balance Deposit
+<% when 'SuppliesRecord'%> Supplies
+<% when 'CorrectionRecord'%> Correction
+<% when 'GroundRecord'%> Ground Fee
+<% when 'Fee Record'%> Fee Charge
+<% end %>
+</div>
+<% if (not charge.notes.nil?) && charge.notes!="" %>
+	<div><label>Note:</label> <%= charge.notes%></div>
+<% end %>
+</td>
+<td style="text-align:right;width:70px"><%= Kernel.sprintf("%.2f",charge.charge_amount) %></td>
+<td style="text-align:right;width:70px"><%= Kernel.sprintf("%.2f",charge.running_total) %></td>
+</tr>    
+<% }%>
+</table>
+<%end%>

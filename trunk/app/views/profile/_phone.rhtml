@@ -1,0 +1,31 @@
+<% @item = item %>
+<% if edit %>
+<table>
+<tr><td>
+<%= form_remote_tag :url=>{:action => 'save_new_item',:item_type=>'phone',:item_id=>item.id}%>
+Number:<%= text_field('item',"phone_number", :value => item.phone_number,:size=>'15') %>
+<%=select('item',"is_txt_capable", {"TXT Capable"=>true, "Not TXT Capable"=>false}, :selected => item.is_txt_capable)%>
+<%= submit_tag 'Save' %>
+<%= end_form_tag %>
+</td>
+<td>
+
+<% if not item.new_record? %>
+<%= link_to_remote("Delete",
+				   :url => { :action => :delete_item,:item_id =>item.id, :item_type => 'phone'}) %>
+
+</td><td>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_edit_item,:item_id =>item.id, :item_type => 'phone'} ) %>
+				   
+<% else %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_new_item,:item_type => 'phone'} ) %>
+<% end %>
+</td></tr>
+</table>
+
+<% else %>
+<%= item.phone_number%>
+<%= if item.is_txt_capable then '(+TXT)' else '' end%>
+<% end %>

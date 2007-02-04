@@ -1,0 +1,9 @@
+<%= start_form_tag ({:action => 'create_topic', :forum_name => @forum.name}) %>
+	<label for="post_one_line_summary">Topic Title</label><br/>
+	<%= text_field 'post', 'one_line_summary',:size =>"60"  %><br/><br/>
+	<label for="document_body">Body</label><br/>
+	<%= text_area 'post', 'body' %><br/>
+	<%= submit_tag "Create Topic" %>
+<%= end_form_tag %>
+
+<p><%= link_to 'Back to '+ @forum.description, :action => 'index', :forum_name => @forum.name%></p>

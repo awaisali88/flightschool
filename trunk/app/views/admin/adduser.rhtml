@@ -1,0 +1,24 @@
+  <div class="form-padding">
+    <%= start_form_tag :action => 'createuser' %>
+    <table>
+        <%= make_row ('Account Type', check_box('post',"student") + 
+         ' Student/Renter ' + check_box('post',"instructor")+
+         ' Instructor ' + check_box('post',"admin")+
+         ' Administrator ') %> 
+		<%= make_row ('', check_box('post',"dispatcher")+
+         ' Dispatcher ' + check_box('post',"mechanic")+
+         ' Mechanic ' + check_box('post',"site_owner")+
+         ' Site Owner ' + check_box('post',"aircraft_owner")+
+         ' Aircraft Owner') %>  
+		<%= make_row 'ECAC Office:', select('user','office',options_for_offices())  %>
+        <%= make_row 'First Name(s)', text_field('user',"first_names")  %>
+        <%= make_row 'Last Name', text_field('user',"last_name")  %>
+        <%= make_row 'Email', text_field('user',"email")  %>
+    </table>
+   <%= render_partial 'user/password', :submit => false %>
+
+      <div class="button-bar">
+        <%= submit_tag 'Create' %>
+      </div>
+    <%= end_form_tag %>
+  </div>

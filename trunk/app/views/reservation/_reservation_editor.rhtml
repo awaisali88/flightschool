@@ -1,0 +1,317 @@
+
+<% if @suppress_flash %>
+<% for name in [:notice, :warning, :message] %>
+  <% if flash[name] %>
+    <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+  <% end %>
+<% end %>
+<% end %>
+
+<% if  @reservation.errors.full_messages.size > 0 %>
+<div class="error_box_header"><%= @reservation.reservation_kind %> Error</div>
+<div class="error_box">
+<%    @reservation.errors.full_messages.each{|m| %>
+	> <%= m %><br/>
+<% } %> 
+</div>
+<% end %>
+          <table style="display:none" id="reservation_form_table">
+					<% if (not @reservation.new_record?) and @reservation.status != 'canceled' %>
+					<tr>
+						<th style="text-align:center">
+					       	<input type="button"  class="button" style="width:150px" value="<%= @reservation.reservation_type =='booking' ? "Cancel Reservation" : "Delete Block" %>" 
+							onClick="if(confirm('Are you sure you want to cancel this <%= @reservation.reservation_type =='booking' ? "reservation" : "block" %>?'))
+								new Ajax.Updater('reservation_sidebar','/reservation/cancel?id=<%= @reservation.id %>',{asynchronous:true, evalScripts:true});"/>
+					    </td>	
+					</tr>
+					<% end %>	
+
+					<% if (not @reservation.new_record?) and @reservation.status != 'approved' and admin? %>
+					<tr>
+						<th style="text-align:center">
+					       	<input type="button" class="button" style="width:150px" value="<%= @reservation.reservation_type =='booking' ? "Approve Reservation" : "Restore Block" %>" 
+							onClick="	new Ajax.Updater('reservation_sidebar','/reservation/approve?id=<%= @reservation.id %>',{asynchronous:true, evalScripts:true});"/>
+					    </td>	
+					</tr>
+					<% end %>	
+					
+					<% if not @reservation.new_record? %>
+					<tr>
+						<td>
+					    	<label>For: </label> <%= @reservation.pilot.full_name %>
+					    </td>	
+					</tr>
+					<% end %>
+				    
+
+					<% if (not @reservation.new_record?) %>
+					<tr>
+						<td>
+					    	<label>Status: <%= @reservation.reservation_status %></label>
+					    </td>	
+					</tr>
+					<% end %>	
+
+				    <% if @reservation.new_record? and admin? %>
+					<tr>
+						<td>
+					    	<label>Pilot: </label> <br/>
+							<input type="text" id="pilot_autocomplete"style="width:150px" autocomplete="off" onclick="this.select()" 
+								value="<%= @reservation.pilot.nil? ? '' : @reservation.pilot.full_name_with_initials %>"	/>
+							<div class="page_name_auto_complete" id="pilot_list" style="display:none"></div>
+							<script type="text/javascript">
+							new Autocompleter.Local('pilot_autocomplete', 'pilot_list', <%=user_array User.active_users%>,
+							 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
+								afterUpdateElement:function(text,li){
+									$('reservation_pilot').value = li.id;
+							}});
+							</script>
+							
+					       	<input type="text" id="reservation_pilot" name="reservation[created_by]" value="<%= @reservation.created_by %>" style="display:none"/>
+					    </td>	
+					</tr>
+					<% end %>
+										
+				    <tr>
+						<td>
+					    	<label>Office: </label> <br/>
+					       	<select id="reservation_office" name="reservation_office" style="width:150px"></select>
+					    </td>	
+					</tr>
+					<% if @reservation.reservation_type != 'instructor_block' %>
+					<tr>		
+					    <td>
+							<label>Aircraft Type: </label> <br/>
+					        <select id="reservation_aircraft_type" name="aircraft_type" style="width:150px"></select>
+					    </td>
+					</tr>
+					<tr>		
+					    <td>
+							<label>Aircraft: </label> <br/>
+					        <select id="aircraft_select" name="reservation[aircraft_id]" style="width:150px"></select>
+					    </td>
+					</tr>
+					<% else %>
+						<select id="reservation_aircraft_type" name="aircraft_type" style="display:none"></select>
+				        <select id="aircraft_select" name="reservation[aircraft_id]" style="display:none"></select>
+					<% end %>
+					<% if @reservation.reservation_type != 'aircraft_block' %>
+					<tr>		
+					    <td>
+							<label>Instructor: </label><br/>
+					        <select id="instructor_select" name="reservation[instructor_id]" style="width:150px"></select>
+						</td>
+	        		</tr>
+					<% else %>
+			        	<select id="instructor_select" name="reservation[instructor_id]" style="display:none"></select>
+					<% end %>
+					<tr>
+					    <td>
+						  <input name="reservation[time_start(1i)]" id="start_year" style="display:none">	
+						  <input name="reservation[time_start(2i)]" id="start_month" style="display:none">	
+						  <input name="reservation[time_start(3i)]" id="start_day" style="display:none">
+							<label>From: </label><br/>
+							<input id="reservation_start_date" style="display:none"/>
+							<input id="start_date_trigger" type="button" class="button" onclick="return false;" style="width:90px;padding:0px;margin:0px">
+					  	  <select id="start_hour" name="reservation[time_start(4i)]" style="width:65px;padding:0px;margin:0px"><%= options_for_select options_for_time, (@reservation.time_start.nil? ? '7' : @reservation.time_start.hour)%></select>
+					    </td>
+				    </tr>
+					<tr>
+					    <td>
+						  <input name="reservation[time_end(1i)]" id="end_year" style="display:none">	
+						  <input name="reservation[time_end(2i)]" id="end_month" style="display:none">	
+						  <input name="reservation[time_end(3i)]" id="end_day" style="display:none">	
+							<label>To: </label> <br/>
+							<input id="reservation_end_date" style="display:none"/>
+							<input id="end_date_trigger" type="button"  class="button" onclick="return false;" style="width:90px;padding:0px;margin:0px">
+					   	 <select id="end_hour" name="reservation[time_end(4i)]" style="width:65px;padding:0px;margin:0px"><%= options_for_select options_for_time, (@reservation.time_end.nil? ? '9' : @reservation.time_end.hour)%></select>
+					    </td>
+				</tr>							    
+		    </table>
+		
+<% if @violated_rules!=nil and @reservation.status!='approved' %>		
+<% if @violated_rules.size>0 %>
+	<div class="error_box_header">
+		Automatic verification problems:
+	</div>
+		
+	<div class="error_box">
+		<% @violated_rules.each{|rule| %>
+			> <%= rule.description %> <br/>
+			<% if admin? %>
+			<a onclick="new Ajax.Updater('reservation_sidebar','/reservation/add_rule_exception?reservation_id=<%= @reservation.id %>&rule_id=<%= rule.id %>&user_id=<%=@reservation.pilot.id %>',{asynchronous:true, evalScripts:true});"/>
+			<br/>
+			<% end %>
+		<% } %>
+	</div>
+<% end %>
+<% end %>
+		
+<script type="text/javascript">
+
+<% if not @reservation.time_start.nil? %>
+	makeSelected($('start_hour'),<%= @reservation.time_start.hour %>)
+	makeSelected($('end_hour'),<%= @reservation.time_end.hour %>)
+<% end %>
+
+	function setOffice(){
+		offices.each(function(office){
+			if(office.key==office_select.value){
+				type_select.options.length = 0;
+				$H(office.value['aircraft_types']).each(function(type){
+					type_select.options[type_select.options.length] = new Option(type.key,type.key) 
+				})
+				instructor_select.options.length = 0;
+				instructor_select.options[0] = new Option('No Instructor','') 				
+				$A(office.value['instructors']).each(function(instructor){
+					instructor_select.options[instructor_select.options.length] = new Option(instructor['name'],instructor['id']) 
+				})		
+			}
+		})
+		sortSelect(instructor_select,1);
+		sortSelect(type_select,0);
+		if(defined(reservation['aircraft_id'])){
+			offices.each(function(office){
+				$H(office.value['aircraft_types']).each(function(type){
+					$A(type.value).each(function(aircraft){
+						if($H(aircraft)['id']==reservation['aircraft_id']){
+							makeSelected(type_select,type.key)
+						}
+					})
+				})
+			})
+		}else{
+			selectFirst(type_select);
+		}
+		setType();
+				
+		if(defined(reservation['instructor_id'])){
+			makeSelected(instructor_select,reservation['instructor_id'])
+		}else{
+			selectFirst(instructor_select);
+		}
+	}
+	
+	function setType(){
+		offices.each(function(office){
+			$H(office.value['aircraft_types']).each(function(type){
+				if(type.key == type_select.value){
+					aircraft_select.options.length = 0;
+					aircraft_select.options[0] = new Option('None/Ground School','') 								
+					$A(type.value).each(function(aircraft){
+						aircraft_select.options[aircraft_select.options.length] = new Option(aircraft['name'],aircraft['id'])
+					})
+				}
+			})
+		})
+		sortSelect(aircraft_select,1);
+		if(defined(reservation['aircraft_id'])){
+			makeSelected(aircraft_select,reservation['aircraft_id'])
+		}else{
+			selectFirst(aircraft_select);
+		}
+	}
+
+	function setStartDate(){
+		$('start_date_trigger').value = $('reservation_start_date').value
+		a = $('reservation_start_date').value.split('-')
+		$('start_year').value = a[0]
+		$('start_month').value = a[1]
+		$('start_day').value = a[2]
+	}
+	
+	function setEndDate(){
+		$('end_date_trigger').value = $('reservation_end_date').value
+		a = $('reservation_end_date').value.split('-')
+		$('end_year').value = a[0]
+		$('end_month').value = a[1]
+		$('end_day').value = a[2]		
+	}
+	
+	function setEndHour(){
+		makeSelected($('end_hour'),(parseInt($('start_hour').value)+2).toString())
+	}
+	
+	offices = $H(<%= reservation_editor_data %>);
+	reservation = <%= @reservation.to_json %>;
+	
+	office_select = $('reservation_office');
+	type_select = $('reservation_aircraft_type');
+	aircraft_select = $('aircraft_select');
+	instructor_select = $('instructor_select');
+	
+	offices.each(function(office){
+		office_select.options[office_select.options.length] = new Option(office.key,office.key) 
+	})
+	sortSelect(office_select,0);
+	
+	if(defined(reservation['aircraft_id'])){
+		offices.each(function(office){
+			$H(office.value['aircraft_types']).each(function(type){
+				$A(type.value).each(function(aircraft){
+					if($H(aircraft)['id']==reservation['aircraft_id']){
+						makeSelected(office_select,office.key)
+					}
+				})
+			})
+		})
+	}else if(defined(reservation['instructor_id'])){
+		offices.each(function(office){
+			$A(office.value['instructors']).each(function(instructor){
+					if($H(instructor)['id']==reservation['instructor_id']){
+						makeSelected(office_select,office.key)
+					}
+			})
+		})
+	}else{
+		makeSelected(office_select,'<%= current_user.current_office.name %>')
+	}
+	setOffice();
+		
+	new Form.Element.Observer(office_select,.25, setOffice);
+	new Form.Element.Observer(type_select, .25, setType);
+	new Form.Element.Observer($('start_hour'),.25, setEndHour);
+	
+	if(defined(reservation['start_date'])){
+		$('reservation_start_date').value = reservation['start_date']
+	}else{
+		$('reservation_start_date').value = dateToString(new Date); 
+	}
+	if(defined(reservation['end_date'])){
+		$('reservation_end_date').value = reservation['end_date']
+	}else{
+		$('reservation_end_date').value = dateToString(new Date); 
+	}
+	setStartDate();
+	setEndDate();
+
+    Calendar.setup({
+        inputField     :    "reservation_start_date",     // id of the input field
+        ifFormat       :    "%Y-%m-%d",     // format of the input field (even if hidden, this format will be honored)
+        button         :    "start_date_trigger",       
+        daFormat       :    "%Y-%m-%d",// format of the displayed date
+        align          :    "Tl",           // alignment (defaults to "Bl")
+        singleClick    :    true,
+		onClose	       :   function(cal){ 
+								cal.hide();
+								$('end_date_trigger').value = $('reservation_start_date').value
+								$('reservation_end_date').value = $('reservation_start_date').value
+								setStartDate();
+						   }
+    });
+    Calendar.setup({
+        inputField     :    "reservation_end_date",     // id of the input field
+        ifFormat       :    "%Y-%m-%d",     // format of the input field (even if hidden, this format will be honored)
+        button         :    "end_date_trigger",       
+        daFormat       :    "%Y-%m-%d",// format of the displayed date
+        align          :    "Tl",           // alignment (defaults to "Bl")
+        singleClick    :    true,
+		onClose	       :   function(cal){ 
+								cal.hide();
+								setEndDate();
+						   }
+    });
+
+	$('reservation_form_table').style.display = 'block';
+	
+</script>

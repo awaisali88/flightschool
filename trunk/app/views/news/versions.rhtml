@@ -1,0 +1,19 @@
+<table width="100%" class="link_bar">
+<tr><td><%= link_to "Preview", :action => "preview",:id=>params[:id] %>
+</td><td><%= link_to "Edit", :action => "edit",:id=>params[:id] %>
+</td><td><%= link_to "Versions", :action => "versions",:id=>params[:id] %>
+</td></tr>
+</table>
+<br/>
+<table cellpadding="5" cellspacing="0" width="100%" id="version_table" >
+<th width='10%'>Version</th><th width='60%'>Time submitted</th><th width='30%'>Author</th>
+<% @versions.each{|v| %>
+    <tr valign="top">
+	<td><%=link_to v.version.to_s,:action=>'edit',:id=>v.id,:version=>v.version %></td>
+	<td><%=link_to v.last_updated_time,:action=>'edit',:id=>v.id,:version=>v.version %></td>
+	<td><%=link_to v.last_updater.full_name,:controller=>'profile',:action=>'view',:id=>v.last_updater.id %></td>
+	</tr>
+<%}%>
+</table>
+
+<script type="text/javascript">color_table('version_table')</script>

@@ -1,0 +1,18 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+  xml.channel{
+    xml.title("East Coast Aero Club")
+    xml.link("http://www.ecacbed.com")
+    xml.description("New England Aviation School")
+    xml.language("en-us")
+    xml.copyright("Copyright 5-4-06")
+    for post in @posts
+      xml.item do
+        xml.title(post.one_line_summary)
+        xml.description(h post.body)
+        xml.guid("ecacbed_news_"+post.id.to_s)
+        xml.pubDate(post.created_at.rfc2822)
+      end
+    end
+  }
+}

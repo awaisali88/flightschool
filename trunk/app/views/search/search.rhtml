@@ -1,0 +1,8 @@
+<div style="font-size: 14pt; color: black; font-weight: bold;">Site Pages:</div>
+<div style="margin-left:30px;">
+<% @results.each{|result| %>
+    <dl>
+        <dt><label><%= static_page_link result%></label></dt>
+    </dl>
+<% } %>
+</div>

@@ -1,0 +1,5 @@
+<div class="profile_item">
+		<%= render_partial item_type, :item => item, :edit => false %>
+		<%= link_to_remote 'Edit' ,:url=>
+		{:action=>'edit_item', :item_type=>item_type, :item_id=>item.id} %>
+</div>

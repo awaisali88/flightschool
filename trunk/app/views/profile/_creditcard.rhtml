@@ -1,0 +1,35 @@
+
+<% @item = item %>
+<% if edit %>
+<%= form_remote_tag :url=>{:action => 'save_new_item',:item_type=>'creditcard',:item_id=>item.id}%>
+
+<table>
+	<tr>
+	  <td>Card Type:</td> <td><%=select('item',"card_type", {'Visa'=>'Visa','American Express'=>'American Express','Mastercard'=>'Mastercard','Discover'=>'Discover'}, :selected=>item.card_type)%></td>
+	</tr>
+	<tr>
+	  <td>Card Number:</td> <td><%= text_field('item',"credit_card_number", :value=>item.credit_card_number, :size=>'30') %></td>
+	</tr>
+	<tr>
+	  <td>Expiration Date:</td> <td><%= select_month(item.credit_card_expiration_month || Date.today, :use_month_numbers => true, :field_name => "credit_card_expiration_month", :prefix=>'item')%>
+	  							 <%= select_year(item.credit_card_expiration_year || Date.today, :start_year => 2005 :end_year => 2020, :field_name =>"credit_card_expiration_year", :prefix=>'item')%></td>
+	</tr>
+</table>
+
+<%= submit_tag 'Save' %>
+
+<% if not item.new_record? %>
+<%= link_to_remote("Delete",
+				   :url => { :action => :delete_item,:item_id =>item.id, :item_type => 'creditcard'}) %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_edit_item,:item_id =>item.id, :item_type => 'creditcard'} ) %>
+<% else %>
+<%= link_to_remote("Cancel",
+				   :url => { :action => :cancel_new_item,:item_type => 'creditcard'} ) %>
+<% end %>
+
+<% else %>
+<%= item.card_type %><br/>
+Number: <%= item.credit_card_number %>   Exp. Date: <%= item.credit_card_expiration_month%>/<%= item.credit_card_expiration_year %>
+
+<% end %>

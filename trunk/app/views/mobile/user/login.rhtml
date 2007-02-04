@@ -1,0 +1,42 @@
+<% if @reservations.nil? %>
+
+<fieldset>
+<table><tr><td>
+   Email: </td><td><input type="text" name="email" emptyok="false"/></td></tr><tr><td>
+   Password: </td><td><input type="password" name="password" emptyok="false"/></td></tr>
+   </table>
+</fieldset>
+<do type="accept" label="Login">
+  <go method="post" href="/mobile/user/login">
+     <postfield name="email" value="$email"/>
+     <postfield name="password" value="$password"/>
+  </go>
+</do>
+<% if not @err.nil? %>
+	<p><%=@err%></p>
+<% end %>
+
+<% else %>
+
+<p>Hi, <%=@user.first_names%>.</p>
+<% if @reservations.size==0%>
+<p>You have no pending or approved reservations</p>
+<% else %>
+<p>You have following reservations:</p>
+<% @reservations.each{|reservation|%>
+<p>
+<br/>
+Aircraft: <%=reservation.aircraft.nil? ? 'No Aircraft/Ground School' : reservation.aircraft.type_and_identifier %><br/>
+<%=reservation.instructor_id.nil? ? '' : "Instructor: #{reservation.instructor.full_name}<br/>"%>
+
+<% if reservation.time_start.to_date == reservation.time_end.to_date%>
+On: <%= reservation.time_start.strftime("%a %b %d")%> (<%= reservation.time_start.strftime("%I%p")%> - <%= reservation.time_end.strftime("%I%p")%>) 
+<% else %>
+From: <%= reservation.time_start.strftime("%a %b %d %I%p")%> <br/>
+To: <%= reservation.time_end.strftime("%a %b %d %I%p")%>
+<% end %>
+</p>
+<%}%>
+<% end %>
+
+<% end %>
