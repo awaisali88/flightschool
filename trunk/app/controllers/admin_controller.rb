@@ -82,9 +82,9 @@ def zero_activity_users
   end
   @users = User.find_by_sql(<<-"SQL"
                               select users.* from users where 
-                              (select count(*) from groups_users where user_id = users.id and approved=true)=0
+                              (select count(*) from groups_users where user_id = users.id and approved=true limit 1)=0
                               and (select count(*) from reservations where created_by = users.id and 
-                                  time_start>'#{(Time.now-24*3600*31)}')=0
+                                  time_start>'#{(Time.now-3.month)}' limit 1)=0
                               order by created_at desc;
                               SQL
                             )
@@ -178,7 +178,6 @@ def edit_password
     @user.change_password(params[:user][:password],params[:user][:password_confirmation])
     if @user.save
       flash[:notice] = "User's password updated"
-      return
     end
   end
   redirect_to :action => 'edit_user' , :id => params[:id]
