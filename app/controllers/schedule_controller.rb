@@ -11,8 +11,8 @@
 
 class ScheduleController < ApplicationController
 
-  before_filter :require_supported_browser, :except=>['quickpick','reservation_summary']
-  before_filter :require_schedule_access, :except=>['quickpick','reservation_summary']
+  before_filter :require_supported_browser, :except=>['quickpick','quickpick_update','reservation_summary']
+  before_filter :require_schedule_access, :except=>['quickpick','quickpick_update','reservation_summary']
 
 # # Serves one of two pages based on params[:reservation_id] 
 # # If  params[:reservation_id] is present then a page with 
