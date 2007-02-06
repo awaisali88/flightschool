@@ -42,7 +42,6 @@ def edit
   return unless has_permission :can_post_news
   @page_title = 'Edit Static Page'
   @document = StaticContent.find(params[:id])
-  @versions = @document.versions
   if params[:version]!=nil
     @document = @document.get_version params[:version]
   end
@@ -50,9 +49,9 @@ def edit
     @document.last_updated_by = current_user 
      if @document.update_attributes(params[:document])
        flash[:notice] = 'Document was successfully updated.'
-       redirect_to :action => 'list'
      end
    end
+   @versions = @document.versions
 end
 
 def delete
