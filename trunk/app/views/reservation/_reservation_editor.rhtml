@@ -285,6 +285,14 @@
 	setStartDate();
 	setEndDate();
 
+	// set the to and from hour fields to the right values
+	var start_hour = new Date()
+	start_hour.setTime(reservation['start_int'])
+	var end_hour = new Date()
+	end_hour.setTime(reservation['end_int'])
+	makeSelected($('start_hour'),start_hour.getHours())
+	makeSelected($('end_hour'),end_hour.getHours())
+
     Calendar.setup({
         inputField     :    "reservation_start_date",     // id of the input field
         ifFormat       :    "%Y-%m-%d",     // format of the input field (even if hidden, this format will be honored)
@@ -297,6 +305,7 @@
 								$('end_date_trigger').value = $('reservation_start_date').value
 								$('reservation_end_date').value = $('reservation_start_date').value
 								setStartDate();
+								setEndDate();
 						   }
     });
     Calendar.setup({
@@ -308,6 +317,7 @@
         singleClick    :    true,
 		onClose	       :   function(cal){ 
 								cal.hide();
+								setStartDate();
 								setEndDate();
 						   }
     });

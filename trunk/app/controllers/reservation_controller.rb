@@ -60,6 +60,7 @@ class ReservationController < ApplicationController
       @reservation.override_acceptance_rules
     else
       @reservation.created_by = current_user.id
+      @reservation.status = 'created'
     end
     session[:schedule][:date] = @reservation.time_start.to_date unless @reservation.time_start.nil?
     if @reservation.save
@@ -101,7 +102,7 @@ class ReservationController < ApplicationController
 
   def update
     @reservation = Reservation.find_by_id params[:id]
-    return unless @reservation.pilot.id == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
+    return unless @reservation.pilot == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
     
     if admin?
       @reservation.override_acceptance_rules
@@ -127,7 +128,7 @@ class ReservationController < ApplicationController
   
   def cancel
     @reservation = Reservation.find_by_id params[:id]
-    return unless @reservation.pilot.id == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
+    return unless @reservation.pilot == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
     
      if admin?
         @reservation.override_acceptance_rules
@@ -159,7 +160,7 @@ class ReservationController < ApplicationController
   # Adds a comment to reservation with id params[:id]
   def add_comment
     @reservation = Reservation.find_by_id(params[:id])
-    return unless @reservation.pilot.id == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations) 
+    return unless @reservation.pilot == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations) 
     
     if @reservation.instructor_id != current_user.id && @reservation.created_by != current_user.id &&  !can_approve_reservations? then return end 
     comment = ReservationComment.new(params[:comment],current_user)
