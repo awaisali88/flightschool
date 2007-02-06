@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
         render(:file => "#{RAILS_ROOT}/public/500.html",
                :status => "500 Error")
       end
-      log_request
+#      log_request
     end
   
 end

@@ -94,7 +94,7 @@ class ReservationController < ApplicationController
   
   def edit
     @reservation = Reservation.find_by_id params[:id]
-    return unless @reservation.pilot.id == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
+    return unless @reservation.pilot == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
     @violated_rules = @reservation.violated_rules
     render :partial=>'edit_reservation',:layout=>false
   end
