@@ -39,6 +39,8 @@ class ImageController < ApplicationController
       }
       image.destroy
       flash[:notice] = 'Image deleted.'
+      expire_action :action => "show", :id => params[:id] 
+      expire_action :action => "thumb", :id => params[:id] 
     rescue
       flash[:warning] = 'Deletion failed.'
     end

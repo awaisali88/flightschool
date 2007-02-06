@@ -1,7 +1,7 @@
 class FileController < ApplicationController
   
-  caches_page :index
-  before_filter :login_required, :only=>[:list]
+  caches_page :get
+  before_filter :login_required, :except=>[:get]
   before_filter :force_single_column_layout
   
   def list
@@ -15,6 +15,7 @@ class FileController < ApplicationController
       return unless current_user.id.to_s == file.user_id.to_s || has_permission(:admin) 
       file.destroy
       flash[:notice] = 'File deleted.'
+      expire_action :action => "get", :id => params[:id] 
     rescue
       flash[:warning] = 'Deletion failed.'
     end
