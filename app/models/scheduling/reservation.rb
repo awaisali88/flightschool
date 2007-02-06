@@ -35,15 +35,15 @@ def automatic_verification
 end
     
 def validate
-  if status != 'canceled'
-    if is_overlapping
+  if self.status != 'canceled'
+    if self.is_overlapping
      errors.add_to_base("Selected time period overlaps with existing reservations")
    
     end
-    if time_start >= time_end
+    if self.time_start >= self.time_end
      errors.add_to_base("Invalid time range (start >= end)")
     end  
-    if aircraft_id.nil? && instructor_id.nil?
+    if self.aircraft_id.nil? && self.instructor_id.nil?
      errors.add_to_base("Aircraft and instructor fields cannot both be empty")
     end  
   end

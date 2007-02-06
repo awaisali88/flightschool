@@ -208,9 +208,16 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 	<%	} %>
 <% } %>
 </div>
-   	
 </div>
-
+<div style="width:100%">
+<table cellspacing="10px">
+<tr>
+	<td><label>Legend:</label></th>
+<td style="text-align:center;width:200px"><div style="display:marker; height:20px;  background: lightgreen;"><label style="color:#001b57">Approved</label></div></td>
+<td style="text-align:center;width:200px"><div style="display:marker; height:20px; background: yellow;"><label style="color:#001b57">Awaiting Approval</label></div></td>
+<td style="text-align:center;width:200px"><div style="display:marker; height:20px; background: tan;"><label style="color:#001b57">Blocked</label></div></td>
+</tr></table>
+</div>
  
 	<script type="text/javascript">
 	    Calendar.setup({

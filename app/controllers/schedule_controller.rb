@@ -11,6 +11,7 @@
 
 class ScheduleController < ApplicationController
 
+  before_filter :login_required
   before_filter :require_supported_browser, :except=>['quickpick','quickpick_update','reservation_summary']
   before_filter :require_schedule_access, :except=>['quickpick','quickpick_update','reservation_summary']
 
