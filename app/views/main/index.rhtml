@@ -1,0 +1,5 @@
+<% if user? %>
+<%= render_component :controller=>'news',:action=>'index' %>
+<% else %>
+<%= render_component(:controller=>'static',:action=>'view',:params=>{:url=>['index']}) %>
+<% end %>
