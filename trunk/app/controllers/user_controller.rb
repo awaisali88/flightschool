@@ -179,11 +179,7 @@ public
           UserNotify.deliver_forgot_password(user, url)
           flash[:notice] = "Instructions on resetting your password have been emailed to #{params[:user][:email]}"
         end  
-        unless user?
-          redirect_to :action => 'index', :controller => 'news'
-          return
-        end
-        redirect_back_or_default :action => 'home'
+        redirect_to :action => 'index', :controller => 'main'
       rescue
         flash.now[:warning] = "Your password could not be emailed to #{params[:user][:email]}"
       end

@@ -5,19 +5,15 @@
 	        <td style=" padding:0px;">
 	           <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
 	           <%= text_field_tag "email","your email",:id=>'email_field',:class =>"login_field",
-	             :onclick => "$('fake_password_field').style.display='none'; "+
-	               "$('real_password_field').style.display='inline'; " +
-	               "Field.select($('email_field'));",
-	            :onblur =>"$('fake_password_field').style.display='none'; "+
-	               "$('real_password_field').style.display='inline'; " +
-	               "Field.focus($('real_password_field'));"  %>
+	             :onclick =>  "$('password_field').type='password'; " +
+					"$('password_field').value='';"+
+	               "Field.select($('email_field'));"%>
 	           </td></tr><tr><td>
-	           <%= password_field_tag "password", nil,:id =>"real_password_field",
-	               :class =>"login_field",:style =>"display:none" %>
-               <%= text_field_tag "fake","password",:id =>"fake_password_field",
-	               :class =>"login_field",:onclick =>"$('fake_password_field').style.display='none'; "+
-	               "$('real_password_field').style.display='inline'; "+
-	               "Field.focus($('real_password_field'));"
+               <%= text_field_tag "password","password",:id =>"password_field",
+	               :class =>"login_field",
+		             :onclick =>  "$('password_field').type='password'; " +
+						"$('password_field').value='';"+
+		               "Field.select($('password_field'));"
 	                %>
 	           
 	           </td></tr></table>
