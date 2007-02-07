@@ -54,7 +54,7 @@
 		<li><%= render_partial('layouts/navtab',:tab_id=>:cms, :link =>link_to('CMS', :action => 'list', :controller =>'news'))%></li>
 	<% end %>
 <% else %>
-	<li><%= render_partial('layouts/navtab', :tab_id=>:info,:link =>link_to('East Coast Aero Club', '/content/index'))%></li>
+	<li><%= render_partial('layouts/navtab', :tab_id=>:info,:link =>link_to("#{current_school.name}", '/content/index'))%></li>
 <% end %>
 
 </ul>

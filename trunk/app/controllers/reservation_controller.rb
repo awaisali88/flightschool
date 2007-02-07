@@ -108,7 +108,7 @@ class ReservationController < ApplicationController
       @reservation.override_acceptance_rules
     end
         
-    if not has_permission(:can_approve_reservations) and @reservation.status=='approved' 
+    if not admin? and @reservation.status=='approved' 
       @reservation.status = 'created'
     end
 
