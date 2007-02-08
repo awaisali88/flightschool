@@ -2,5 +2,5 @@
 mode: development
 runs_at_launch: 0
 identifier: flightschool
-port: 3002
+port: 3003
 bundle: /Applications/Locomotive2/Bundles/rmagickRailsSept2006_x86.locobundle
