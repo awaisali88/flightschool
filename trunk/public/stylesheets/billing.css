@@ -27,11 +27,6 @@ div.page_name_auto_complete ul strong.highlight {
 	padding: 0;
 }
 
-#record_table input{
-	background: #ffffee;
-	border: 1px solid black;
-}
-
 #record_table th{
 	font-size: 9pt;
 }
@@ -51,7 +46,7 @@ div.page_name_auto_complete ul strong.highlight {
 }
 
 .input_with_error{
-	border: 2px solid red;
+	border: 2px solid red ! important;
 }
 
 .notification{
