@@ -14,7 +14,7 @@ class ImageController < ApplicationController
   
   caches_page :thumb
   caches_page :show
-  before_filter :login_required, :only=>[:list]
+  before_filter :login_required, :except=>[:show,:thumb]
   before_filter :force_single_column_layout
   
   

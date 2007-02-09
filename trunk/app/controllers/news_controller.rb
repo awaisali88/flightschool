@@ -9,6 +9,7 @@
 class NewsController < ApplicationController
   
 before_filter :force_single_column_layout, :except=>[:index]
+before_filter :login_required 
   
   # page with paginated new stories  
   def index

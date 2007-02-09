@@ -217,7 +217,7 @@ class ReservationController < ApplicationController
     @reservations = Reservation.find(:all,:include=>[:pilot],
                     :conditions => ["time_end > ? and time_start < ? and status!='canceled'",@from.to_time,@to.to_time])  
      render :update do |page| 
-          page.send :record, "set_schedule_date(" + (@from.to_time.to_i*1000).to_s + ");" 
+          page.send :record, "set_schedule_date("+(@from.to_time.to_i*1000).to_s + ");" 
           page.send :record, "set_reservations(" + @reservations.to_json + ");" 
      end 
   end

@@ -268,7 +268,7 @@ new Autocompleter.Local('aircraft', 'aircraft_list', aircraft_list,
 </table>
 <br/>
 <%= submit_tag 'Create Records',:id=>'commit', :onclick=>"Form.Element.disable('commit'); new Ajax.Request('/billing/create_records', {asynchronous:true, evalScripts:true, parameters:Form.serialize('record_form')})"%><br/>
-<small>Only rows with nonempty 'Amount' fields will be processed. Rows highlighted in red contain errors and need to be corrected in order to be recorded by the system.</small>
+<small>Only rows with nonempty 'Amount' fields will be processed.<br/> Rows highlighted in red contain errors and need to be corrected in order to be recorded by the system.</small>
 <%= end_form_tag %>
 <script language=javascript>
  addRow(1);
