@@ -12,6 +12,7 @@ class StaticController < ApplicationController
 
 #before_filter :no_access, :except=>[:view,:view_index]
 before_filter :force_single_column_layout
+before_filter :login_required, :except=>[:view]
 
 
 # main static content administration interface 

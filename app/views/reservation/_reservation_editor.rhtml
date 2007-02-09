@@ -229,7 +229,8 @@
 	}
 	
 	function setEndHour(){
-		makeSelected($('end_hour'),(parseInt($('start_hour').value)+2).toString())
+		if(displaying_new_reservation_form) // only for creating new reservations
+			makeSelected($('end_hour'),(parseInt($('start_hour').value)+2).toString())
 	}
 	
 	offices = $H(<%= reservation_editor_data %>);
@@ -286,12 +287,8 @@
 	setEndDate();
 
 	// set the to and from hour fields to the right values
-	var start_hour = new Date()
-	start_hour.setTime(reservation['start_int'])
-	var end_hour = new Date()
-	end_hour.setTime(reservation['end_int'])
-	makeSelected($('start_hour'),start_hour.getHours())
-	makeSelected($('end_hour'),end_hour.getHours())
+	makeSelected($('start_hour'),<%= @reservation.time_start.hour %>)
+	makeSelected($('end_hour'),<%= @reservation.time_end.hour %>)
 
     Calendar.setup({
         inputField     :    "reservation_start_date",     // id of the input field

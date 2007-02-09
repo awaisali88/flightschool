@@ -1,13 +1,15 @@
+// sets the date to be displayed on the schedule
+// server_time_zone is the offset in hours between server time zone and GMT
 function set_schedule_date(date){
 	fix_from = new Date();
-	fix_from.setTime(date)
-	fix_from.setHours(7);
+	fix_from.setTime(date+7*60*60*1000)
+	
 	fix_to = new Date();
-	fix_to.setTime(date)
-	fix_to.setHours(23);	
+	fix_to.setTime(date+23*60*60*1000)
 		
-	tmp = new Date()
-	tmp.setTime(date)
+	var tmp = new Date()
+	tmp.setTime(date+12*60*60*1000) //add 12 hours to make sure that we dont end up in a different day 
+									//after time zone adjustment
 	schedule_date = dateToString(tmp)
 	tmp.setDate(tmp.getDate()+1)
 	next_schedule_date = dateToString(tmp)

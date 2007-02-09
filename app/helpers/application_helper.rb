@@ -14,6 +14,11 @@ def int_to_time t
      return "#{t-12} pm"
    end
 end
+
+# returns the number of hours between local time zone and GMT
+def offset_from_GMT()
+  return (Time.local(2000)-Time.gm(2000))/1.hour
+end
     
 def isMSIE?()
   @request.env['HTTP_USER_AGENT'].downcase.index('msie')!=nil 

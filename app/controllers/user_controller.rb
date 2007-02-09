@@ -34,7 +34,7 @@ public
     when :post
       if params[:email] == nil || params[:email] == ""
         flash[:warning] = "Please enter your email"
-        redirect_to :action => 'index', :controller => 'news'
+        redirect_to '/'
       elsif params[:password] == nil || params[:password] == ""
         flash[:warning] = "Please enter your password"
         redirect_to '/'

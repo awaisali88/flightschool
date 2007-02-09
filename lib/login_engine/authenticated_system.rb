@@ -64,7 +64,7 @@ module LoginEngine
     # a popup window might just close itself for instance
     def access_denied
       flash[:warning] = 'Please Login'
-      redirect_to :back
+      redirect_to '/'
     end  
   
     # store current uri in  the session.
