@@ -38,7 +38,7 @@
 					<% if not @reservation.new_record? %>
 					<tr>
 						<td>
-					    	<label>For: </label> <%= @reservation.pilot.full_name_link %>
+					    	<label>For: </label><small> <%= @reservation.pilot.full_name_link %></small>
 					    </td>	
 					</tr>
 					<% end %>
