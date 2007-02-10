@@ -114,7 +114,7 @@ def edit
 end
 
 def set_portrait
-  return unless (can_edit_any_user_info? or (user_id == current_user.id.to_s))  
+  return unless (can_edit_any_user_info? or (params[:user] == current_user.id.to_s))  
   begin
     user = User.find_by_id params[:user]
     image = Image.new(params[:image])
