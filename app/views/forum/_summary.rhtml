@@ -2,10 +2,17 @@
 	No recent topics.
 <%  else %>
 
+<table id="topics_table">
 <% @topics.each{|topic| %>
+	<tr>
+		<td>
 	<div class = "topic_summary_link">
-		<%= link_to(h(topic.subject), {:controller => "forum", :action => "view",:topic=>topic.id},{:class=>'topic_summary_link'}) %>
+		<%= link_to("(#{topic.reply_count}) "+h(topic.subject), {:controller => "forum", :action => "view",:topic=>topic.id},{:class=>'topic_summary_link'}) %>
 	</div>
+		</td>
+	</tr>
 <% } %>
+</table>
+<script type="text/javascript">color_table('topics_table')</script>
 
 <% end %>
