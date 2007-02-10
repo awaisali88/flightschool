@@ -3,12 +3,12 @@
 	<% if post.status=='rejected' %>
 		<% if admin? %>
 			<%= render_partial 'layouts/display_item',
-				:heading=>'<div class="heading_link">'+link_to('Show Post',:action=>'show_post',:id=>post.id)+'</div>'+"#{post.creator.full_name} on #{post.creation_time}:", 
+				:heading=>'<div class="heading_link">'+link_to('Show Post',:action=>'show_post',:id=>post.id)+'</div>'+"#{post.creator.full_name_link} on #{post.creation_time}:", 
 				:content=>(h post.body).gsub(/$/,'<br/>') %>
 		<% end %>
 	<% else %>
 		<%= render_partial 'layouts/display_item',
-			:heading=>((admin? and i>0) ? '<div class="heading_link">'+link_to('Hide Post',:action=>'hide_post',:id=>post.id)+'</div>' : '')+"#{post.creator.full_name} on #{post.creation_time}:", 
+			:heading=>((admin? and i>0) ? '<div class="heading_link">'+link_to('Hide Post',:action=>'hide_post',:id=>post.id)+'</div>' : '')+"#{post.creator.full_name_link} on #{post.creation_time}:", 
 			:content=>(h post.body).gsub(/$/,'<br/>') %>
 	<% end %>
 	<% i=i+1 %>

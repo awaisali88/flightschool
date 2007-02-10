@@ -29,6 +29,15 @@ class ForumController < ApplicationController
           :conditions => ["refers_to = ?", @topic.id],
           :order_by => "created_at" 
   end
+  
+  #shows several recent forum topic headings
+  def summary
+    @forum = Forum.find_by_name('general')
+    @topics  = ForumTopic.find(:all,:conditions=>["refers_to=? and status='approved'",@forum.id],
+      :order=>"(select max(updated_at) from documents d where d.refers_to = documents.id and d.status='approved')  desc",
+      :limit=>10)
+    render :partial=>'summary',:layout=>false
+  end
     
   # creates a new topic in the forums
   def create_topic

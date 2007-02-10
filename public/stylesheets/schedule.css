@@ -187,7 +187,6 @@ html>body .aircraft_name{
    position: absolute;
    height:16px; 
    border: 1px solid black;
-   cursor: pointer;
    overflow: hidden;
    font-size: 8pt;
 }
@@ -196,7 +195,6 @@ html>body .aircraft_name{
    position: absolute;
    height:16px; 
    border: 1px solid black;
-   cursor: pointer;
    overflow: hidden;
    font-size: 8pt;
    background: lightgreen;
@@ -206,7 +204,6 @@ html>body .aircraft_name{
    position: absolute;
    height:16px; 
    border: 1px solid black;
-   cursor: pointer;
    overflow: hidden;
    font-size: 8pt;
    background: yellow;
@@ -216,7 +213,6 @@ html>body .aircraft_name{
    position: absolute;
    height:16px; 
    border: 1px solid black;
-   cursor: pointer;
    overflow: hidden;
    font-size: 8pt;
    background:tan;

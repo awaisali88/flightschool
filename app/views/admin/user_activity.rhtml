@@ -86,7 +86,7 @@
    when 'flight'%>
 	Flight on <%=charge.flight_date%>. Aircraft: <%=charge.aircraft.identifier%>
 	<% if not charge.instructor_id.nil?%>  
-	, w. <%=charge.instructor.full_name%>.
+	, w. <%=charge.instructor.full_name_link%>.
 	<% end %> 
 <% when 'deposit'%> Balance Deposit
 <% when 'headset'%> Headset Rental

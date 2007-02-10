@@ -1,6 +1,6 @@
 <div class="reservation_box">
 
-    <label>Pilot:</label> <%= reservation.creator.full_name%><br/>
+    <label>Pilot:</label> <%= reservation.pilot.full_name_link%><br/>
     
   
     <label>Aircraft: </label> <%= reservation.aircraft.nil? ? 'No Aircraft/Ground School' : (reservation.aircraft.type.type_name+'('+
@@ -8,7 +8,7 @@
                 reservation.aircraft.identifier)%> <br/>
     <label>Instructor: </label><%= 
         reservation.instructor.nil? ? 'No Instructor' :
-    reservation.instructor.full_name%><br/>
+    reservation.instructor.full_name_link%><br/>
 	<label>Time: </label>
 	<% if reservation.time_start.to_date == reservation.time_end.to_date %>
    		<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %Y %I%p")%>-<%= reservation.time_end.strftime("%I%p") %>
@@ -41,7 +41,7 @@
         <% reservation.comments.each{|comment|%>
             <div>
             <label>(<%=comment.created_at.strftime("%b %d %Y - %H:%M:%S ")%>) 
-                    <%= comment.creator.full_name %>:</label>
+                    <%= comment.creator.full_name_link %>:</label>
             <span style="font-style: italic"><%= h comment.body%></span>            
             </div>
         <%}%>

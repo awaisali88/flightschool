@@ -12,7 +12,11 @@
 <td style="display:none"><label> Markup </label><%=select 'document', 'mime_type', [['Textile','text/textile'],['HTML','text/html']]%></td>	
 </tr></table>
 
-<p><label for="document_body">Body</label><br/>
+<p>
+
+<div style="float:right"><small>You can use either <a href="http://hobix.com/textile/">Textile</a> or <a href="http://www.w3schools.com/html/html_intro.asp">HTML</a> markup for editing.</small></div>
+	
+<label for="document_body">Body</label> <br/>
 <%= text_area 'document', 'body',:rows=>'25',:cols=>'85' %></p>
 </p>
 </td>

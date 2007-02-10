@@ -20,7 +20,7 @@ public
   # Override this function in your own application to define a custom home action.
   def home
     if user?
-      @fullname = "#{current_user.first_names} #{current_user.last_name}"
+      @fullname = current_user.full_name
     else
       @fullname = "Not logged in..."
     end 

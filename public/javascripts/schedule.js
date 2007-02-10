@@ -1,3 +1,9 @@
+//
+// schedule.js - client side code for painting scheduling reservation browser interface 
+// @author - Lev Popov levpopov@mit.edu
+//
+
+
 // sets the date to be displayed on the schedule
 // server_time_zone is the offset in hours between server time zone and GMT
 function set_schedule_date(date){
@@ -26,8 +32,9 @@ function set_schedule_date(date){
 	}
 }
 
+// updates the schedule display with provided reservation data (JSON-formatted array of reservations)
 function set_reservations(reservations){
-	var graph = $('graph');
+	var graph = $('graph');//schedule drawing pane
 
 	$$('.approved_booking_reservation_bar').each(function(bar){		Element.remove(bar);	})
 	$$('.created_booking_reservation_bar').each(function(bar){		Element.remove(bar);	})
@@ -55,9 +62,11 @@ function set_reservations(reservations){
 		bar.style.left = label_width+width_per_hour*(start-fix_from)/(60*60*1000) + 'px'
 		bar.style.top = '300px'
 
-		if(admin){
-	    	bar.innerHTML = r['pilot']
-	
+		if(current_user==r['created_by'] || admin){
+			bar.style.cursor = 'pointer'
+			if(current_user==r['created_by'])
+				bar.style.border = "2px solid green"
+	    	bar.innerHTML = r['pilot']	
 			bar.onclick = function(e){
 				new Ajax.Updater('reservation_sidebar', '/reservation/edit?id='+r['id'], {asynchronous:true, evalScripts:true})
 			}		
@@ -73,85 +82,4 @@ function set_reservations(reservations){
 		}		
 	})
 	hide_loading_indicator();
-}
-
-
-/*
-<% @aircraft_reservations.each{|r|%>
-		<% if tops["a#{r.aircraft_id}"].nil? then next end %>
- 		<div id="abar<%=r.id%>" class="reservation_bar" 
-		<% @start = r.time_start < @fixfrom ? @fixfrom: r.time_start %>
-		<% @end = r.time_end > @fixto ? @fixto : r.time_end  %>
-		<% if @start.hour < 7 then @start = Time.local(@start.year,@start.month,@start.day,7) end%>
-		<% if @end.hour < 7 then @end = Time.local(@end.year,@end.month,@end.day,7) end%>
-		<% left = ((@start-@fixfrom)/(24*60*60)).floor*width_per_day+(@start.hour-@fixfrom.hour)*width_per_hour + msie_pos_fix-1 %>
-		<% right = ((@end-@fixfrom)/(24*60*60)).floor*width_per_day+(@end.hour-@fixfrom.hour)*width_per_hour + msie_pos_fix-1 %>
-		<% width = right-left + msie_width_fix +1 %>		
-		
-	   	style="width:<%=width %>px; top:<%=tops["a#{r.aircraft_id}"].to_i+1+msie_height_fix%>px;
-	   	    left: <%=label_width+left%>px;
-			background:<%= r.status=="approved"? (r.reservation_type == 'booking' ? 'lightgreen' : 'tan') : 'yellow' %>;
-	   	">
-	   	<%= can_see_names ? r.creator.full_name.gsub(" ","&nbsp;") : (@user.full_name == r.creator.full_name ? r.creator.full_name.gsub(" ","&nbsp;") : '&nbsp;') %></div>
-		
-	 	<%= if can_approve_reservations? then draggable_element("abar"+r.id.to_s , :revert => true) end %>
- 	<% } %>
-
-*/
-function draw_schedule(aircrafts,instructors,days){
-    var graph = $('graph');
-    var gw = graph.offsetWidth;
-    var lw = 120;
-    var hh = 20;
-    var gh = hh;
-    var type_h = 20;
-    var air_h = 20;
-    var width_per_hour = (gw-lw)/(days*16);//we only show 16 hours
-
-    for(i=0;i<aircrafts.length;i++){
-        gh += type_h+aircrafts[i][1].length*air_h;
-    }
-    //draw background
-    for(i=0;i<days;i++){
-        for(j=0;j<8;j++){
-            var bar = document.createElement('div');
-            bar.style.width=width_per_hour*2+"px";
-            bar.style.height=gh+"px";
-            bar.style.background= j%2==0 ? "#f0f5ff":"#d0e5ff" ;
-            bar.style.position="absolute";
-            bar.style.left = width_per_hour*2*(8*i+j)+lw+"px";
-            if(j==0){ bar.style.borderLeft="1px solid black"}
-            graph.appendChild(bar);
-        }
-    }    
-    
-    var offset=hh;
-    //draw aircraft labels
-    for(i=0;i<aircrafts.length;i++){
-          //type name bar
-          var bar = document.createElement('div');
-          bar.setAttribute("class","type_label_over");
-          bar.setAttribute("className","type_label_over");
-          bar.style.width=gw+"px";
-          bar.style.height=type_h+"px";
-          bar.style.top = offset+"px";
-          bar.innerHTML = aircrafts[i][0].attributes.type_name
-          offset+=type_h;
-          graph.appendChild(bar);
-
-          //aircrafts
-          for(j=0;j<aircrafts[i][1].length;j++){
-          bar = document.createElement('div');
-          bar.setAttribute("class","aircraft_name");
-          bar.setAttribute("className","aircraft_name");
-          bar.style.width=lw+"px";
-          bar.style.height=air_h+"px";
-          bar.style.top = offset+"px";
-          bar.innerHTML = aircrafts[i][1][j].attributes.identifier
-          graph.appendChild(bar);
-          offset+=air_h;
-          }
-    }
-    
-    graph.style.height = gh+'px'  
 }

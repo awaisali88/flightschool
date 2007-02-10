@@ -1,7 +1,7 @@
 
 <% @reservation.comments.each{|comment|%>
     <div style="width:150px">
-    <label> <%= comment.creator.full_name %>:</label><br/>
+    <label> <%= comment.creator.full_name_link %>:</label><br/>
     <span style="font-style: italic"><%= h comment.body%></span>            
     </div>
 <%}%>

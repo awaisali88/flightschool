@@ -11,6 +11,12 @@ module ReservationHelper
       data[o]['aircraft_types'][a.type.type_name] ||= []
       data[o]['aircraft_types'][a.type.type_name] << {:name=>a.identifier_and_equip,:id=>a.id}
     }
+    
+    data.each_pair{|office,hash|
+      hash['aircraft_types'] ||={}
+      hash['aircraft_types']['- None/Ground School -'] = [{:name=>'None',:id=>nil}]
+    }
+    
     instructors.each{|i|
       o = i.current_office.name
       data[o] ||= {}

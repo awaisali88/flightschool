@@ -104,21 +104,6 @@ function update_document_body(id){
      
 }
 
-function quickpick_fix_selects(aircraft_type,instructor){
-    for(i=0;i<document.forms['quickpick_form'].reservation_aircraft_type.options.length;i++)
-    {
-        if(document.forms['quickpick_form'].reservation_aircraft_type.options[i].value == aircraft_type)
-            document.forms['quickpick_form'].reservation_aircraft_type.options[i].selected = "selected"
-    }
-  
-    for(i=0;i<document.getElementById('quickpick_instructor_select').options.length;i++)
-    {
-        if(document.getElementById('quickpick_instructor_select').options[i].value == instructor)
-           document.getElementById('quickpick_instructor_select').options[i].selected = "selected"
-    }
-    
-}
-
 
 function image_upload_setup(){
 

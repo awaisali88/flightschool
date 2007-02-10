@@ -137,7 +137,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		<% } %>
     	 <% @instructors.each{|i| %>
 		    <div style="width:95px;max-width:95px;max-height:20px;overflow:hidden;position:absolute;top:<%=tops['i'+i.id.to_s]%>px" class="aircraft_name">
-		         <%= i.full_name_rev.gsub(' ','&nbsp;')%>
+		         <%= i.full_name_rev_link%>
 		    </div>
 		<% } %>
         </div> 
@@ -160,7 +160,6 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 			<input id="trigger" type="submit" value="<%=@date%>" onclick="return false;">
 		</div>
 		
-		<% if admin? %>
 			<div style="float:right; padding-top:5px;padding-right:5px">
 			<% if session[:schedule][:filter]=='false' %>
 			<a style="color:white" href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=true'})" >
@@ -171,7 +170,6 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 			<% end %>
 			<a href="#" style="color:white"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
 			</div>
-		<% end %>
 		
 		
 		
@@ -243,6 +241,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		width_per_day = <%= width_per_day %>
 		width_per_hour = <%= width_per_hour %>		
 		admin = <%= admin? %>
+		current_user = <%= current_user.id %>
 		
 		new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + '<%= @date.to_s %>'})
 	</script>
