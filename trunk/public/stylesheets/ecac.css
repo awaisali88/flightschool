@@ -280,7 +280,7 @@ th{
     text-align: left;
 }
 
-.content a{
+a{
     color: #003377;
     font-size: 1em;
 }
@@ -402,4 +402,26 @@ select{
 
 .button[class] {  /* IE ignores [class] */
     width: auto;  /* cancel margin fix for other browsers */
+}
+
+.pagination_links{
+	margin-top:3px;
+	margin-bottom:3px;
+	text-align:right;
+	font-weight:bold;
+	font-size: 10pt;
+∂}
+
+.pagination_links a{
+	padding: 2px;
+	background: #2255aa;
+	color: white;
+	border: 1px solid black;
+	width: auto;
+	font-weight:bold;
+	font-size: 10pt;
+}
+
+.item_heading a{
+	color:white;
 }

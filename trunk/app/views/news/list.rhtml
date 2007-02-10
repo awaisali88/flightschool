@@ -14,11 +14,12 @@
 
 </table>
 
+<div class="pagination_links">
 <%= link_to 'Previous page', { :page => @document_pages.current.previous } if @document_pages.current.previous %>
 <%= submit_tag 'Save Status Changes' %>
 <%= link_to 'Next page', { :page => @document_pages.current.next } if @document_pages.current.next %> 
 <%= end_form_tag %>
-
+</div>
 
 <script type="text/javascript">
 	color_table('article_table')

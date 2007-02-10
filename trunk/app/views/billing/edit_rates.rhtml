@@ -18,7 +18,7 @@
 					<%= make_row "<label>#{office.name}</label>",'' %>
 					<% @instructors.each{|instructor| %>
 						<% if instructor.default_office != office then next end %>
-						<%= make_row (instructor.full_name,text_field_tag("instructors[#{instructor.id}]",instructor.hourly_rate,:size=>5,:class=>"billing_input"))%>	
+						<%= make_row (instructor.full_name_link,text_field_tag("instructors[#{instructor.id}]",instructor.hourly_rate,:size=>5,:class=>"billing_input"))%>	
 					<% } %>
 				<% } %>
 			</table>

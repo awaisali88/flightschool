@@ -1,3 +1,11 @@
+<% if index == :alphabet %>
+<div style="text-align:left;padding:7px;">
+	<% ("A"[0].."Z"[0]).each{|c| %>
+		<%= link_to "#{c.chr}", :action => "users",:letter=>"#{c.chr}" %>
+	<% } %>
+</div>
+<% end %>
+
 <div id="user_table">
 <table width="100%">
 <tr>
@@ -25,13 +33,7 @@
 <% }%>
 </table>
 
-<% if index == :alphabet %>
-<p>
-	<% ("A"[0].."Z"[0]).each{|c| %>
-		<%= link_to "#{c.chr}", :action => "users",:letter=>"#{c.chr}" %>
-	<% } %>
-</p>
-<% elsif index == :pages%>
+<% if index == :pages%>
 	<%= pagination_links @pages %>
 <% end %>
 <p><label>Legend:</label> <span class="unapproved">unapproved items</span></p>

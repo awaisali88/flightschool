@@ -19,7 +19,7 @@
 	<%=charge.flight_date%> 
 	<%=charge.aircraft!=nil ? "Aircraft: #{charge.aircraft.identifier} (Hobb's: #{format_hobbs charge.hobbs_start}-#{format_hobbs charge.hobbs_end})": ''%>
 	<% if not charge.instructor_id.nil?%>  
-	, w. <%=charge.instructor.full_name%>.
+	, w. <%=charge.instructor.full_name_link%>.
 	 <%=charge.ground_instruction_time!=nil ? "Gnd. instruction: #{charge.ground_instruction_time}hrs": ''%>
 	<% end %> 
 <% when 'DepositRecord'%> Balance Deposit

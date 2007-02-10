@@ -38,3 +38,13 @@ background: #ffffff;
 .heading_link a{
 	color: white;
 }
+
+.topic_summary_link{
+	padding:3px;
+}
+
+.topic_summary_link a{
+	font-size: 10pt;
+	color: #2255aa;
+	font-weight:bold;
+}

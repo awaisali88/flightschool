@@ -1,14 +1,16 @@
-<div style="padding:5px">
-<%= link_to_remote 'Previous',:update=>'image_selector',:url=>{:controller=>'image',:action=>'links_list',:page => @pages.current.previous}  if @pages.current.previous %>
-<%= link_to_remote 'Next',:update=>'image_selector',:url=>{:controller=>'image',:action=>'links_list',:page => @pages.current.next} if @pages.current.next %>
-</div>
+<% if @images.size==0 %>
+	No images uploaded yet.
+<% else %>
+	<small><i>To embed a picture paste the code underneath</i></small>
+<% end %>
+
 <% @images.each{|image| %>
 	<img src='/image/thumb/<%= image['id'] %>'><br/>
-	/image/show/<%= image['id'] %><br/>
+	<small>!/image/show/<%= image['id'] %>!</small><br/>
 <%  } %>
 
 
-<div>
+<div class="pagination_links">
 <%= link_to_remote 'Previous',:update=>'image_selector',:url=>{:controller=>'image',:action=>'links_list',:page => @pages.current.previous}  if @pages.current.previous %>
 <%= link_to_remote 'Next',:update=>'image_selector',:url=>{:controller=>'image',:action=>'links_list',:page => @pages.current.next} if @pages.current.next %>
 </div>

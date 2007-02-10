@@ -21,25 +21,24 @@
 <% @users.each{|user|%>
 <%i = i+1%>
 <tr class="<%=i.even? ? "even_row" : "odd_row" %>" > 
-<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:15px">
+<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px">
 	<%=link_to user.last_name+', '+user.first_names, :controller=>'profile', :action=>'view', :id=>user.id%>
-	<%= start_form_tag :action=>'approve_user_items',:id=>user.id %><%= submit_tag 'Approve All'%> <%= end_form_tag %>
 </td>
-<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:15px">
-	<%= user.email_verified ? "#{user.email}" : "<span class=\"unapproved\">#{user.email}</span>" %>
+<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px ">
+<small><a href="mailto:<%=h user.email %>" <%= user.email_verified? ? '' : "class=\"unapproved\""%> ><%= user.email %> </a></small>
 </td>
-<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:15px">
+<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px">
     <%user.unapproved_groups.each{|group|%>
 	        <span class="unapproved"><%= group['group_name']%></span>
 	 <%}%>
 </td>
-<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:15px">
+<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px">
 		<%="<label class=\"unapproved\">Birthdate:</label><br/> #{user.birthdate}<br/>"  unless user.birthdate_approved %>
 		<%="<label class=\"unapproved\">Medical Date:</label><br/> #{user.faa_physical_date}<br/>"  unless user.physical_approved %>
 		<%="<label class=\"unapproved\">Biennial/Certification Date:</label><br/> #{user.last_biennial_or_certificate_date}<br/>"  unless user.biennial_approved %>
 		<%="<label class=\"unapproved\">US Citizen:</label><br/> #{user.is_us_citizen}"  unless user.us_citizen_approved %>
 </td>
-<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:15px">
+<td style="vertical-align:top; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px">
 						<table width="100%">
 							<% user.unapproved_certificates.each{|certificate| %>
 								<tr>
@@ -63,6 +62,9 @@
 								</tr>
 							<% } %>
 						</table>
+</td>
+<td style="vertical-align:center; border-bottom: 1px solid black; padding-bottom:5px;padding-top:5px"> 
+	<%= start_form_tag :action=>'approve_user_items',:id=>user.id %><%= submit_tag 'Approve'%> <%= end_form_tag %>
 </td>
 </tr>   
 

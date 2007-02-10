@@ -116,15 +116,14 @@ function addRow(src_iteration){
 	var cell = row.insertCell(0);
 	var el = document.createElement('input');
 	el.type = 'text';	el.name = 'month'+iteration;    el.id = 'month' + iteration; 	el.size = 2; el.value=iteration==1?'mm':$('month' + (iteration-1)).value;
-//	el.onfocus = function(){addRow(iteration)}; 
-	el.maxlength = 2; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 2); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){nextBox(event,this,2, "day"+iteration);};
 	cell.appendChild(el);
 	
 	cell = row.insertCell(1);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'day'+iteration;    el.id = 'day' + iteration;	el.size = 2; el.value=iteration==1?'dd':$('day' + (iteration-1)).value;
-	el.maxlength = 2; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 2); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){nextBox(event,this,2, "pilot"+iteration);};
 	cell.appendChild(el);
 	
@@ -164,14 +163,14 @@ function addRow(src_iteration){
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[hobbs_start]';    el.id = 'hobbs_start' + iteration;	el.size = 4; 
 	el.value=iteration==1?'':$('hobbs_end' + (iteration-1)).value
-	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "hobbs_end"+iteration);};
 	cell.appendChild(el);
 	
 	cell = row.insertCell(5);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[hobbs_end]';    el.id = 'hobbs_end' + iteration;	el.size = 4;
-	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_start"+iteration);};
 	cell.appendChild(el);
 	
@@ -179,21 +178,21 @@ function addRow(src_iteration){
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[tach_start]';    el.id = 'tach_start' + iteration;	el.size = 4; 
 	el.value=iteration==1?'':$('tach_end' + (iteration-1)).value
-	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_end"+iteration);};
 	cell.appendChild(el);
 
 	cell = row.insertCell(7);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[tach_end]';    el.id = 'tach_end' + iteration;	el.size = 4;
-	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "ground_time"+iteration);};
 	cell.appendChild(el);
 
 	cell = row.insertCell(8);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[ground_instruction_time]';    el.id = 'ground_time' + iteration;	el.size = 5;
-	el.maxlength = 4; el.onkeydown = function(){keyDown=true};
+	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){ nextBox(event,this,4, "aircraft_rate"+iteration);};
 	cell.appendChild(el);
 	

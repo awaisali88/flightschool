@@ -25,23 +25,21 @@
  </script>
 
 
-<% if not params[:showall] %>
+<% if not params[:showall] and @reservations.size>30 %>
     <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
 <% end %>
 
 <table  width="100%" id="reservation_table">
 
-<tr><th colspan="2"></th></tr>
+<tr><th>Date/Time</th><th>Instructor</th><th>Aircraft</th></tr>
 
 <% @reservations = @reservations.reverse %>
 <% if @reservations.size == 0 %>
 <tr><td>No Upcoming Reservations.</td></tr>	
 <% end %>
-<% @reservations.in_groups_of(2){|pair| %>
-
-<tr>
-	<% pair.each{|reservation| %>
+	<% @reservations.each{|reservation| %>
 		<% if reservation.nil? then next end %>
+	<tr>
 	<td style="">
 	<% expired = reservation.time_end<Time.now %>
 	<table><tr><td>		
@@ -54,22 +52,29 @@
 		<% else  %>
    			<%= reservation.time_start.strftime("%a&nbsp;%b&nbsp;%d, %I%p")%>-<%= reservation.time_end.strftime("%a&nbsp;%b&nbsp;%d, %I%p") %>
 		<% end %>
-	   <% instructor = reservation.instructor%>
-	   <% if not instructor.nil?%>
-	       w. <%= instructor.first_names+' '+instructor.last_name[0..0]+'.'%>
-	   <% end %>
 	   </a>
 	</td></tr></table>
 </td>
-<% } %>
+	<td>
+		<% instructor = reservation.instructor%>
+		   <% if not instructor.nil?%>
+		       <%= instructor.short_name%>
+		   <% end %>
+	</td>
+	<td>
+		<% aircraft = reservation.aircraft%>
+		   <% if not aircraft.nil?%>
+		       <%= aircraft.type_and_identifier%>
+		   <% end %>
+	</td>
 </tr>
-<%}%>
-<tr><th colspan="2"></th></tr>
+<% } %>
+<tr><th colspan="3"></th></tr>
 
 </table>
 
 <% if params[:showall] %>
-<div style="text-align:center">
+<div class="pagination_links">
     <%= link_to 'Older Reservations', { :user=>params[:user],:showall=>true,:page => @reservation_pages.current.next } if @reservation_pages.current.next %> 
     <%= link_to 'Newer Reservations', {:user=>params[:user],:showall=>true,:page => @reservation_pages.current.previous } if @reservation_pages.current.previous %>
 </div>

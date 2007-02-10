@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
                             :finder_sql =>  
                             <<-"SQL"
                             select groups.* from groups,groups_users
-                            where groups_users.user_id = #{id} and 
+                            where groups_users.user_id = #{self.id} and 
                             groups.id = groups_users.group_id and 
                             groups_users.approved = true;
                             SQL
@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
                             :finder_sql => 
                             <<-"SQL"
                             select groups.* from groups,groups_users
-                            where groups_users.user_id = #{id} and 
+                            where groups_users.user_id = #{self.id} and 
                             groups.id = groups_users.group_id and 
                             groups_users.approved = false;
                             SQL
@@ -75,10 +75,18 @@ class User < ActiveRecord::Base
       return last_name+", "+first_names
   end
   
-  def short_name
-    return last_name+' '+first_names[0..0]
+  def full_name_link
+    return "<a href=\"/profile/view/#{self.id}\">#{full_name.gsub(' ','&nbsp;')}</a>"
   end
-  
+
+  def full_name_rev_link
+    return "<a href=\"/profile/view/#{self.id}\">#{full_name_rev.gsub(' ','&nbsp;')}</a>"
+  end
+
+  def short_name
+    return "<a href=\"/profile/view/#{self.id}\">#{self.last_name},&nbsp;#{self.first_names[0..0]}</a>"
+  end
+    
   def full_name_with_id
     return id.to_s+'. '+first_names+' '+last_name
   end    

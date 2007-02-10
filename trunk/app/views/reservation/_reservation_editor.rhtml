@@ -38,7 +38,7 @@
 					<% if not @reservation.new_record? %>
 					<tr>
 						<td>
-					    	<label>For: </label> <%= @reservation.pilot.full_name %>
+					    	<label>For: </label> <%= @reservation.pilot.full_name_link %>
 					    </td>	
 					</tr>
 					<% end %>
@@ -197,14 +197,13 @@
 			$H(office.value['aircraft_types']).each(function(type){
 				if(type.key == type_select.value){
 					aircraft_select.options.length = 0;
-					aircraft_select.options[0] = new Option('None/Ground School','') 								
 					$A(type.value).each(function(aircraft){
 						aircraft_select.options[aircraft_select.options.length] = new Option(aircraft['name'],aircraft['id'])
 					})
 				}
 			})
 		})
-		sortSelect(aircraft_select,1);
+		sortSelect(aircraft_select,0);
 		if(defined(reservation['aircraft_id'])){
 			makeSelected(aircraft_select,reservation['aircraft_id'])
 		}else{

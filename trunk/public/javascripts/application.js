@@ -150,3 +150,122 @@ function color_table(table){
 	for(i=0;i<t.rows.length;i++)
 		t.rows[i].className = i%2==0 ? 'even_row' : 'odd_row'
 }
+
+function quickpick_fix_selects(aircraft_type,instructor){
+    for(i=0;i<document.forms['quickpick_form'].reservation_aircraft_type.options.length;i++)
+    {
+        if(document.forms['quickpick_form'].reservation_aircraft_type.options[i].value == aircraft_type)
+            document.forms['quickpick_form'].reservation_aircraft_type.options[i].selected = "selected"
+    }
+  
+    for(i=0;i<document.getElementById('quickpick_instructor_select').options.length;i++)
+    {
+        if(document.getElementById('quickpick_instructor_select').options[i].value == instructor)
+           document.getElementById('quickpick_instructor_select').options[i].selected = "selected"
+    }
+    
+}
+
+//
+// From Lightbox JS
+// getPageScroll()
+// Returns array with x,y page scroll values.
+// Core code from - quirksmode.org
+//
+function getPageScroll(){
+
+	var yScroll;
+	var xScroll;
+
+	if (self.pageYOffset) {
+		yScroll = self.pageYOffset;
+	} else if (document.documentElement && document.documentElement.scrollTop){	 // Explorer 6 Strict
+		yScroll = document.documentElement.scrollTop;
+	} else if (document.body) {// all other Explorers
+		yScroll = document.body.scrollTop;
+	}
+	if (self.pageXOffset) {
+		xScroll = self.pageXOffset;
+	} else if (document.documentElement && document.documentElement.scrollLeft){	 // Explorer 6 Strict
+		xScroll = document.documentElement.scrollLeft;
+	} else if (document.body) {// all other Explorers
+		xScroll = document.body.scrollLeft;
+	}
+
+	arrayPageScroll = new Array(xScroll,yScroll) 
+	return arrayPageScroll;
+}
+
+
+
+// from popup.js - this section needs cleaning
+
+function popup(evt) {
+    var el = Event.element(evt);
+    var result = window.open(el.href, 'rg_popup', 'scrollbars=yes, location=no, resizable=no, width=550,height=310'); 
+    if (result != null) { Event.stop(evt); }
+}
+function apply_popup(el_or_id) {
+    var el = $(el_or_id);
+    if (el.tagName == 'A') {
+        Event.observe(el, 'click', popup, false);        
+    } else {
+        /* recurse */
+        $A(el.childNodes).each(apply_popup);
+    }
+}
+
+/* Form.Element.setValue("fieldname/id","valueToSet") */
+Form.Element.setValue = function(element,newValue) {
+    element_id = element;
+    element = $(element);
+    if (!element){element = document.getElementsByName(element_id)[0];}
+    if (!element){return false;}
+    var method = element.tagName.toLowerCase();
+    var parameter = Form.Element.SetSerializers[method](element,newValue);
+}
+
+Form.Element.SetSerializers = {
+  input: function(element,newValue) {
+    switch (element.type.toLowerCase()) {
+      case 'submit':
+      case 'hidden':
+      case 'password':
+      case 'text':
+        return Form.Element.SetSerializers.textarea(element,newValue);
+      case 'checkbox':
+      case 'radio':
+        return Form.Element.SetSerializers.inputSelector(element,newValue);
+    }
+    return false;
+  },
+
+  inputSelector: function(element,newValue) {
+    fields = document.getElementsByName(element.name);
+    for (var i=0;i<fields.length;i++){
+      if (fields[i].value == newValue){
+        fields[i].checked = true;
+      }
+    }
+  },
+
+  textarea: function(element,newValue) {
+    element.value = newValue;
+  },
+
+  select: function(element,newValue) {
+    var value = '', opt, index = element.selectedIndex;
+    for (var i=0;i< element.options.length;i++){
+      if (element.options[i].value == newValue){
+        element.selectedIndex = i;
+        return true;
+      }        
+    }
+  }
+}
+
+function unpackToForm(data){
+   for (i in data){
+     Form.Element.setValue(i,data[i].toString());
+   }
+}
