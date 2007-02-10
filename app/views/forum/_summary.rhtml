@@ -4,7 +4,7 @@
 
 <% @topics.each{|topic| %>
 	<div class = "topic_summary_link">
-		<%= link_to(Ah(topic.subject), {:controller => "forum", :action => "view",:topic=>topic.id},{:class=>'topic_summary_link'}) %>
+		<%= link_to(h(topic.subject), {:controller => "forum", :action => "view",:topic=>topic.id},{:class=>'topic_summary_link'}) %>
 	</div>
 <% } %>
 
