@@ -38,7 +38,13 @@
 					<% if not @reservation.new_record? %>
 					<tr>
 						<td>
-					    	<label>For: </label><small> <%= @reservation.pilot.full_name_link %></small>
+							<div style="width:150px; max-width:150px; overflow:hidden">
+					    	<label>For: </label><small> 
+							<%= @reservation.pilot.full_name_link %><br/>
+							<a href="mailto:<%= @reservation.pilot.email %>"><%= @reservation.pilot.email %></a><br/>
+							<%= @reservation.pilot.phone_numbers[0].phone_number unless @reservation.pilot.phone_numbers.size==0 %>
+							</small>
+							</div>
 					    </td>	
 					</tr>
 					<% end %>
@@ -132,7 +138,7 @@
 <% if @violated_rules!=nil and @reservation.status!='approved' %>		
 <% if @violated_rules.size>0 %>
 	<div class="error_box_header">
-		Automatic verification problems:
+		Automatic verification failed:
 	</div>
 		
 	<div class="error_box">

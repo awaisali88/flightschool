@@ -160,7 +160,7 @@ delete from reservation_rules where id = 7;
 update reservation_rules set type='ReservationApprovalRule';
 update reservation_rules set name = 'advance_scheduling' where id = 5;
 update reservation_rules set name = 'recent_medical' where id = 3;
-update reservation_rules set name = 'recent_biennial' where id = 4;
+update reservation_rules set name = 'recent_certification' where id = 4;
 
 insert into reservation_rules values(default,'Pilots must have approved Birthday, Medical, and Biennial/Certification Dates','ReservationApprovalRule','approved_dates');  
 
