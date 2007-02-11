@@ -136,7 +136,6 @@ end
 
 def violated_rules
   if self.reservation_type !='booking' then return end
-    
   rules = ReservationApprovalRule.find_all()
   violated_rules = []
   exceptions = ReservationRulesException.find_all_by_user_id(self.pilot.id).map{|e| e.reservation_rule_id}
@@ -146,7 +145,7 @@ def violated_rules
     end
         
     case rule.name
-    when 'recent_physical':
+    when 'recent_medical':
       if self.instructor != nil then next end 
       if self.pilot.faa_physical_date.nil? or self.pilot.birthdate.nil? then 
         violated_rules<<rule 
@@ -163,7 +162,7 @@ def violated_rules
         violated_rules<<rule 
         next
       end
-      if self.pilot.last_biennial_or_certificate_date < (Time.now + 2.years )
+      if self.pilot.last_biennial_or_certificate_date.to_time < (Time.now + 2.years )
         violated_rules<<rule
       end
     when 'approved_dates'
