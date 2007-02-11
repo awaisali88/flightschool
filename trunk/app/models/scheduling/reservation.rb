@@ -153,7 +153,7 @@ def violated_rules
       end
       physical = Time.mktime(self.pilot.faa_physical_date.year,self.pilot.faa_physical_date.month) #truncate the date to month
       now = Time.mktime(Time.now.year,Time.now.month)
-      if (self.pilot.birthdate>40.years.ago) ? (physical>now+2.years) : (physical>now+3.years) 
+      if (self.pilot.birthdate.to_time>40.years.ago) ? (physical>now+2.years) : (physical>now+3.years) 
         violated_rules<<rule
       end
     when 'recent_certification':
