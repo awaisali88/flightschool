@@ -1,16 +1,35 @@
-<p>
+<div style="float:right">
+    <%= start_form_tag :action => 'find'%>
+		<label>Search Users: </label> <%= text_field_tag  'user_name'%>
+		<%= submit_tag 'Find' %>
+    <%= end_form_tag %>
+</div>
+
+<div style="float:left">
 <%= form_tag ({:action=>'users'}, {:method=>:get}) %>
 <label>Show users from </label>
 <select name="filter_office" style="width:150px">
 	<%= options_for_select(options_for_offices.map{|e| [e[0],e[1].to_s]}<<['All Offices','none'],session[:filter_office]) %>
 </select> 
 <%= submit_tag 'Filter'%>
+<%= end_form_tag %>
+</div>
+
+<div style="height:50px">
+</div>
+
+<div style="float:right">
 <% if session[:show_suspended] == 'true' %>
 <%= link_to 'Hide Suspended Users', :action => 'users', :show_suspended => 'false' %>
 <% else %>
 <%= link_to 'Show Suspended Users', :action => 'users', :show_suspended => 'true' %>
 <% end %>
-<%= end_form_tag %>
-</p>
+</div>
+
+<div style="text-align:left">
+	<% ("A"[0].."Z"[0]).each{|c| %>
+		<%= link_to "#{c.chr}", :action => "users",:letter=>"#{c.chr}" %>
+	<% } %>
+</div>
 
 <%= render_partial 'user_table',:index=>:alphabet%>
