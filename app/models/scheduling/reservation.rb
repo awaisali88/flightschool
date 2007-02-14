@@ -80,7 +80,7 @@ def initialize(params=nil,pilot=nil)
 end
 
 
-def self.is_overlapping
+def is_overlapping
     return connection.execute( 
       <<-"SQL"   
        select count(*) from reservations where id!=#{self.id} and
