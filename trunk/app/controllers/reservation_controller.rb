@@ -64,6 +64,7 @@ class ReservationController < ApplicationController
     end
     session[:schedule][:date] = @reservation.time_start.to_date unless @reservation.time_start.nil?
 
+    success = false
     Reservation.transaction do
       success = @reservation.save
     end
@@ -116,7 +117,7 @@ class ReservationController < ApplicationController
       @reservation.status = 'created'
     end
 
-
+    success = false
     Reservation.transaction do
       success = @reservation.update_attributes(params[:reservation])
     end
@@ -160,6 +161,7 @@ class ReservationController < ApplicationController
   
     @reservation.status = 'approved'
     
+    success = false
     Reservation.transaction do
       success = @reservation.save
     end
