@@ -7,9 +7,7 @@
 
 
 <%
-   msie_width_fix = isMSIE? ? 0: -2;
-   msie_pos_fix = isMSIE? ? 1:1;
-   msie_height_fix = isMSIE? ? 1:0;
+   msie_height_fix = isMSIE? ? 6:0;
 
    @days = 1
 	@aircraft_count = @aircrafts.size
@@ -74,21 +72,10 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		    <% if aircraft.type.id != type.id 
 	    	       next
 		       end %>
-		    <div id="aircraft<%=aircraft.id%>" style="border-bottom: 1px solid black; height:<%=isMSIE? && !@master_schedule ? 20 : 14%>px;width:<%=graph_width%>px; top:<%=offset%>px" 
+		    <div id="aircraft<%=aircraft.id%>" style="border-bottom: 1px solid black; height:<%=isMSIE? && !@master_schedule ? 20 : 14%>px;width:<%=graph_width%>px; top:<%=offset-msie_height_fix%>px" 
 		         class="aircraft_name">
 		    </div>
-		    <% if can_approve_reservations?%>
-			   	<script type="text/javascript">
-					Droppables.add('aircraft<%=aircraft.id%>', {
-				    onDrop: function(element) 
-				     { 
-						element.style.display = "none";
-						new Ajax.Updater('master_schedule_wrap', '/schedule/drag_drop_reservation?master=<%=@master_schedule%>&sdate=<%=@from.to_date.to_s%>&drag=' + element.id + '&drop=a<%=aircraft.id%>', {asynchronous:true, evalScripts:true});           
-					 }});
-				</script>
-            <% end %>			
-			<%= drop_receiving_element("aircraft"+aircraft.id.to_s, :url =>
-			    { :controller => "schedule", :action => "drag_drop_reservation" }) %>
+	
 	         <% tops["a#{aircraft.id}"] = offset %>
 		     <% offset += air_height %> 
 		<% } %>

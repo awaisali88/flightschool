@@ -18,7 +18,7 @@ def view
   user_id = params[:id].nil? ? current_user.id.to_s : params[:id]
   @user = User.find_by_id(user_id)
   @page_title = @user.full_name  
-  @profile_editable = (can_edit_any_user_info? or (user_id == current_user.id.to_s))
+  @full_profile = (can_edit_any_user_info? or (user_id == current_user.id.to_s))
   
   @posts = ForumPost.find(:all,:conditions=>["created_by = ?",@user.id],:order=>'created_at desc')
   @reservations_total = Reservation.count(:conditions=>["created_by=?",@user.id])
@@ -31,7 +31,6 @@ def view
 
   @charges = BillingCharge.find :all, :conditions=>["user_id = ?",@user_id],:order=>'created_at desc', :limit => 20
 end
-
 
 def edit
   user_id = params[:id].nil? ? current_user.id.to_s : params[:id]

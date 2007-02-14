@@ -63,8 +63,12 @@ class ReservationController < ApplicationController
       @reservation.status = 'created'
     end
     session[:schedule][:date] = @reservation.time_start.to_date unless @reservation.time_start.nil?
-    if @reservation.save
-      
+
+    Reservation.transaction do
+      success = @reservation.save
+    end
+    
+    if success
       #add instructor block if the reservation is made for an instructor
       if @reservation.pilot.in_group? 'instructor'
         block = Reservation.new(@reservation.attributes)
@@ -112,7 +116,12 @@ class ReservationController < ApplicationController
       @reservation.status = 'created'
     end
 
-    if @reservation.update_attributes(params[:reservation])
+
+    Reservation.transaction do
+      success = @reservation.update_attributes(params[:reservation])
+    end
+    
+    if success
       session[:last_reservation] = params[:reservation]
       flash[:notice] = 'Updated.'
       @violated_rules = @reservation.violated_rules    
@@ -150,7 +159,12 @@ class ReservationController < ApplicationController
     return unless has_permission :can_approve_reservations 
   
     @reservation.status = 'approved'
-    if @reservation.save
+    
+    Reservation.transaction do
+      success = @reservation.save
+    end
+    
+    if success
       flash[:notice] = 'Approved.'
       @refresh_content = true
     end

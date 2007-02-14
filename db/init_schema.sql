@@ -210,6 +210,27 @@ create table reservations(
     constraint valid_reservation_type check (reservation_type in ('instructor_block','aircraft_block','booking'))
 );
 
+-- trigger for ensuring that non-canceled reservations do not overlap
+CREATE OR REPLACE function check_reservation_overlaps() returns trigger AS $reservation_overlap_trigger$
+BEGIN       
+   if NEW.status!='canceled' and 
+	  (select count(*) from reservations r where 
+	  	(r.aircraft_id=NEW.aircraft_id or r.instructor_id=NEW.instructor_id) and 
+		r.id != NEW.id and 
+		r.status!='canceled' and
+		r.time_start<NEW.time_end and 
+		r.time_end>NEW.time_start)>0 THEN
+		return NULL;
+	else
+		return NEW;
+	end if;
+END 
+$reservation_overlap_trigger$ LANGUAGE plpgsql;       
+
+CREATE trigger reservation_overlap_trigger
+  after INSERT OR UPDATE ON reservations 
+  FOR each ROW EXECUTE PROCEDURE check_reservation_overlaps();
+
 --  table stores changes made to reservations, which are used for emailing notifications to pilot whose reservations have been altered.
 create table reservations_changes as select * from reservations;
 alter table reservations_changes add column sent boolean default true;

@@ -3,7 +3,7 @@
 		<td>
 			<div style="float:left"><img style="margin-right:10px;margin-left:5px;" alt="" src="/image/thumb/<%= @user.portrait_id %>"/></div>
 
-			<% if @profile_editable %>
+			<% if @full_profile %>
 			<div style="float:right" class="admin_toolbox">
 				<table>
 					<tr><th><%= admin? ? 'Administrative Tools' : 'Profile Tools' %></th></tr>
@@ -39,6 +39,7 @@
 			
 		</td>
 	</tr>
+	<% if @full_profile %>
 	<tr>
 		<td>
 			<table width="100%">
@@ -110,6 +111,7 @@
 			</table>
 		</td>
 	</tr>
+	<% end %>
 </table>
 
 
@@ -157,7 +159,7 @@
  <tr class="even_row"><td><label>Total Forum Posts:</label></td><td><%= @posts.size%></td></tr>
  </table> 
 <% i = 0%>
- <table>
+ <table width="100%">
  <% @posts.each{|post|%>
  <% if i>10 then break end %>
  <% i = i+1%>

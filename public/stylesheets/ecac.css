@@ -122,18 +122,13 @@ body{
     background: white;
     background-repeat: no-repeat;
     background-attachment:fixed;
-    width: 127px;
-    max-width: 127px;
+    width: 118px;
+    max-width: 118px;
     border: none;
     padding: 0px;
     padding-left:3px;
     padding-right:6px;
     margin: 0px;
-}
-
-html>body .login_field{
-    width:118px;
-    background-attachment:scroll;
 }
 
 .login_link, #login_box a, #logout_box a{

@@ -38,7 +38,6 @@ def validate
   if self.status != 'canceled'
     if self.is_overlapping
      errors.add_to_base("Selected time period overlaps with existing reservations")
-   
     end
     if self.time_start >= self.time_end
      errors.add_to_base("Invalid time range (start >= end)")
@@ -80,6 +79,18 @@ def initialize(params=nil,pilot=nil)
   super(params)
 end
 
+
+def self.is_overlapping
+    return connection.execute( 
+      <<-"SQL"   
+       select count(*) from reservations where id!=#{self.id} and
+       (instructor_id = #{self.instructor_id} or aircraft_id = #{self.aircraft_id}) and
+       status != 'canceled' and 
+       time_start < #{self.time_end} and
+       time_end > #{self.time_start}
+         SQL
+    )[0][0].to_i > 0
+end
 
 def self.changed_reservations
   find_by_sql(<<-"SQL"
@@ -173,24 +184,6 @@ def violated_rules
   } 
   return violated_rules
 end
-
-
-def is_overlapping
-   ins_r = Reservation.instructor_reservations instructor_id, time_start, time_end
-   air_r = Reservation.aircraft_reservations aircraft_id, time_start, time_end
-   (ins_r+air_r).each{|r|
-      if r.id.to_i == id 
-        next
-      end
-      if (r[:time_start]< time_end && r[:time_end]> time_start) ||
-         (r[:time_start]== time_start) ||
-         (r[:time_end]== time_end)
-      return true
-   end
-   }
-  return false 
-end
-
 
 def from
   t = self.time_start.hour
