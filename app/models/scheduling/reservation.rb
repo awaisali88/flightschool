@@ -81,13 +81,16 @@ end
 
 
 def is_overlapping
+  #workaround for windows ruby bug not printing the time to spec
+  t_from = self.time_start.to_s :db
+  t_to = self.time_end.to_s :db
     return connection.execute( 
       <<-"SQL"   
-       select count(*) from reservations where id!=#{self.id} and
+       select count(*) from reservations where id != #{self.id.nil? ? -1 : self.id} and
        (instructor_id = #{self.instructor_id.nil? ? -1 : self.instructor_id} or aircraft_id = #{self.aircraft_id.nil? ? -1 : self.aircraft_id}) and
        status != 'canceled' and 
-       time_start < '#{self.time_end.to_s(:db)}' and
-       time_end > '#{self.time_start.to_s(:db)}'
+       time_start <= '#{t_to}' and
+       time_end >= '#{t_from}'
          SQL
     )[0][0].to_i > 0
 end
