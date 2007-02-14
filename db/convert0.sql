@@ -138,8 +138,8 @@ update users set biennial_approved = true where last_biennial_or_certificate_dat
 update users set us_citizen_approved = true where is_us_citizen is null;
 	
 delete from documents where type='ForumPost' and refers_to is null;
-delete from documents c where c.refers_to in (select id from documents a where type='ForumTopic' and (select count(*) from documents b where b.refers_to=a.id and b.status='approved')=0);
-delete  from documents a where type='ForumTopic' and (select count(*) from documents b where b.refers_to=a.id and b.status='approved')=0;
+delete from documents where documents.refers_to in (select id from documents a where type='ForumTopic' and (select count(*) from documents b where b.refers_to=a.id and b.status='approved')=0);
+delete  from documents where type='ForumTopic' and (select count(*) from documents b where b.refers_to=documents.id and b.status='approved')=0;
 	
 create table files(
 	id							SERIAL PRIMARY KEY,
