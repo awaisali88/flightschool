@@ -48,7 +48,6 @@ public
           if admin?
             session[:admin_user_id] = current_user.id
           end
-          flash[:notice] = 'Login successful'
           redirect_to '/'
         else
           user = User.find_by_email(params[:email])

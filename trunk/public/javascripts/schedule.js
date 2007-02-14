@@ -42,10 +42,6 @@ function set_reservations(reservations){
 	$$('.approved_aircraft_block_reservation_bar').each(function(bar){		Element.remove(bar);	})
 	
 	$A(reservations).each(function(r){				
-	    var bar = document.createElement('div');
-	    bar.setAttribute("class",r['status']+"_"+r['reservation_type']+"_reservation_bar");
-	    bar.setAttribute("className",r['status']+"_"+r['reservation_type']+"_reservation_bar");
-
 		var start = new Date()
 		start.setTime(r['start_int'])
 		if(start > fix_to) return;
@@ -55,30 +51,50 @@ function set_reservations(reservations){
 		end.setTime(r['end_int'])
 		if(end < fix_from) return;
 		if(end>fix_to) {end = fix_to}
-
-
 		
-		bar.style.width = width_per_hour*(end-start)/(60*60*1000) + 'px'
-		bar.style.left = label_width+width_per_hour*(start-fix_from)/(60*60*1000) + 'px'
-		bar.style.top = '300px'
-
-		if(current_user==r['created_by'] || admin){
-			bar.style.cursor = 'pointer'
-			if(current_user==r['created_by'])
-				bar.style.border = "2px solid green"
-	    	bar.innerHTML = r['pilot']	
-			bar.onclick = function(e){
-				new Ajax.Updater('reservation_sidebar', '/reservation/edit?id='+r['id'], {asynchronous:true, evalScripts:true})
-			}		
-		}		
+		var width = width_per_hour*(end-start)/(60*60*1000) + 'px'
+		var left = label_width+width_per_hour*(start-fix_from)/(60*60*1000) + 'px'
 		
 		if(defined(r['aircraft_id']) && defined(tops['a'+r['aircraft_id']])){
-	    	bar.style.top = tops['a'+r['aircraft_id']] + 'px'
-    		graph.appendChild(bar);
+			var abar = document.createElement('div');
+		    abar.setAttribute("class",r['status']+"_"+r['reservation_type']+"_reservation_bar");
+		    abar.setAttribute("className",r['status']+"_"+r['reservation_type']+"_reservation_bar");
+		    abar.style.width = width;
+			abar.style.left = left;
+	    	abar.style.top = tops['a'+r['aircraft_id']] + 'px'
+	
+			if(current_user==r['created_by'] || admin){
+				abar.style.cursor = 'pointer'
+				if(current_user==r['created_by'])
+					abar.style.border = "2px solid green"
+		    	abar.innerHTML = r['pilot']	
+				abar.onclick = function(e){
+					new Ajax.Updater('reservation_sidebar', '/reservation/edit?id='+r['id'], {asynchronous:true, evalScripts:true})
+				}		
+			}
+				
+    		graph.appendChild(abar);
 		}
+		
 		if(defined(r['instructor_id']) && defined(tops['i'+r['instructor_id']])){
-	    	bar.style.top = tops['i'+r['instructor_id']] + 'px'
-    		graph.appendChild(bar);
+			var ibar = document.createElement('div');
+		    ibar.setAttribute("class",r['status']+"_"+r['reservation_type']+"_reservation_bar");
+		    ibar.setAttribute("className",r['status']+"_"+r['reservation_type']+"_reservation_bar");
+		    ibar.style.width = width;
+			ibar.style.left = left;
+	    	ibar.style.top = tops['i'+r['instructor_id']] + 'px'
+	
+			if(current_user==r['created_by'] || admin){
+				ibar.style.cursor = 'pointer'
+				if(current_user==r['created_by'])
+					ibar.style.border = "2px solid green"
+		    	ibar.innerHTML = r['pilot']	
+				ibar.onclick = function(e){
+					new Ajax.Updater('reservation_sidebar', '/reservation/edit?id='+r['id'], {asynchronous:true, evalScripts:true})
+				}		
+			}
+	
+    		graph.appendChild(ibar);
 		}		
 	})
 	hide_loading_indicator();
