@@ -13,7 +13,7 @@ class SchedulingAccessRule < ReservationRule
       case rule.name
       when 'approved_user':
         groups = user.approved_groups.map{|g| g.group_name}
-        if not (groups.include? 'instructor' or groups.include? 'renter' or groups.include? 'student')
+        if not (groups.include? 'admin' or groups.include? 'instructor' or groups.include? 'renter' or groups.include? 'student')
           violated_rules<<rule 
         end
       when 'has_contact_info':
