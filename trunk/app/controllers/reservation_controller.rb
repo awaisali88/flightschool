@@ -56,7 +56,7 @@ class ReservationController < ApplicationController
   def create
     @page_title = 'Reservation Schedule'
     @reservation = Reservation.new(params[:reservation],current_user)
-    if admin?
+    if admin? or instructor?
       @reservation.override_acceptance_rules
     else
       @reservation.created_by = current_user.id
@@ -109,14 +109,16 @@ class ReservationController < ApplicationController
     @reservation = Reservation.find_by_id params[:id]
     return unless @reservation.pilot == current_user or @reservation.instructor_id == current_user.id or has_permission(:can_approve_reservations)
     
-    if admin?
+    if admin? or instructor?
       @reservation.override_acceptance_rules
+    else
+      @reservation.created_by = current_user.id
+
+      if @reservation.status=='approved' 
+        @reservation.status = 'created'
+      end
     end
         
-    if not admin? and @reservation.status=='approved' 
-      @reservation.status = 'created'
-    end
-
     success = false
     Reservation.transaction do
       success = @reservation.update_attributes(params[:reservation])
@@ -187,6 +189,7 @@ class ReservationController < ApplicationController
   
   def add_rule_exception
     return unless has_permission :can_edit_reservation_rules
+    @reservation = Reservation.find_by_id(params[:reservation_id])
     ex = ReservationRulesException.new
     ex.user_id = params[:user_id]
     ex.reservation_rule_id = params[:rule_id]

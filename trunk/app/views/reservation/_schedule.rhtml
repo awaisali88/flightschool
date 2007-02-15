@@ -227,7 +227,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		width_per_second = <%= width_per_second %>
 		width_per_day = <%= width_per_day %>
 		width_per_hour = <%= width_per_hour %>		
-		admin = <%= admin? %>
+		admin = <%= admin? or instructor? %>
 		current_user = <%= current_user.id %>
 		
 		new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + '<%= @date.to_s %>'})

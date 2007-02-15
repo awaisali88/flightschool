@@ -52,7 +52,7 @@ def can_view_any_user_info?
 end
 
 def can_approve_reservations?
-  return admin?
+  return (admin? or instructor?)
 end
 
 def can_edit_reservation_rules?

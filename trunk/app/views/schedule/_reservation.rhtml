@@ -32,7 +32,8 @@
         <br/><label>Automatic Verification:</label><br/>    
         <% rules = reservation.violated_rules %>
         <% rules.each{|rule|%>
-          	<a onclick="new Ajax.Updater('reservation_sidebar','/reservation/add_rule_exception?reservation_id=<%= reservation.id %>&rule_id=<%= rule.id %>&user_id=<%=reservation.pilot.id %>',{asynchronous:true, evalScripts:true});"/>Add an Exemption For This Pilot</a>
+			<small><span style="color:red"><%= rule.description %></span> <br/> 
+          	<a href="#" onclick="new Ajax.Updater('reservation_sidebar','/reservation/add_rule_exception?reservation_id=<%= reservation.id %>&rule_id=<%= rule.id %>&user_id=<%=reservation.pilot.id %>',{asynchronous:true, evalScripts:true});"/>Add an Exemption For This Pilot</a></small><br/>
 		     <%}%>
         <% if rules.size==0%>
             <div>No problems found</div>
