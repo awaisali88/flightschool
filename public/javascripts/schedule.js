@@ -63,7 +63,7 @@ function set_reservations(reservations){
 			abar.style.left = left;
 	    	abar.style.top = tops['a'+r['aircraft_id']] + 'px'
 	
-			if(current_user==r['created_by'] || admin || current_user==r['instructor_id']){
+			if(current_user==r['created_by'] || admin){
 				abar.style.cursor = 'pointer'
 				if(current_user==r['created_by'])
 					abar.style.border = "2px solid green"
@@ -84,7 +84,7 @@ function set_reservations(reservations){
 			ibar.style.left = left;
 	    	ibar.style.top = tops['i'+r['instructor_id']] + 'px'
 	
-			if(current_user==r['created_by'] || admin || current_user==r['instructor_id']){
+			if(current_user==r['created_by'] || admin){
 				ibar.style.cursor = 'pointer'
 				if(current_user==r['created_by'])
 					ibar.style.border = "2px solid green"
