@@ -89,8 +89,8 @@ def is_overlapping
        select count(*) from reservations where id != #{self.id.nil? ? -1 : self.id} and
        (instructor_id = #{self.instructor_id.nil? ? -1 : self.instructor_id} or aircraft_id = #{self.aircraft_id.nil? ? -1 : self.aircraft_id}) and
        status != 'canceled' and 
-       time_start <= '#{t_to}' and
-       time_end >= '#{t_from}'
+       time_start < '#{t_to}' and
+       time_end > '#{t_from}'
          SQL
     )[0][0].to_i > 0
 end

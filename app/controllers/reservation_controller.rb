@@ -162,6 +162,10 @@ class ReservationController < ApplicationController
     return unless has_permission :can_approve_reservations 
   
     @reservation.status = 'approved'
+
+    if admin?
+       @reservation.override_acceptance_rules
+     end
     
     success = false
     Reservation.transaction do
