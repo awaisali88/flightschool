@@ -31,6 +31,30 @@
 	    </tr>
         </table>
 
+		<% elsif isMSIE_mobile? %>
+		
+      <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px">
+        <tr>
+	        <td style=" padding:0px;">
+	           <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
+	           <%= text_field_tag "email","your email",:id=>'email_field',:class =>"login_field" %>
+	           </td></tr><tr><td>
+               <%= password_field_tag "password","",:id =>"password_field",
+	               :class =>"login_field"		
+	                %>
+
+	           </td></tr></table>
+	        </td>
+	        <td style=" padding:0px;">
+		       <table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px"><tr><td>
+	           <%= submit_tag 'Login',:class =>"login_link" %> 
+    	       </td></tr><tr><td>
+	           <%= link_to 'Register', :controller => 'user', :action => 'signup',:class =>"login_link" %>
+	           </td></tr></table>
+	        </td>
+	    </tr>
+        </table>
+
 		<% else %>
 		
 		<table cellpadding="2px" cellspacing="1px" style="margin:0px;padding:0px">

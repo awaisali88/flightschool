@@ -24,6 +24,10 @@ def isMSIE?()
   @request.env['HTTP_USER_AGENT'].downcase.index('msie')!=nil 
 end
 
+def isMSIE_mobile?()
+  @request.env['HTTP_USER_AGENT'].downcase.index('Windows CE')!=nil 
+end
+
 def isKHTML?()
   @request.env['HTTP_USER_AGENT'].downcase.index('khtml')!=nil 
 end
