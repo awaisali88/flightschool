@@ -44,7 +44,9 @@ end
 # returns cached JSON representation of the reservation if cache is available, or rebuilds the cache otherwise
 def cached_json_rep
   if self.json_cache.blank?
-    return self.to_json
+    self.json_cache = self.to_json
+    self.override_acceptance_rules
+    self.save
   else
     return self.json_cache
   end
