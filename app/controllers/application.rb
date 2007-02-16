@@ -5,6 +5,9 @@ require 'login_engine'
 require 'permissions_checker'
 require 'multi_school'
 
+require 'zlib' 
+require 'stringio'
+
 class ApplicationController < ActionController::Base
     include LoginEngine
 #    include BreadCrumbs
@@ -17,7 +20,31 @@ class ApplicationController < ActionController::Base
 #    after_filter :bread_crumbs
     before_filter :load_permissions
     
-    # activity logging code adapted from sources by Zak Stone and Martin Glynn
+
+    protected 
+
+    #compresses the http output for performance
+    def compress 
+      accepts = request.env['HTTP_ACCEPT_ENCODING'] 
+      return unless accepts && accepts =~ /(x-gzip|gzip)/ 
+
+      encoding = $1 
+      output = StringIO.new 
+
+      def output.close # Zlib does a close. Bad Zlib... 
+        rewind 
+      end 
+
+      gz = Zlib::GzipWriter.new(output) 
+      gz.write(response.body) 
+      gz.close 
+
+      if output.length < response.body.length 
+        response.body = output.string 
+        response.headers['Content-encoding'] = 'gzip' 
+      end 
+    end 
+
 #    before_filter :start_timer
 #    after_filter :log_request, :except => [:image]
     
@@ -46,15 +73,16 @@ class ApplicationController < ActionController::Base
         return false
       end
     end
-    
-    def start_timer
-      @start_time = Time.now
-    end
-  
+      
     def force_single_column_layout
       @layout_type = :single_column
     end
   
+    # activity logging code adapted from sources by Zak Stone and Martin Glynn
+    def start_timer
+      @start_time = Time.now
+    end
+
     def log_request 
       req  = Request.new()
       req.ip_address = request.remote_ip()
