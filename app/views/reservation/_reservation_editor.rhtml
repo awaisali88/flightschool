@@ -201,7 +201,7 @@
 	function setType(){
 		offices.each(function(office){
 			$H(office.value['aircraft_types']).each(function(type){
-				if(type.key == type_select.value){
+				if(type.key == type_select.value && office.key==office_select.value){
 					aircraft_select.options.length = 0;
 					$A(type.value).each(function(aircraft){
 						aircraft_select.options[aircraft_select.options.length] = new Option(aircraft['name'],aircraft['id'])

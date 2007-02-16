@@ -21,7 +21,7 @@ module ReservationHelper
       o = i.current_office.name
       data[o] ||= {}
       data[o]['instructors'] ||= []
-      data[o]['instructors'] << {:name=>i.full_name,:id=> i.id}
+      data[o]['instructors'] << {:name=>i.full_name_rev,:id=> i.id}
     }
     data.sort
     return data.to_json

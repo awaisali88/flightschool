@@ -4,6 +4,7 @@ class ReservationController < ApplicationController
   before_filter :redirect_flash_to_sidebar,:except=>[:swap]
   before_filter :require_supported_browser
   before_filter :require_schedule_access
+  before_filter :process_date_params, :only=>[:schedule,:update_schedule]
   
   def list
     user_id =  current_user.id
@@ -205,19 +206,9 @@ class ReservationController < ApplicationController
   end
   
   def schedule
-    session[:schedule] ||= {}
-    session[:schedule][:filter] ||= 'true'
-    session[:schedule][:filter] = params[:office_filter] unless params[:office_filter].nil?
-    
-    params.each_pair{|p,v|
-      session[:schedule][p] = v unless @session[:schedule][p].nil?
-    }
-
-    process_date_params
-
     @aircrafts = Aircraft.find(:all, 
           :conditions => ['deleted = false'+ (session[:schedule][:filter]=="true" ? " and office = #{current_user.office}":'')],
-          :include=>[:type,:default_office],:order=>'prioritized desc')
+          :include=>[:type,:default_office],:order=>'office, prioritized desc, identifier')
     if session[:schedule][:filter]=="true"
       @instructors = Group.users_in_group_cond('instructor',"users.office=#{current_user.office}")
     else
@@ -232,16 +223,14 @@ class ReservationController < ApplicationController
     render :partial=>'schedule'
   end
     
-  def update_schedule  
-    process_date_params
-  
+  def update_schedule    
     @from = @date
-    @to = @from+1
+    @to = @from+7 #reservations for a week
     @reservations = Reservation.find(:all,:include=>[:pilot],
                     :conditions => ["time_end > ? and time_start < ? and status!='canceled'",@from.to_time,@to.to_time])  
      render :update do |page| 
           page.send :record, "set_schedule_date("+(@from.to_time.to_i*1000).to_s + ");" 
-          page.send :record, "set_reservations(" + @reservations.to_json + ");" 
+          page.send :record, "set_reservations([" + @reservations.map{|r| r.cached_json_rep }.join(',') + "]);" 
      end 
   end
   
@@ -297,11 +286,18 @@ class ReservationController < ApplicationController
   end
   
   def process_date_params
+    session[:schedule] ||= {}
+    session[:schedule][:filter] ||= 'true'
+    session[:schedule][:filter] = params[:office_filter] unless params[:office_filter].nil?
+        
     date = session[:schedule][:date]==nil ? Date.today : (Time.now - session[:schedule][:date_updated] > 3600 ? Date.today : session[:schedule][:date])
     @date = params[:date]==nil ? date : params[:date].to_date
+    days = session[:schedule][:days]==nil ? 1 : session[:schedule][:days]
+    @days = params[:days]==nil ? days : params[:days].to_i
 
     session[:schedule][:date] = @date
     session[:schedule][:date_updated] = Time.now
+    session[:schedule][:days] = @days
   end
   
   

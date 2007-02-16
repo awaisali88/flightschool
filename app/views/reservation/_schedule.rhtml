@@ -1,5 +1,5 @@
 
-<div style="height:20px"></div>
+<div style="height:32px"></div>
 
 <script type="text/javascript">
 	Droppables.drops = []
@@ -8,9 +8,9 @@
 
 <%
    msie_height_fix = isMSIE? ? 6:0;
+   msie_width_fix = isMSIE? ? 1:0;
 
-   @days = 1
-	@aircraft_count = @aircrafts.size
+   @aircraft_count = @aircrafts.size
    air_height = 20
    type_height = 17
    graph_height = @aircraft_count*air_height+(@types.length+1)*type_height+@instructors.length*air_height 
@@ -22,8 +22,8 @@
    width_per_day = (graph_width-label_width-1)/(@days)
    width_per_hour = width_per_second*60*60
 
-	@from = @date
-	@to = @date
+   @from = @date
+   @to = @date+@days
    @fixfrom = Time.local(@from.year,@from.month,@from.day,7)
    tmp = @to 
    @fixto = Time.local(tmp.year,tmp.month,tmp.day,23)
@@ -36,7 +36,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 
 <% (0..@days-1).each{|x|%>
 	<div class="vbar" id="vbar1<%=x%>" 
-    style="top:-36px; height:20px; width:<%=width_per_day+2%>px;
+    style="top:-48px; height:20px; width:<%=width_per_day+2%>px;
            left:<%=label_width+x*width_per_day%>px; 
 			border-left: 1px solid black;
      		border-top: 1px solid black;
@@ -44,7 +44,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
            ">
     </div>
    <div class="vbar" id="vbar1<%=x%>" 
-    style="top:-15px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+    style="top:-27px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
            left:<%=label_width+x*width_per_day%>px; background:#f0f5ff;
 			border-left:1px solid black;
      		text-align: left;
@@ -52,7 +52,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
     </div>
 	<% (1..15).each{|i| %>
 	   <div class="vbar" id="vbar3<%=x%>" 
-	    style="top:-15px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+	    style="top:-27px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
 	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
 	     		text-align: left;
 	           ">
@@ -60,6 +60,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 	<%	} %>
     
 <% } %>
+
 
 <% can_see_names =  (can_approve_reservations? || instructor? || @is_admin) %>
 <!-- aircraft section -->
@@ -94,14 +95,14 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		    <% offset += air_height %>
 		<% } %>
 		
-        <% if @master_schedule%>        
+
+<!-- top panel auto-scroll code  -->
         <script type="text/javascript">
              function autoposition_titles(){
-                $("top_bar").style.top = "-32px";
+                $("top_bar").style.top = "-47px";
                 sc = getPageScroll()
-                $("left_bar").style.left = sc[0]+"px";
-                if(sc[1]>80){
-                    $("top_bar").style.top = sc[1]-120+"px";                    
+                if(sc[1]>150){
+                    $("top_bar").style.top = sc[1]-230+<%= msie_height_fix %>+"px";                    
                 }
              }
     
@@ -111,7 +112,6 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 	            window.attachEvent('on' + "scroll", function (e) { autoposition_titles(); });
             }
         </script>
-        <% end %>
 
 
 <!-- sliding left panel -->
@@ -119,7 +119,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		<% @aircrafts.each{|a|%>
     		<% if tops["a#{a.id}"].nil? then next end %>
 		    <div style="width:95px;max-width:95px;overflow:hidden;position:absolute;top:<%=tops['a'+a.id.to_s]%>px" class="aircraft_name">
-		         <%= a.identifier%>
+		         [<%= a.current_office.name[0..0] %>]&nbsp;<%= a.identifier%>
 		    </div>
 		<% } %>
     	 <% @instructors.each{|i| %>
@@ -132,48 +132,66 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 
 <!-- sliding top panel -->
 
-<div id="top_bar" style="position:absolute; left:0px; top:-35px;"> 
+<div id="top_bar" style="position:absolute; left:0px; top:-47px; font-size:10pt; font-weight:bold; z-index:255"> 
+
+	<div class="vbar" 
+    style="background:#2255aa;width:<%= graph_width-label_width %>px;  left:<%= label_width+msie_width_fix%>px; padding:<%= 2-msie_width_fix %>px;	text-align: center;">
+
+	<%= start_form_tag({:action => '#',:controller => '#'},{:id => 'schedule_time_form',:style=>"margin:0px;padding:0px"})%>
+	<div style="float:left; font-size:9pt" >
+	<label style="padding:2px;color:white;font-size:9pt">Schedule from: </label> 
+
+
+		<input name="date" id="date" value="<%=@date%>" style="display:none"/>
+		<input id="trigger" type="submit" value="<%=@date%>" onclick="return false;" style="font-size:8pt;">
+	</div>
+	
+		<div style="float:right; padding-top:5px;padding-right:5px">
+		<% if session[:schedule][:filter]=='false' %>
+		<a style="color:white;padding-right:5px" href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=true'})" >
+			Show <%=current_user.default_office.name%> Only</a>
+		<% else %>
+		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=false'})" >
+		Show All Offices</a>
+		<% end %>
+		<% if session[:schedule][:days]==1 %>
+		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'days=7'})" >
+		Show 7 days
+		</a>	
+		<% else %>
+		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'days=1'})" >
+		Show 1 day
+		</a>	
+		<% end %>
+		<a href="#" style="color:white"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
+		</div>
+	
+	
+	
+	<div style="padding-top:4px">
+	<a href="#" style="color:white" 
+	   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule',{asynchronous:true, evalScripts:true, parameters:'date=' + previous_schedule_date});">	<< </a> &nbsp&nbsp&nbsp
+	
+	<a href="#" style="color:white" 
+	   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + next_schedule_date})
+	;"> >></a>
+	</div>
+	
+	<%= end_form_tag %>		
+
+
+	    </div>
+
 <% (0..@days-1).each{|x|%>
+	
 	<div class="vbar" id="vbar5<%=x%>" 
-    style="background:#2255aa;width:<%=width_per_day%>px;       left:<%=label_width+x*width_per_day+1%>px; 		text-align: center;">
-		
-		
-		<%= start_form_tag({:action => '#',:controller => '#'},{:id => 'schedule_time_form',:style=>"margin:0px;padding:0px"})%>
-		<div style="float:left">
-		<label style="padding:2px;color:white;font-size:10pt">Schedule for: </label> 
-
-
-			<input name="date" id="date" value="<%=@date%>" style="display:none"/>
-			<input id="trigger" type="submit" value="<%=@date%>" onclick="return false;">
-		</div>
-		
-			<div style="float:right; padding-top:5px;padding-right:5px">
-			<% if session[:schedule][:filter]=='false' %>
-			<a style="color:white" href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=true'})" >
-				Show <%=current_user.default_office.name%> Only</a>
-			<% else %>
-			<a style="color:white"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=false'})" >
-			Show All Offices</a>
-			<% end %>
-			<a href="#" style="color:white"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
-			</div>
-		
-		
-		
-		<div style="padding-top:4px">
-		<a href="#" style="color:white" 
-		   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule',{asynchronous:true, evalScripts:true, parameters:'date=' + previous_schedule_date});">	<< </a> &nbsp&nbsp&nbsp
-		
-		<a href="#" style="color:white" 
-		   onclick="show_loading_indicator('graph'); new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + next_schedule_date})
-		;"> >></a>
-		</div>
-		
-		<%= end_form_tag %>		
+    style="background:#555555; color: #ffeeee; width:<%=width_per_day-1%>px;       left:<%=label_width+x*width_per_day+1%>px; 	top:22px;	text-align: center;">
+		<span id="date_label_<%= x %>"><%= (Date.new(@from.year,@from.month,@from.day)+x).to_time.strftime("%a, %b  %d")%></span>
     </div>
 
+
    <div class="vbar"  
-    style=" top:23px;width:<%=width_per_hour+2%>px;
+    style=" top:34px;width:<%=width_per_hour+2%>px;
            left:<%=label_width+x*width_per_day%>px; background:#f0f5ff;
      		text-align: left;			border-left:1px solid black;
      		
@@ -184,7 +202,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 
 	<% (1..15).each{|i| %>
 	   <div class="vbar" id="vbar3<%=x%>" 
-	    style="top:23px;width:<%=width_per_hour+2%>px;
+	    style="top:34px;width:<%=width_per_hour+2%>px;
 	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
 	     		text-align: left;
 	           ">
@@ -219,6 +237,8 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 				 }
 	    });
 	
+
+	
 		
 		graph_height = <%= graph_height %>
 		graph_width = <%= graph_width %>
@@ -229,6 +249,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		width_per_hour = <%= width_per_hour %>		
 		admin = <%= admin? or instructor? %>
 		current_user = <%= current_user.id %>
+		num_days = <%= @days %>
 		
 		new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + '<%= @date.to_s %>'})
 	</script>
