@@ -1,9 +1,9 @@
 
 <% @reservation.comments.each{|comment|%>
-    <div style="width:150px">
-    <label> <%= comment.creator.full_name_link %>:</label><br/>
+    <div style="width:150px"><small>
+    <label> <%= comment.created_at.to_s(:short) %> <%= comment.creator.full_name_link %>, </label><br/>
     <span style="font-style: italic"><%= h comment.body%></span>            
-    </div>
+    </small></div>
 <%}%>
 
 <%= form_remote_tag(:url => {:controller=>'reservation',:action => "add_comment",:id=>@reservation.id}, :update => 'reservation_sidebar') %>
