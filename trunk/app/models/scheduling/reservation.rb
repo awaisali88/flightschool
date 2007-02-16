@@ -27,10 +27,26 @@ class Reservation < ActiveRecord::Base
 
   
   before_save :automatic_verification
+  before_save :cache_to_json
   
 def automatic_verification
   if self.reservation_type=='booking' and self.status == 'created' and self.violated_rules.size==0
     self.status = 'approved'
+  end
+end
+
+# this method caches the output of Reservation.to_json method in the database to speed up 
+# processing of client-side requests for reservation data
+def cache_to_json
+  self.json_cache = self.to_json
+end
+
+# returns cached JSON representation of the reservation if cache is available, or rebuilds the cache otherwise
+def cached_json_rep
+  if self.json_cache.blank?
+    return self.to_json
+  else
+    return self.json_cache
   end
 end
     

@@ -206,6 +206,8 @@ create table reservations(
 	time_start		timestamp not null,
 	time_end		timestamp not null,
     reservation_type text not null,
+	json_cache		text,
+	-- caches JSON representation of the representation for performance
     status text not null check (status in ('created','approved','canceled','completed')),
     constraint valid_reservation_type check (reservation_type in ('instructor_block','aircraft_block','booking'))
 );
