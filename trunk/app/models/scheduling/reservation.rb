@@ -27,7 +27,7 @@ class Reservation < ActiveRecord::Base
 
   
   before_save :automatic_verification
-  before_save :cache_to_json
+  before_update :cache_to_json
   
 def automatic_verification
   if self.reservation_type=='booking' and self.status == 'created' and self.violated_rules.size==0
