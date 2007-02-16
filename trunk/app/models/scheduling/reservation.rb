@@ -47,9 +47,8 @@ def cached_json_rep
     self.json_cache = self.to_json
     self.override_acceptance_rules
     self.save
-  else
-    return self.json_cache
   end
+  return self.json_cache
 end
     
 def validate
