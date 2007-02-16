@@ -5,6 +5,7 @@ class ReservationController < ApplicationController
   before_filter :require_supported_browser
   before_filter :require_schedule_access
   before_filter :process_date_params, :only=>[:schedule,:update_schedule]
+  after_filter :compress, :only=>[:update_schedule]
   
   def list
     user_id =  current_user.id
