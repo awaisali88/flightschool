@@ -81,7 +81,7 @@ def validate
           errors.add_to_base(rule.description)
         end
       when '24_hours_advance':
-        if self.time_start < Time.now + 24.hours
+        if (self.time_start < Time.now + 24.hours) and (not self.instructor.nil?)
           errors.add_to_base(rule.description)          
         end
       end

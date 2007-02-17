@@ -14,7 +14,7 @@ module ReservationHelper
     
     data.each_pair{|office,hash|
       hash['aircraft_types'] ||={}
-      hash['aircraft_types']['- None/Ground School -'] = [{:name=>'None',:id=>nil}]
+      hash['aircraft_types']['- None/Ground School -'] = [{:name=>'None',:id=>''}]
     }
     
     instructors.each{|i|
