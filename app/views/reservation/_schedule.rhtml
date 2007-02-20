@@ -62,7 +62,6 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 <% } %>
 
 
-<% can_see_names =  (can_approve_reservations? || instructor? || @is_admin) %>
 <!-- aircraft section -->
 	<% @types.each{|type| %>
 	    <div id="over<%=type.id%>" class="type_label_over" style="top:<%=offset%>px; width:<%=graph_width%>px">
@@ -139,12 +138,18 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 
 	<%= start_form_tag({:action => '#',:controller => '#'},{:id => 'schedule_time_form',:style=>"margin:0px;padding:0px"})%>
 	<div style="float:left; font-size:9pt" >
-	<label style="padding:2px;color:white;font-size:9pt">Schedule from: </label> 
-
-
+		
+		<label style="padding:2px;color:white;font-size:9pt">Schedule from: </label> 	
+	
 		<input name="date" id="date" value="<%=@date%>" style="display:none"/>
 		<input id="trigger" type="submit" value="<%=@date%>" onclick="return false;" style="font-size:8pt;">
+		
+			<label style="padding:2px;color:white;font-size:9pt">show </label> 
+			<%= select_tag 'days', options_for_select([1,2,4,7,14].map{|x| x.to_s}, @days.to_s), {:style=>"font-size:8pt"} %>
+			<label style="padding:2px;color:white;font-size:9pt"> days</label> 
+		
 	</div>
+
 	
 		<div style="float:right; padding-top:5px;padding-right:5px">
 		<% if session[:schedule][:filter]=='false' %>
@@ -154,16 +159,15 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'date='+schedule_date+'&office_filter=false'})" >
 		Show All Offices</a>
 		<% end %>
-		<% if session[:schedule][:days]==1 %>
-		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'days=7'})" >
-		Show 7 days
-		</a>	
-		<% else %>
-		<a style="color:white;padding-right:5px"  href="#" onclick="new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'days=1'})" >
-		Show 1 day
-		</a>	
-		<% end %>
-		<a href="#" style="color:white"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
+
+		<script type="text/javascript">
+			new Form.Element.EventObserver($('days'), function(){
+				new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true,parameters:'days='+$('days').value})
+			});
+		</script>
+
+		<a href="#" style="color:white;padding-right:5px"  onclick="window.location='/schedule/printable_schedule?date='+schedule_date">Print</a>
+		<%= link_to("Options", {:action => "preferences"},{:style=>'color:white'})%>
 		</div>
 	
 	
@@ -196,7 +200,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
      		text-align: left;			border-left:1px solid black;
      		
            ">
-		<%= @days < 5 ? 7: nil%>
+		<%= @days < 3 ? 7: nil%>
     </div>
 
 
@@ -206,7 +210,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
 	     		text-align: left;
 	           ">
-			<%= @days < 5 ? (i+6)%12+1: nil%>
+			<%= @days < 3 ? (i+6)%12+1: nil%>
 	    </div>
 	<%	} %>
 <% } %>

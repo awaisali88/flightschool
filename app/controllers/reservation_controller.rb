@@ -163,6 +163,7 @@ class ReservationController < ApplicationController
     @reservation = Reservation.find_by_id params[:id]
     return unless has_permission :can_approve_reservations 
   
+    oldstatus = @reservation.status
     @reservation.status = 'approved'
 
     if admin?
@@ -177,7 +178,10 @@ class ReservationController < ApplicationController
     if success
       flash[:notice] = 'Approved.'
       @refresh_content = true
+    else
+      @reservation.status = oldstatus
     end
+
     render :partial=>'edit_reservation',:layout=>false
   end
   
@@ -220,13 +224,24 @@ class ReservationController < ApplicationController
     @aircrafts.each{|aircraft| @types[aircraft.aircraft_type] = aircraft.type    }
     @types = @types.map{|k,v| v}
     @types.sort!{|a,b| a.sort_value <=> b.sort_value}.reverse!
+    
+    session[:schedule][:preferences] ||= {}
+    type_prefs = session[:schedule][:preferences][:types]
+    instructor_prefs = session[:schedule][:preferences][:instructors]
+    if not(type_prefs.nil?) and type_prefs.size>0
+      @types.delete_if{|type| type_prefs[type.id.to_s].nil? }
+      @aircrafts.delete_if{|aircraft| type_prefs[aircraft.type.id.to_s].nil?}
+    end
+    if not(instructor_prefs.nil?) and instructor_prefs.size>0
+      @instructors.delete_if{|instructor| instructor_prefs[instructor.id.to_s].nil? }
+    end
 
     render :partial=>'schedule'
   end
     
   def update_schedule    
     @from = @date
-    @to = @from+7 #reservations for a week
+    @to = @from + @days
     @reservations = Reservation.find(:all,:include=>[:pilot],
                     :conditions => ["time_end > ? and time_start < ? and status!='canceled'",@from.to_time,@to.to_time])  
      render :update do |page| 
@@ -278,6 +293,26 @@ class ReservationController < ApplicationController
         flash[:warning] = 'There was a problem with the swap, because of overlapping reservations. Try a different \'From\' date.' 
       end
     end
+  end
+  
+  # page for editing per-user schedule view preferences
+  def preferences
+    @page_title = 'Schedule View Preferences'
+    @instructors = Group.users_in_group('instructor')
+    @aircraft_types = AircraftType.find(:all)
+    @offices = Office.find :all
+    @instructors.sort!{|a,b| a.first_names<=>b.first_names}
+    @aircraft_types.sort!{|a,b| a.type_name<=>b.type_name}
+        
+    if request.method == :post
+      session[:schedule][:preferences] = params[:preferences]
+      flash[:notice] = 'Preferences Saved.'
+    end
+    
+    session[:schedule][:preferences] ||= {}
+    session[:schedule][:preferences][:types] ||= {}
+    session[:schedule][:preferences][:instructors] ||= {}
+    
   end
   
   private
