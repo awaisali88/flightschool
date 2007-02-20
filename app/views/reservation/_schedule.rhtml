@@ -100,7 +100,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
              function autoposition_titles(){
                 $("top_bar").style.top = "-47px";
                 sc = getPageScroll()
-                if(sc[1]>150+msie_height_fix*2){
+                if(sc[1]>150+<%= msie_height_fix*2 %>){
                     $("top_bar").style.top = sc[1]-230-<%= msie_height_fix*3 %>+"px";                    
                 }
              }
