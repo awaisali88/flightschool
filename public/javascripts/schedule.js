@@ -34,7 +34,10 @@ function set_schedule_date(date){
 	
 	tmp.setTime(date+12*60*60*1000) 
 	for(var i=0;i<num_days;i++){
-		$('date_label_'+i).innerHTML = tmp.formatDate('D, M j')
+		if(num_days<=7)
+			$('date_label_'+i).innerHTML = tmp.formatDate('D, M j')
+		else
+			$('date_label_'+i).innerHTML = tmp.formatDate('D').substring(0,1)+tmp.formatDate(', j')
 		tmp.setDate(tmp.getDate()+1) 
 	}
 }
