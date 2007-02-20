@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
       if output.length < response.body.length 
         response.body = output.string 
-        response.headers['Content-encoding'] = 'gzip' 
+        response.headers['Content-encoding'] = encoding
       end 
     end 
 
