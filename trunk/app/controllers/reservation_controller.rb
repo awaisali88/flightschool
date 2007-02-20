@@ -1,7 +1,7 @@
 class ReservationController < ApplicationController
   
   before_filter :login_required
-  before_filter :redirect_flash_to_sidebar,:except=>[:swap]
+  before_filter :redirect_flash_to_sidebar,:except=>[:swap,:preferences]
   before_filter :require_supported_browser
   before_filter :require_schedule_access
   before_filter :process_date_params, :only=>[:schedule,:update_schedule]
