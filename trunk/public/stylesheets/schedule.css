@@ -21,7 +21,7 @@
     font-weight: bold;
     font-size: .9em;
     color: #001b57;    
-    background: lightblue;
+    background: #dddddd;
     padding: 1px;
     padding-bottom: 6px;
     margin: 3px;
@@ -52,13 +52,13 @@
 
 
 .header_cell{
-    background: lightblue;
+    background: #2255aa;
     height: 1em;
     font-family: arial;
     font-weight: bold;
     font-size: .9em;
     border-right: 1px solid #ddeeff; 
-    color: #001b57;
+    color: white;
  
 }
 
@@ -69,7 +69,7 @@
 .open_cell{
     width: 8px;
     height: 1em;
-    background: lightgreen;
+    background: #d0e5ff;
     border-right: 1px solid #ddeeff; 
     border-bottom: 1px solid white;
     border-top: 1px solid white;
@@ -78,7 +78,7 @@
 .reserved_cell{
     width: 8px;
     height: 1em;
-    background: #f2a3a0;
+    background: tan;
     border-right: 1px solid #ddeeff; 
     border-bottom: 1px solid white;
     border-top: 1px solid white;
@@ -87,8 +87,7 @@
 html>body .open_cell{
     width: 9px;
     height: 1em;
-    background: lightgreen;
-    border-right: 1px solid #ddeeff; 
+    border-right: 1px solid #f0f5ff; 
     border-bottom: 1px solid white;
     border-top: 1px solid white;
 }
@@ -96,7 +95,6 @@ html>body .open_cell{
 html>body .reserved_cell{
     width: 9px;
     height: 1em;
-    background: #f2a3a0;
     border-right: 1px solid #ddeeff; 
     border-bottom: 1px solid white;
     border-top: 1px solid white;
@@ -113,7 +111,7 @@ html>body .reserved_cell{
     margin: 0px;
     width: 15px;
     height: 22px;
-    background: lightblue;
+    background: #2255aa;
     border-bottom: 1px solid white;
     border-top: 1px solid white;
 }

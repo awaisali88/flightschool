@@ -136,6 +136,7 @@ def create_user
   if request.method == :post
     @user.new_password = true
     params[:user][:email].downcase!
+    @user.email_verified = true
     if @user.update_attributes(params[:user])
      @groups.each{|group|
         if params[:groups]!= nil and params[:groups]["#{group.id}"]!=nil

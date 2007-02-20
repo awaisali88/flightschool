@@ -1,0 +1,25 @@
+<p><i>Check the aircraft types and instructors you want to appear on the schedule page. If none are checked, all available resources will be displayed.</i></p>
+
+<%= start_form_tag :action =>'preferences'%>
+	<table>
+		<tr><th>Aircraft Types</th><th>Instructors</th></tr>
+		<tr width="100%"><td style="vertical-align:top">
+			<table style="margin-left:20px;margin-right:20px;">
+					<% @aircraft_types.each{|type| %>
+						<%= make_row (type.type_name,check_box_tag("preferences[types][#{type.id}]","1",session[:schedule][:preferences][:types][type.id.to_s]))%>		
+					<% } %>
+			</table>
+		</td><td  style="vertical-align:top">
+			<table style="margin-left:20px;margin-right:20px;">
+				<% @offices.each{|office| %>
+					<%= make_row "<label>#{office.name}</label>",'' %>
+					<% @instructors.each{|instructor| %>
+						<% if instructor.default_office != office then next end %>
+						<%= make_row (instructor.full_name_link,check_box_tag("preferences[instructors][#{instructor.id}]","1",session[:schedule][:preferences][:instructors][instructor.id.to_s]))%>	
+					<% } %>
+				<% } %>
+			</table>
+		</td></tr>
+	<tr><th colspan="2">	<%= submit_tag 'Save Preferences'%></th></tr>
+	</table>
+<%= end_form_tag %>

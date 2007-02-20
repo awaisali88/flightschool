@@ -1,7 +1,7 @@
 <%= start_form_tag :action =>'edit_rates'%>
 	<table>
 		<tr><th>Aircraft</th><th>Instructors</th></tr>
-		<tr width="100%"><td>
+		<tr width="100%"><td  style="vertical-align:top">
 			<table style="margin-left:20px;margin-right:20px;">
 				<% @offices.each{|office| %>
 					<%= make_row "<label>#{office.name}</label>",'' %>
@@ -12,7 +12,7 @@
 					<% } %>
 				<% } %>
 			</table>
-		</td><td>
+		</td><td  style="vertical-align:top">
 			<table style="margin-left:20px;margin-right:20px;">
 				<% @offices.each{|office| %>
 					<%= make_row "<label>#{office.name}</label>",'' %>
