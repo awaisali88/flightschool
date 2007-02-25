@@ -1,6 +1,8 @@
 
 <div class="pagination_links">
+<% if @post_pages.page_count > 1 %>	
 Topic pages: <%= pagination_links(@post_pages,:params => {:topic => @topic.id })%>
+<% end %>
 </div>
 
 <% i=0 %>
@@ -20,7 +22,9 @@ Topic pages: <%= pagination_links(@post_pages,:params => {:topic => @topic.id })
 <% end %>
 
 <div class="pagination_links">
-Topic pages: <%= pagination_links(@post_pages,:params => {:topic => @topic.id })%>
+	<% if @post_pages.page_count > 1 %>	
+	Topic pages: <%= pagination_links(@post_pages,:params => {:topic => @topic.id })%>
+	<% end %>
 </div>
 
 <%= start_form_tag :action => 'create_post', :topic => @topic %>
