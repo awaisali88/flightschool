@@ -104,7 +104,8 @@ def unapproved_users
                               users.birthdate_approved = false or
                               users.physical_approved = false or
                               users.biennial_approved = false or
-                              users.us_citizen_approved = false)
+                              users.us_citizen_approved = false) and
+                              users.account_suspended = false
                               order by users.id desc
                               SQL
                             )   

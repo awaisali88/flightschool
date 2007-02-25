@@ -77,7 +77,7 @@ def validate
           errors.add_to_base(rule.description)
         end
       when 'retroactive_scheduling':
-        if self.time_start < Time.now
+        if self.time_end < Time.now
           errors.add_to_base(rule.description)
         end
       when '24_hours_advance':
@@ -184,7 +184,7 @@ def violated_rules
       end
       physical = Time.mktime(self.pilot.faa_physical_date.year,self.pilot.faa_physical_date.month) #truncate the date to month
       now = Time.mktime(Time.now.year,Time.now.month)
-      if (self.pilot.birthdate.to_time>40.years.ago) ? (physical>now+2.years) : (physical>now+3.years) 
+      if (self.pilot.birthdate.to_time>40.years.ago) ? (physical<now-2.years) : (physical<now-3.years) 
         violated_rules<<rule
       end
     when 'recent_certification':
@@ -193,7 +193,7 @@ def violated_rules
         violated_rules<<rule 
         next
       end
-      if self.pilot.last_biennial_or_certificate_date.to_time < (Time.now + 2.years )
+      if self.pilot.last_biennial_or_certificate_date.to_time < (Time.now - 2.years )
         violated_rules<<rule
       end
     when 'approved_dates'
@@ -239,8 +239,11 @@ def to_json
   if(self.time_start != nil and self.time_end != nil)
     return attrs.merge({'start_date'=>time_start.to_date.to_s,
                         'end_date'=>time_end.to_date.to_s,
-                        'start_int'=>time_start.to_i*1000,
-                        'end_int'=>time_end.to_i*1000}).to_json
+                        'start_days'=>days_since_2000(time_start.to_date),
+                        'end_days'=>days_since_2000(time_end.to_date),
+                        'start_hour'=>time_start.hour,
+                        'end_hour'=>time_end.hour
+                      }).to_json
   else
     return attrs.to_json
   end
@@ -333,6 +336,13 @@ def reservation_summary
 end
 
 private 
+
+# returns the number of days between the date and January 1, 2000
+# this is used for the reservation data exchange protocol between 
+# server and the client-side javascript that presents the reservation data
+def days_since_2000 date
+  return date-Date.new(2000)
+end
 
 def convert_time t
   begin

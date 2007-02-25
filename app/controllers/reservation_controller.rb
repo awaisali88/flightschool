@@ -72,6 +72,11 @@ class ReservationController < ApplicationController
     end
     
     if success
+      #send instructor an email to let him/her know about the new reservation
+      if not @reservation.instructor_id.nil?
+          ScheduleMailer.deliver_instructor_notification @reservation.instructor,@reservation
+      end
+      
       #add instructor block if the reservation is made for an instructor
       if @reservation.pilot.in_group? 'instructor'
         block = Reservation.new(@reservation.attributes)
@@ -245,7 +250,7 @@ class ReservationController < ApplicationController
     @reservations = Reservation.find(:all,:include=>[:pilot],
                     :conditions => ["time_end > ? and time_start < ? and status!='canceled'",@from.to_time,@to.to_time])  
      render :update do |page| 
-          page.send :record, "set_schedule_date("+(@from.to_time.to_i*1000).to_s + ");" 
+          page.send :record, "set_schedule_date(#{@from.year},#{@from.month},#{@from.day},#{@from-Date.new(2000)});" 
           page.send :record, "set_reservations([" + @reservations.map{|r| r.cached_json_rep }.join(',') + "]);" 
      end 
   end
