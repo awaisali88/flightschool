@@ -20,7 +20,7 @@ function set_schedule_date(year,month,date,days_since_2000){
 	schedule_date = dateToString(day)
 	day.setDate(day.getDate()+num_days)
 	next_schedule_date = dateToString(day)
-	day.setDate(day.getDate()-2*num_days) 
+	day.setDate(day.getDate()-2*num_days)
 	previous_schedule_date = dateToString(day)
 	$('date').value = schedule_date
 	$('trigger').value = schedule_date
