@@ -14,7 +14,7 @@ function set_schedule_date(year,month,date,days_since_2000){
 	
 	var day = new Date()
 	day.setYear(year)
-	day.setMonth(month)
+	day.setMonth(month-1) // javascript's amazing Date class has months starting with 0 
 	day.setDate(date)
 	
 	schedule_date = dateToString(day)
