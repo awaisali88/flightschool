@@ -2,25 +2,26 @@
 // schedule.js - client side code for painting scheduling reservation browser interface 
 // @author - Lev Popov levpopov@mit.edu
 //
-// TODO: generalize, and extract magic numbers to constants
+
+DAY_START_HOUR = 7
+DAY_END_HOUR = 23
 
 // sets the date to be displayed on the schedule
-// server_time_zone is the offset in hours between server time zone and GMT
-function set_schedule_date(date){
-	fix_from = new Date();
-	fix_from.setTime(date+7*60*60*1000)
+function set_schedule_date(year,month,date,days_since_2000){
+
+	start_day_number = days_since_2000
+	end_day_number = start_day_number+num_days-1
 	
-	fix_to = new Date();
-	fix_to.setTime(date+23*60*60*1000)
-	fix_to.setDate(fix_to.getDate()+num_days-1)	
-	var tmp = new Date()
-	tmp.setTime(date+12*60*60*1000) //add 12 hours to make sure that we dont end up in a different day 
-									//after time zone adjustment
-	schedule_date = dateToString(tmp)
-	tmp.setDate(tmp.getDate()+num_days)
-	next_schedule_date = dateToString(tmp)
-	tmp.setDate(tmp.getDate()-2*num_days)
-	previous_schedule_date = dateToString(tmp)
+	var day = new Date()
+	day.setYear(year)
+	day.setMonth(month)
+	day.setDate(date)
+	
+	schedule_date = dateToString(day)
+	day.setDate(day.getDate()+num_days)
+	next_schedule_date = dateToString(day)
+	day.setDate(day.getDate()-2*num_days)
+	previous_schedule_date = dateToString(day)
 	$('date').value = schedule_date
 	$('trigger').value = schedule_date
 	
@@ -32,13 +33,13 @@ function set_schedule_date(date){
 		setEndDate();
 	}
 	
-	tmp.setTime(date+12*60*60*1000) 
+	day.setDate(day.getDate()+num_days)
 	for(var i=0;i<num_days;i++){
 		if(num_days<=7)
-			$('date_label_'+i).innerHTML = tmp.formatDate('D, M j')
+			$('date_label_'+i).innerHTML = day.formatDate('D, M j')
 		else
-			$('date_label_'+i).innerHTML = tmp.formatDate('D').substring(0,1)+tmp.formatDate(', j')
-		tmp.setDate(tmp.getDate()+1) 
+			$('date_label_'+i).innerHTML = day.formatDate('D').substring(0,1)+day.formatDate(', j')
+		day.setDate(day.getDate()+1) 
 	}
 }
 
@@ -52,22 +53,22 @@ function set_reservations(reservations){
 	$$('.approved_aircraft_block_reservation_bar').each(function(bar){		Element.remove(bar);	})
 	
 	$A(reservations).each(function(r){				
-		var start = new Date()
-		start.setTime(r['start_int'])
-		if(start > fix_to) return;
-		if(start<fix_from) {start = fix_from}
-		if(start.getHours()<7) start.setHours(7);
-		if(start.getHours()>23) start.setHours(23);
-
-		var end = new Date()
-		end.setTime(r['end_int'])
-		if(end < fix_from) return;
-		if(end>fix_to) {end = fix_to}
-		if(end.getHours()<7) end.setHours(7);
-		if(end.getHours()>23) end.setHours(23);
+		var start_d = r['start_days']
+		var start_h = r['start_hour']
+		if((start_d > end_day_number) || (start_d==(end_day_number) && start_h>DAY_END_HOUR)) return;
+		if(start_d < start_day_number) start_d = start_day_number;
+		if(start_h<DAY_START_HOUR) start_h=DAY_START_HOUR;
+		if(start_h>DAY_END_HOUR) start_h=DAY_END_HOUR;
 		
-		var left = Math.floor((start-fix_from)/(24*60*60*1000))*width_per_day + (start.getHours()-fix_from.getHours())*width_per_hour
-		var right = Math.floor((end-fix_from)/(24*60*60*1000))*width_per_day + (end.getHours()-fix_from.getHours())*width_per_hour
+		var end_d = r['end_days']
+		var end_h = r['end_hour']
+		if((end_d < start_day_number) || (end_d==(start_day_number) && end_h<DAY_START_HOUR)) return;
+		if(end_d > end_day_number) end_d = end_day_number;
+		if(end_h<DAY_START_HOUR) end_h=DAY_START_HOUR;
+		if(end_h>DAY_END_HOUR) end_h=DAY_END_HOUR;
+				
+		var left = (start_d-start_day_number)*width_per_day + (start_h-DAY_START_HOUR)*width_per_hour
+		var right = (end_d-start_day_number)*width_per_day + (end_h-DAY_START_HOUR)*width_per_hour
 		var width = right-left + 'px'	
 		
 		if(defined(r['aircraft_id']) && defined(tops['a'+r['aircraft_id']])){
