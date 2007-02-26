@@ -56,14 +56,20 @@ function set_reservations(reservations){
 		var start_d = r['start_days']
 		var start_h = r['start_hour']
 		if((start_d > end_day_number) || (start_d==(end_day_number) && start_h>DAY_END_HOUR)) return;
-		if(start_d < start_day_number) start_d = start_day_number;
+		if(start_d < start_day_number){
+			start_d = start_day_number;
+			start_h = DAY_START_HOUR;
+		}
 		if(start_h<DAY_START_HOUR) start_h=DAY_START_HOUR;
 		if(start_h>DAY_END_HOUR) start_h=DAY_END_HOUR;
 		
 		var end_d = r['end_days']
 		var end_h = r['end_hour']
 		if((end_d < start_day_number) || (end_d==(start_day_number) && end_h<DAY_START_HOUR)) return;
-		if(end_d > end_day_number) end_d = end_day_number;
+		if(end_d > end_day_number){
+			end_d = end_day_number;
+			end_h = DAY_END_HOUR;
+		}
 		if(end_h<DAY_START_HOUR) end_h=DAY_START_HOUR;
 		if(end_h>DAY_END_HOUR) end_h=DAY_END_HOUR;
 				
