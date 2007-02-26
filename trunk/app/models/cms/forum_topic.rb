@@ -2,7 +2,7 @@ class ForumTopic < Document
 
   belongs_to :forum, :class_name=>'Forum',:foreign_key=>'refers_to'
   has_many :posts, :class_name=>'ForumPost',:foreign_key=>'refers_to'
-  before_save :fill_summary
+  before_create :fill_summary
   
   #called before a forum topic is created - fetches the topic subject from the first post in the topic
   def fill_summary
