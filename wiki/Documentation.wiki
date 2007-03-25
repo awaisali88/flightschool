@@ -1,0 +1,26 @@
+= Project FlightSchool Documentation =
+
+'''[GettingStarted Getting Started Guide]'''
+
+[DevelopmentStandards Development Standards]
+== Installation Instructions ==
+ * [Installation]
+
+== Schema ==
+ * [DatabaseSchema Database Schema]
+
+== Modules ==
+User Management
+ * [UserRegistrationModule User Registration]
+ * [UserProfileModule User Profiles]
+ * [AdministrationModule Site Administration]
+Content Management
+ * [NewsModule News Publishing]
+ * [StaticContentModule Static Content]
+ * [ForumModule Discussion Forums]
+ * [ImageModule Image Content]
+Online Scheduling 
+ * [SchedulingModule Reservation & Scheduling]
+Accounting System 
+ * [BillingModule Accounting/Billing]
+
