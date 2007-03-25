@@ -1,4 +1,5 @@
-{{{create language plpgsql;
+{{{
+create language plpgsql;
 
 -- Table storing all of the schools/clubs served by the application
 create table schools(
