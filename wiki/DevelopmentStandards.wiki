@@ -1,13 +1,12 @@
 = Development Standards =
-[[PageOutline]]
+
   Using Rails framework for its core, Project FlightSchool inherits a lot of development conventions from it. With a notable exception of strong reliance on RDBMS integrity constraints, in most instances everything is done "The Rails Way" - we will go through the convention details to illustrate what this means for our project.
 
 == Tools and Languages ==
 Project FlightSchool uses following tools: 
  * PostgreSQL 8.1 
- * Apache2
- * Edge Rails (soon to be Rails 1.1) framework
-
+ * Rails 1.1 framework
+ 
 Languages used are PL/pgSQL for RDBMS procedures, Ruby for server-side scripting, Javascript for client-side scripting, and JSON for Javascript<->Ruby interfacing.
 Connection to RDBMS is managed through ActiveRecord ORM layer, which is part of Rails framework.  
 
@@ -79,7 +78,6 @@ Each Migration must have following documentation:
  * Purpose
  * Schema change summary
  * Tables and Columns affected 
-
 
 
 
