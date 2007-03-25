@@ -1,0 +1,29 @@
+= User Registration Module =
+
+== Purpose ==
+User registration module is responsible for basic user management functionality, including:
+ * User signup and email verification
+ * User authenication
+ * Lost password recovery 
+ * Permission checking 
+ * User administration 
+  * creation of accounts by admin
+  * approving and suspending accounts
+ 
+== Design ==
+User Registration Module is based on the [http://api.rails-engines.org/login_engine/ Rails Salted Hash Login Engine]
+
+Model:
+ * All user accounts are stored in a single users table in the database. 
+ * User's email is their Login ID
+ * User's password is stored in the database in SHA digested form
+
+Permission Checking:
+ * Permission checking code resides in a PermissionsChecker Ruby module in /lib. 
+ * All controllers requiring permissions register a before_filter hook that links to load_permissions method in PermissionsChecker, which refreshes user's permissions.
+ * Controllers can use permission level methods defined in PermissionsChecker to verify certail level of authorization
+   * Example: {{{admin? , can_edit_any_user_info?}}}
+
+== Sources ==
+ * trunk/app/controllers/user_controller.rb 
+ * trunk/lib/permissions_checker.rb
