@@ -19,4 +19,4 @@ All of the data entry forms use Javascript to make data entry more efficient - p
  * All billing information is stored in billing_charges table
 
 === Implementation ===
-* trunk/app/controllers/billing_controller.rb
+ * trunk/app/controllers/billing_controller.rb
