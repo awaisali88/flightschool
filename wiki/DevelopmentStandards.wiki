@@ -73,11 +73,10 @@ Each module must have following documentation:
 === For a Shared Procedure ===
 Shared procedures are to be treated the same way as Module controller code.
 
-=== For a [wiki:Migrations Migration] ===
+=== For a  Migration ===
 Each Migration must have following documentation:
  * Purpose
  * Schema change summary
  * Tables and Columns affected 
-
 
 
