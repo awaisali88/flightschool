@@ -1,10 +1,10 @@
 = Project FlightSchool Documentation =
 
-'''[GettingStarted Getting Started Guide]'''
+[GettingStarted Getting Started Guide]
 
 [DevelopmentStandards Development Standards]
 == Installation Instructions ==
- * [Installation]
+ * [DebianInstall Debian Installation Guide]
 
 == Schema ==
  * [DatabaseSchema Database Schema]
@@ -18,7 +18,7 @@ Content Management
  * [NewsModule News Publishing]
  * [StaticContentModule Static Content]
  * [ForumModule Discussion Forums]
- * [ImageModule Image Content]
+ * [ImageFileModule Image Content]
 Online Scheduling 
  * [SchedulingModule Reservation & Scheduling]
 Accounting System 
