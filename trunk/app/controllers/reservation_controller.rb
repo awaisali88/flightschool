@@ -25,8 +25,8 @@ class ReservationController < ApplicationController
       end
       @after = 0
     else
-      @before = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and time_start<?",user_id,first.time_start])
-      @after = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and time_start>=?",user_id,first.time_start])
+      @before = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and (time_start<? or (time_start=? and id<?)",user_id,first.time_start,first.time_start,first.id])
+      @after = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and (time_start>? or (time_start=? and id>?)",user_id,first.time_start,first.time_start,first.id])
     end
     
     case request.method
@@ -52,8 +52,8 @@ class ReservationController < ApplicationController
       end
       @after = 0
     else
-      @before = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and time_start<?",user_id,first.time_start])
-      @after = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and time_start>=?",user_id,first.time_start])
+      @before = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and (time_start<? or (time_start=? and id<?)",user_id,first.time_start,first.time_start,first.id])
+      @after = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and (time_start>? or (time_start=? and id>?)",user_id,first.time_start,first.time_start,first.id])
     end
     
     case request.method
