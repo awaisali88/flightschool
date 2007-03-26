@@ -1,10 +1,10 @@
 <% if (params[:controller] == 'reservation' or params[:controller]=='schedule' or
 	 params[:controller]=='aircraft' or params[:controller]=='aircraft_type' or
 	 params[:controller]=='maintenance' or params[:action]=='aircrafts') %>
-	<%= link_to "New Reservation", :controller => "reservation", :action => "new" %>
+	<%= link_to "Create/View Reservations", :controller => "reservation", :action => "new" %>
 	<%= link_to "My Reservations", :controller => "reservation", :action => "list" %> 
 	<% if instructor? %>
-		|<%= link_to "Instructor Reservations", :controller => "reservation", :action => "instructor" %>
+		|<%= link_to "Instr. Reservations", :controller => "reservation", :action => "instructor" %>
 		<%= link_to "Instr. Blocks", :controller => "schedule", :action => "create_instructor_block" %>
 	<% end %>
 	<% if admin? %>

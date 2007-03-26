@@ -3,7 +3,6 @@
 </div>
 <script type="text/javascript">
 new Ajax.Updater('schedule_browser', '/reservation/schedule', {asynchronous:true, evalScripts:true})
-
 function refreshContent(){
 	new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + schedule_date})
 }

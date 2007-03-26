@@ -221,7 +221,7 @@ def delete_user
   
 end
 
-# shows search users page
+# Find Users page
 def find
   return unless has_permission :admin
   @page_title = 'Find Users'
@@ -230,6 +230,11 @@ def find
                     	:conditions=>["(LOWER(first_names) || ' ' || LOWER(last_name)) like ?",
                     	              '%'+params[:user_name].downcase+'%'])
 	end
+end
+
+
+def query
+
 end
 
 private

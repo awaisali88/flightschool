@@ -25,15 +25,10 @@
  </script>
 
 
-<% if not params[:showall] and @reservations.size>30 %>
-    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
-<% end %>
-
 <table  width="100%" id="reservation_table">
 
 <tr><th>Date/Time</th><th>Instructor</th><th>Aircraft</th></tr>
 
-<% @reservations = @reservations.reverse %>
 <% if @reservations.size == 0 %>
 <tr><td>No Upcoming Reservations.</td></tr>	
 <% end %>
@@ -73,14 +68,10 @@
 
 </table>
 
-<% if params[:showall] %>
 <div class="pagination_links">
-    <%= link_to 'Older Reservations', { :user=>params[:user],:showall=>true,:page => @reservation_pages.current.next } if @reservation_pages.current.next %> 
-    <%= link_to 'Newer Reservations', {:user=>params[:user],:showall=>true,:page => @reservation_pages.current.previous } if @reservation_pages.current.previous %>
+    <%= link_to 'Older Reservations', { :user=>params[:user],:offset => ((@before-50)>0 ? @before-50:0)} if @before>0 %> 
+    <%= link_to 'Newer Reservations', {:user=>params[:user],:offset => (@before+50) } if @after>50 %>
 </div>
-<% else %>
-    <div style="text-align:center;"><%= link_to 'Show Expired and Canceled Reservations', {:showall=>true} %></div>
-<% end %>
 
 <div style="padding-left:80px">
 <table cellspacing="10px"><tr>
