@@ -18,7 +18,7 @@ class ForumTopic < Document
   end
   
   def reply_count
-    return (ForumPost.count ["refers_to = ?",id]) - 1
+    return (ForumPost.count ["refers_to = ? and status!='rejected'",id]) - 1
   end
 
   def latest_post

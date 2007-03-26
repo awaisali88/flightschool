@@ -4,17 +4,29 @@ class ReservationController < ApplicationController
   before_filter :redirect_flash_to_sidebar,:except=>[:swap,:preferences]
   before_filter :require_supported_browser
   before_filter :require_schedule_access
-  before_filter :process_date_params, :only=>[:schedule,:update_schedule]
+  before_filter :process_date_params, :only=>[:schedule,:instructor_schedule,:update_schedule]
   after_filter :compress, :only=>[:update_schedule]
   
   def list
     user_id =  current_user.id
     @page_title = "Reservations for "+User.find_by_id(user_id).full_name
 
-    if params[:showall]    
-      @reservation_pages, @reservations = paginate :reservations, :conditions=>["created_by = ? and reservation_type='booking'",user_id],:order=>'time_start desc', :per_page => 50
+    if params[:offset]==nil
+      @reservations = Reservation.find(:all,:conditions=>["created_by = ? and reservation_type='booking' and time_end>?",user_id,Time.now],:order=>'time_start',:limit=>50)
     else
-      @reservations = Reservation.find(:all,:conditions=>["created_by = ? and reservation_type='booking' and status!='canceled' and time_end>?",user_id,Time.now],:order=>'time_start desc')
+      @reservations = Reservation.find(:all,:conditions=>["created_by = ? and reservation_type='booking'",user_id],:offset=>params[:offset],:order=>'time_start',:limit=>50)
+    end
+    first = @reservations[0]
+    if first.nil?
+      if params[:offset]==nil
+        @before = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking'",user_id])
+      else
+        @before = 0
+      end
+      @after = 0
+    else
+      @before = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and time_start<?",user_id,first.time_start])
+      @after = Reservation.count(:conditions=>["created_by = ? and reservation_type='booking' and time_start>=?",user_id,first.time_start])
     end
     
     case request.method
@@ -26,10 +38,22 @@ class ReservationController < ApplicationController
     user_id =  current_user.id
     @page_title = "Instructor Reservations for "+User.find_by_id(user_id).full_name
 
-    if params[:showall]   
-      @reservation_pages, @reservations = paginate :reservations, :conditions=>["instructor_id = ? and reservation_type='booking'",user_id],:order=>'time_start desc', :per_page => 50
+    if params[:offset]==nil
+      @reservations = Reservation.find(:all,:conditions=>["instructor_id = ? and reservation_type='booking' and time_end>?",user_id,Time.now],:order=>'time_start',:limit=>50)
     else
-      @reservations = Reservation.find(:all,:conditions=>["instructor_id = ? and reservation_type='booking' and status!='canceled' and time_end>?",user_id,Time.now],:order=>'time_start desc')
+      @reservations = Reservation.find(:all,:conditions=>["instructor_id = ? and reservation_type='booking'",user_id],:offset=>params[:offset],:order=>'time_start',:limit=>50)
+    end
+    first = @reservations[0]
+    if first.nil?
+      if params[:offset]==nil
+        @before = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking'",user_id])
+      else
+        @before = 0
+      end
+      @after = 0
+    else
+      @before = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and time_start<?",user_id,first.time_start])
+      @after = Reservation.count(:conditions=>["instructor_id = ? and reservation_type='booking' and time_start>=?",user_id,first.time_start])
     end
     
     case request.method
@@ -215,6 +239,13 @@ class ReservationController < ApplicationController
     render :partial=>'edit_reservation',:layout=>false
   end
   
+  def instructor_schedule
+    @aircrafts = []
+    @types = []
+    @instructors = User.find_all_by_id current_user.id
+    render :partial=>'schedule'
+  end
+  
   def schedule
     @aircrafts = Aircraft.find(:all, 
           :conditions => ['deleted = false'+ (session[:schedule][:filter]=="true" ? " and office = #{current_user.office}":'')],
@@ -240,6 +271,13 @@ class ReservationController < ApplicationController
     if not(instructor_prefs.nil?) and instructor_prefs.size>0
       @instructors.delete_if{|instructor| instructor_prefs[instructor.id.to_s].nil? }
     end
+
+    if (@request.env['HTTP_REFERER'] =~ /create_instructor_block/)!=nil
+       @aircrafts = []
+        @types = []
+        @instructors = User.find_all_by_id current_user.id
+    end
+    
 
     render :partial=>'schedule'
   end

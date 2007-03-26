@@ -1,3 +1,8 @@
+<div style="height:20px"></div>
+<script type="text/javascript">
+displaying_new_reservation_form = false
+</script>
+<%= render_partial 'reservation/schedule_browser'%>
 <% reservation = @reservation%>
 <h3>Create a One-Time Block</h3>
  <i> I am unavailable: </i>
@@ -5,13 +10,13 @@
               <table>
 				<tr>
 			    <td style="text-align:left;"><label>From: </label></td><td>
-				    <select name="s_year">
+				    <select id='s_year' name="s_year">
 				    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_start.year%>
 				    </select>
-				    <select name="s_month">
+				    <select id='s_month' name="s_month">
 				    <%= options_for_select (1..12).map{|x| x},reservation.time_start.month%>
 				    </select>
-				    <select name="s_day">
+				    <select id='s_day' name="s_day">
 				    <%= options_for_select (1..31).map{|x| x},reservation.time_start.day%>
 				    </select>
 				    <select name="s_hour">
@@ -21,13 +26,13 @@
 			    </td>
 			    </tr><tr>
 			    <td style="text-align:left;"><label>To: </label> </td><td>
-				    <select name="e_year">
+				    <select id="e_year" name="e_year">
 				    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_end.year%>
 				    </select>
-				    <select name="e_month">
+				    <select id="e_month" name="e_month">
 				    <%= options_for_select (1..12).map{|x| x},reservation.time_end.month%>
 				    </select>
-				    <select name="e_day">
+				    <select id='e_day' name="e_day">
 				    <%= options_for_select (1..31).map{|x| x},reservation.time_end.day%>
 				    </select>
 				    <select name="e_hour">
@@ -70,25 +75,25 @@
 			
 					<tr>
 				    <td style="text-align:left;"><label>Starting: </label></td><td>
-				   		    <select name="s_year">
+				   		    <select id="s_year2" name="s_year">
 						    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_start.year%>
 						    </select>
-						    <select name="s_month">
+						    <select id="s_month2" name="s_month">
 						    <%= options_for_select (1..12).map{|x| x},reservation.time_start.month%>
 						    </select>
-						    <select name="s_day">
+						    <select id="s_day2" name="s_day">
 						    <%= options_for_select (1..31).map{|x| x},reservation.time_start.day%>
 						    </select>
 				    </td>
 				    </tr><tr>
 				    <td style="text-align:left;"><label>Ending: </label> </td><td>
-						    <select name="e_year">
+						    <select id="e_year2" name="e_year">
 						    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_start.year%>
 						    </select>
-						    <select name="e_month">
+						    <select id="e_month2" name="e_month">
 						    <%= options_for_select (1..12).map{|x| x},reservation.time_start.month%>
 						    </select>
-						    <select name="e_day">
+						    <select id="e_day2" name="e_day">
 						    <%= options_for_select (1..31).map{|x| x},reservation.time_start.day%>
 						    </select>
 				    </td></tr>
@@ -106,13 +111,13 @@
 		              <table>
 						<tr>
 					    <td style="text-align:left;"><label>From: </label></td><td>
-						    <select name="s_year">
+						    <select id="s_year3" name="s_year">
 						    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_start.year%>
 						    </select>
-						    <select name="s_month">
+						    <select id="s_month3" name="s_month">
 						    <%= options_for_select (1..12).map{|x| x},reservation.time_start.month%>
 						    </select>
-						    <select name="s_day">
+						    <select id="s_day3" name="s_day">
 						    <%= options_for_select (1..31).map{|x| x},reservation.time_start.day%>
 						    </select>
 			  			    <select name="s_hour">
@@ -122,13 +127,13 @@
 					    </td>
 					    </tr><tr>
 					    <td style="text-align:left;"><label>To: </label> </td><td>
-						    <select name="e_year">
+						    <select id="e_year3" name="e_year">
 						    <%= options_for_select [Time.new.year,Time.new.year+1],reservation.time_end.year%>
 						    </select>
-						    <select name="e_month">
+						    <select id="e_month3" name="e_month">
 						    <%= options_for_select (1..12).map{|x| x},reservation.time_end.month%>
 						    </select>
-						    <select name="e_day">
+						    <select id="e_day3" name="e_day">
 						    <%= options_for_select (1..31).map{|x| x},reservation.time_end.day%>
 						    </select>
 			  			    <select name="e_hour">
@@ -140,3 +145,18 @@
 
 		        <%= submit_tag 'Clear Blocks'%>
 		          <%= end_form_tag %>
+		
+<script type="text/javascript">
+   new Form.Element.Observer('s_year',0,function(element,value){$('e_year').value=value})
+   new Form.Element.Observer('s_month',0,function(element,value){$('e_month').value=value})
+   new Form.Element.Observer('s_day',0,function(element,value){$('e_day').value=value})
+
+   new Form.Element.Observer('s_year2',0,function(element,value){$('e_year2').value=value})
+   new Form.Element.Observer('s_month2',0,function(element,value){$('e_month2').value=value})
+   new Form.Element.Observer('s_day2',0,function(element,value){$('e_day2').value=value})
+
+   new Form.Element.Observer('s_year3',0,function(element,value){$('e_year3').value=value})
+   new Form.Element.Observer('s_month3',0,function(element,value){$('e_month3').value=value})
+   new Form.Element.Observer('s_day3',0,function(element,value){$('e_day3').value=value})
+
+</script>

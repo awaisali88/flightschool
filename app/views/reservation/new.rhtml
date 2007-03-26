@@ -1,6 +1,8 @@
-<%content_for 'sidebar' do%>
+<% content_for 'sidebar' do %>
 	<div id="reservation_sidebar" style="position:absolute;">
 		<%= render :partial => 'new_reservation' %>
+	</div>
+	<div id="reservation_sidebar_shadow">
 	</div>
 <% end %>
 
@@ -13,6 +15,9 @@
          if(sc[1]>160){
              $("reservation_sidebar").style.top = sc[1]+"px";                    
          }
+		if(getPageSize()[1]<Element.getHeight('reservation_sidebar')+sc[1]){
+            $("reservation_sidebar").style.top = (getPageSize()[1]-Element.getHeight('reservation_sidebar'))+"px";                    			
+		}
       }
 
      if (window.addEventListener) {
@@ -20,4 +25,6 @@
      } else if (window.attachEvent) {
          window.attachEvent('on' + "scroll", function (e) { autoposition_reservation_sidebar(); });
      }
+
+	new PeriodicalExecuter(function(){$('reservation_sidebar_shadow').style.height = Element.getHeight('reservation_sidebar') + 'px'},1)
  </script>

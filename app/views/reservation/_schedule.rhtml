@@ -44,7 +44,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
            ">
     </div>
    <div class="vbar" id="vbar1<%=x%>" 
-    style="top:-27px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+    style="top:-27px; height:<%=graph_height+25%>px; width:<%=width_per_hour+2%>px;
            left:<%=label_width+x*width_per_day%>px; background:#f0f5ff;
 			border-left:1px solid black;
      		text-align: left;
@@ -52,7 +52,7 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
     </div>
 	<% (1..15).each{|i| %>
 	   <div class="vbar" id="vbar3<%=x%>" 
-	    style="top:-27px; height:<%=graph_height+14%>px; width:<%=width_per_hour+2%>px;
+	    style="top:-27px; height:<%=graph_height+25%>px; width:<%=width_per_hour+2%>px;
 	           left:<%=label_width+x*width_per_day+width_per_hour*i%>px; background:<%= i%2==1 ? "#d0e5ff" : "#f0f5ff"%>;
 	     		text-align: left;
 	           ">
