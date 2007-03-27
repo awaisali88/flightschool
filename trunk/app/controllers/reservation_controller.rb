@@ -64,6 +64,7 @@ class ReservationController < ApplicationController
 
   def new
     @page_title = 'Reservation Schedule'
+    session[:schedule][:showing_instructor_block_page] = nil
     @reservation = Reservation.new({'created_by'=>current_user.id}.merge(session[:last_reservation] || {}))
     if not @reservation.time_start.nil?
       if @reservation.time_start > Time.now
@@ -81,6 +82,7 @@ class ReservationController < ApplicationController
 
   def create
     @page_title = 'Reservation Schedule'
+    session[:schedule][:showing_instructor_block_page] = nil
     @reservation = Reservation.new(params[:reservation],current_user)
     if admin? or instructor?
       @reservation.override_acceptance_rules
@@ -239,13 +241,6 @@ class ReservationController < ApplicationController
     render :partial=>'edit_reservation',:layout=>false
   end
   
-  def instructor_schedule
-    @aircrafts = []
-    @types = []
-    @instructors = User.find_all_by_id current_user.id
-    render :partial=>'schedule'
-  end
-  
   def schedule
     @aircrafts = Aircraft.find(:all, 
           :conditions => ['deleted = false'+ (session[:schedule][:filter]=="true" ? " and office = #{current_user.office}":'')],
@@ -272,7 +267,7 @@ class ReservationController < ApplicationController
       @instructors.delete_if{|instructor| instructor_prefs[instructor.id.to_s].nil? }
     end
 
-    if (@request.env['HTTP_REFERER'] =~ /create_instructor_block/)!=nil
+    if (session[:schedule][:showing_instructor_block_page] != nil)
        @aircrafts = []
         @types = []
         @instructors = User.find_all_by_id current_user.id
