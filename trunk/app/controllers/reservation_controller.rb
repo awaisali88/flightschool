@@ -64,6 +64,7 @@ class ReservationController < ApplicationController
 
   def new
     @page_title = 'Reservation Schedule'
+    session[:schedule] ||= {}
     session[:schedule][:showing_instructor_block_page] = nil
     @reservation = Reservation.new({'created_by'=>current_user.id}.merge(session[:last_reservation] || {}))
     if not @reservation.time_start.nil?
@@ -82,6 +83,7 @@ class ReservationController < ApplicationController
 
   def create
     @page_title = 'Reservation Schedule'
+    session[:schedule] ||= {}
     session[:schedule][:showing_instructor_block_page] = nil
     @reservation = Reservation.new(params[:reservation],current_user)
     if admin? or instructor?
