@@ -13,10 +13,10 @@ function set_schedule_date(year,month,date,days_since_2000){
 	end_day_number = start_day_number+num_days-1
 	
 	var day = new Date()
+	day.setDate(1) //to avoid bugs related to months not having less days than other months
 	day.setYear(year)
 	day.setMonth(month-1) // javascript's amazing Date class has months starting with 0 
 	day.setDate(date)
-	
 	schedule_date = dateToString(day)
 	day.setDate(day.getDate()+num_days)
 	next_schedule_date = dateToString(day)
