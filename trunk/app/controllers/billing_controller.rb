@@ -84,8 +84,15 @@ def new_flight_record
   return unless has_permission :can_do_billing
   @page_title = 'New Flight Record Sheet'
   
-    @users = User.find(:all,:conditions=>['account_suspended = false'])
+  @users = User.find(:all,:conditions=>['account_suspended = false'])
   @instructors = Group.users_in_group('instructor')
+  former_instructors = Group.users_in_group('former_instructor')
+  former_instructors.each{|i|
+    if not @instructors.include?(i)
+      @instructors << i
+    end
+  }
+  
   @aircrafts = Aircraft.find(:all,:conditions=>['deleted = false'])
     
 end
@@ -248,27 +255,6 @@ def student_report
   @user = User.find(@user_id)
   @page_title = "Billing Charges for #{@user.full_name}"
 end
-# 
-# private
-# 
-# def parse_user val
-#    if val=='' or val.nil?
-#      return nil
-#    elsif val[0..0]=='['
-#      user_id = val.split(']')[0][1..-1]
-#      return User.find(user_id)
-#    end
-# end
-# 
-# def parse_aircraft val
-#   if val=='' or val.nil?
-#       return nil
-#    elsif val.split(',').size>1
-#      aircraft_id = val.split(',')[1].strip
-#      return Aircraft.find_by_identifier(aircraft_id)
-#    end
-#   return nil
-# end
 
 
 end

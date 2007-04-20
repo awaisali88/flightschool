@@ -232,9 +232,72 @@ def find
 	end
 end
 
-# 
+# Page allowing admins to query for a group of users and to perform actions on those users
 def query
+  return unless has_permission :admin
+  @page_title = 'Batch Admin Action'
+  if request.method == :post
+    offices = Office.find(:all,:conditions=>['school_id=?',current_school.id])
+    conditions = 'select users.* from users,groups,groups_users where groups.id=groups_users.group_id and users.id=groups_users.user_id'
+    binds = []
+    if params[:office] == 'all'
+      conditions << ' and ('+offices.map{|o| "office=#{o.id}"}.join(' or ')+')'
+    else
+      conditions << ' and office=?'
+      binds << params[:office]
+    end
+    
+    if params[:group] != 'all'
+      conditions << ' and groups.id=? and groups_users.approved=true'
+      binds << params[:group]
+    end
+        
+    if params[:active] != 'all'
+      conditions << ' and last_login>?'
+      binds << (Date.today - params[:active].to_i).to_time
+    end
 
+    if params[:created] != 'all'
+      conditions << ' and created_at>?'
+      binds << (Date.today - params[:created].to_i).to_time
+    end
+    @users = User.find_by_sql([conditions+' order by upper(last_name)']+binds)
+
+    case params[:commit]
+    when 'Send Email'
+        @users.each{|u| 
+          UserNotify.deliver_announcement(u,params[:subject],params[:email])
+        }
+        flash[:notice] = "#{@users.size} emails sent"
+    when 'Suspend'
+      User.transaction do
+        success = true
+        @users.each{|u| 
+          u.account_suspended=true
+          success &&= u.save
+        }
+        if success
+          flash[:notice] = "#{@users.size} accounts suspended"
+        else
+          flash[:warning] = "There was a problem with suspending selected users. No changes have been made."
+        end
+      end
+    when 'Unsuspend'
+      User.transaction do
+        success = true
+        @users.each{|u| 
+          u.account_suspended=false
+          success &&= u.save
+        }
+        if success
+          flash[:notice] = "#{@users.size} accounts unsuspended"
+        else
+          flash[:warning] = "There was a problem with unsuspending selected users. No changes have been made."
+        end
+      end
+    end
+
+  end
 end
 
 private
