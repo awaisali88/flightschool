@@ -15,8 +15,8 @@
 
 <% elsif params[:controller] == 'admin' or params[:controller] == 'reservation_rules' or (params[:controller]=='profile' and admin?)%>
    <%= link_to "Manage Users", :controller => "admin", :action => "users" %>
+   <%= link_to "Batch Action", :controller => "admin", :action => "query" %>
    <%= link_to "Recent Users", :controller => "admin", :action => "recent_users" %>
-   <%= link_to "Inactive Users", :controller => "admin", :action => "zero_activity_users" %>
    <%= link_to "View Pending Edits", :controller => "admin", :action => "unapproved_users" %>
    <%= link_to "Find Users", :controller => "admin", :action => "find" %> 
    <%= link_to "Add New User", :controller => "admin", :action => "create_user" %>

@@ -1,0 +1,88 @@
+<%= start_form_tag :action=>'query'%>
+<table cellspacing="10px">
+<tr><th>Select Users</th><th>Select Action</th></tr>
+<tr><td style="vertical-align:top;">
+<table cellspacing="5px">
+	<tr>
+		<td><label>Office:</label></td>
+		<td><select name="office" style="width:150px">
+			<%= options_for_select([['All Offices','all']]+options_for_offices.map{|e| [e[0],e[1].to_s]},params[:office]) %>
+		</select></td>
+	</tr>
+	<tr>
+		<td><label>Group:</label></td>
+		<td><select name="group" style="width:150px">
+			<%= options_for_select([['All Groups','all']]+Group.find(:all).sort{|a,b| a.group_name<=>b.group_name}.map{|g| [g.group_name.humanize,g.id.to_s]},params[:group]) %>
+		</select></td>
+	</tr>
+	<tr>
+		<td><label>Signed Up:</label></td>
+		<td><select name="created" style="width:150px">
+			<%= options_for_select([['Any Time','all'],['Within Last Week','7'],['Within Last 4 Weeks','28'],['Within last 12 Weeks','84']],params[:created])%>
+		</select></td>
+	</tr>
+	<tr>
+		<td><label>Last Active:</label></td>
+		<td><select name="active" style="width:150px">
+			<%= options_for_select([['Any Time','all'],['Within Last Week','7'],['Within Last 4 Weeks','28'],['Within last 12 Weeks','84']],params[:active])%>
+		</select></td>
+	</tr>
+	<tr><td colspan=2><%=submit_tag 'Preview Selection',{:style=>'width:100%'}%></td></tr>	
+</table>
+</td>
+<td style="vertical-align:top;">
+	<table cellspacing="5px">
+		<tr><td style="vertical-align:top;"><label>Send Email:</label></td><td>
+			<table><tr><td>
+			<%= text_field_tag 'subject','',:size=>'50',:style=>'width:100%'%>
+			</td></tr><tr><td>
+			<%= text_area_tag 'email','',:size=>'50x10'%>
+			</td></tr><tr><td>
+		    <%=submit_tag 'Send Email',{:style=>'width:100%'}%>
+			</td></tr></table>
+		</td></tr>
+		<tr><td style="vertical-align:center;"><label>Suspend Users:</label></td><td>
+				    <%=submit_tag 'Suspend'%> <i><small>Suspended users will not be able to log on and schedule</small></i>
+		</td></tr>
+		<tr><td style="vertical-align:center;"><label>Unsuspend Users:</label></td><td>
+				    <%=submit_tag 'Unsuspend'%> <i><small>All suspended accounts will be reactivated</small></i>
+		</td></tr>
+		
+	</table>
+</td></tr>
+<tr><th colspan="2">Selected Users</th></tr>
+<tr><td colspan="2">
+
+	<% if not @users.nil? %>
+		<% if @users.size>0 %>
+			<table id="results_table" width="100%">
+				<tr><th>Name</th><th>email</th><th>Phone</th></tr>
+				<%  @users.each{ |user|%>
+				<tr>
+					<td>
+						<%= link_to user.full_name, :controller=>'profile',:action => 'view', :id => user.id %>
+					</td>
+					<td>
+						<a href="mailto:<%=h user.email %>"><%= user.email %></a>
+					</td>
+					<td>
+						<% numbers = user.phone_numbers %>
+						<%= numbers.empty? ? '' : numbers[0].phone_number %>
+					</td>
+				<tr>
+				<% } %>
+			</table>
+		<% else %>
+			<label>Sorry, no results found.</label>
+		<% end %>
+	<% end %>
+
+</td></tr>
+</table>
+<%= end_form_tag%>
+
+<script type="text/javascript">color_table('results_table')</script>
+<script type="text/javascript">
+  activate_on_load('user_name')
+</script>
+

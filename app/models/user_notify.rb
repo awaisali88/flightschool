@@ -39,6 +39,12 @@ class UserNotify < ActionMailer::Base
     @body["url"] = url || LoginEngine.config(:app_url).to_s
     @body["app_name"] = LoginEngine.config(:app_name).to_s
   end
+  
+  def announcement(user,subject,text)
+    setup_email(user)
+    @subject += subject
+    @body["text"] = text
+  end
 
   def setup_email(user)
     @recipients = "#{user.email}"

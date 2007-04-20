@@ -45,7 +45,14 @@ def edit
   while @addresses.size < 3 do 
     @addresses <<  UserAddress.new
   end
+  
   @groups = Group.find :all, :order=>'group_name desc'
+  # filter the groups selectable by a user unless they are admin
+  if not admin?
+    @groups.delete_if{|g| ['former_instructor','admin'].include?(g.group_name)}
+  end
+  
+  
   @user_groups = @user.all_groups.map{|g| g['id'].to_s}
   @user_unapproved_groups = @user.unapproved_groups.map{|g| g['id'].to_s}
   @certificates = UserCertificate.certificate_categories.map{|pair| pair[1]}
