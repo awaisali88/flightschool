@@ -6,6 +6,7 @@
 [DevelopmentStandards Development Standards]
 == Installation Instructions ==
  * [DebianInstall Debian Installation Guide]
+ * [ConfiguringFlightSchool Configuration Guide]
 
 == Schema ==
  * [DatabaseSchema Database Schema]
