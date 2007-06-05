@@ -1,49 +1,10 @@
-= Getting Started with FlightSchool development =
+= Getting Started with FlightSchool Development =
 
-== Quick Intro to the SDK VMware Image ==
+The best way to get into development is to check out the code from svn using `svn checkout http://flightschool.googlecode.com/svn/trunk/ flightschool` and look around. 
 
-=== Getting the Source: ===
-
-This VM image already has a snapshot of the source tree checked out in /home/dev/projects/FlightSchool
-
-The latest project source is currently in a subversion repository hosted on a server at MIT, and can be accessed at http://openflight.svnrepository.com/svn/FlightSchool (no authenication required for checkout. Contact Lev Popov - (levpopov at gmail) if you would like to get commit access) 
-
-=== Development Environment: ===
-
-This VM image comes with RadRails - an Eclipse-based IDE with plugins for Ruby/Rails development and subversion integration. A development project for our web application is already set up. 
-
-=== Documentation: ===
-
-Documentation is located (in a wiki) on project's Trac page at http://openflight.svnrepository.com/FlightSchool/trac.cgi/wiki . Per-module Design Overview documents and fully annotated database schema are available. 
-
-=== Starting the Server: ===
-
-To start up the development web server, execute following in a terminal:
-
-~$ cd /home/dev/projects/FlightSchool
-~$ ./script/server
-
-Then you can connect to the local development server from a web browser using http://localhost:3000 as the URL
-
-To connect to the database, use following:
-
-~$ psql -U postgres devel
-
-=== Passwords ===
-
-root password for the VM is ' ' (a single space)
-
-test admin account on the dev. server is admin@ecas.com, password = 'password'
-
-=== Misc ===
-
-you can change the screen resolution of the VM to better fit your screen through the menu on top 
-(System->Preferences->Screen Resolution)
-
-----
 == Getting Around the Source ==
 
-All of Project FlightSchool source is organized into modules, each responsible for a particular piece of app functionality. See the [wiki:Documentation] page for design docs on each of the modules, as well as the pointers to source files used by each of them. 
+All of Project FlightSchool source is organized into modules, each responsible for a particular piece of app functionality. See the [Documentation] page for design docs on each of the modules, as well as the pointers to source files used by each of them. 
 
 === Controller Code ===
 
@@ -51,4 +12,4 @@ Typically you would want to be able to locate a piece of code that is responsibl
 
 === Model Code ===
 
-Once you see the controller code, you would be interested in how it manipulates the data drom the database. Rails' ActiveRecord is used to wrap database tables with Model classes, and following the convention, each class name is directly derived from the table name it wraps. Once you know the name of the table, you can see its schema definition on the [wiki:DBSchema schema page].
+Once you see the controller code, you would be interested in how it manipulates the data drom the database. Rails' ActiveRecord is used to wrap database tables with Model classes, and following the convention, each class name is directly derived from the table name it wraps. Once you know the name of the table, you can see its schema definition on the [DatabaseSchema schema page].
