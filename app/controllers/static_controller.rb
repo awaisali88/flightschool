@@ -28,7 +28,7 @@ end
 def new
   return unless has_permission :can_post_news
   @page_title = 'Create New Static Page'
-  @document = StaticContent.new
+  @document = StaticContent.new params[:document]
   if request.method == :post
     @document = StaticContent.new (params[:document],current_user,current_school)
     if @document.save
@@ -94,8 +94,12 @@ end
 def view
   @page = StaticContent.find(:first,:conditions =>["url_name=?",params[:url].join('/')]) 
   if @page == nil
-    flash[:warning] = 'Sorry, the page you have requested does not exist.'
-    redirect_to :back;
+    if admin?
+      flash[:warning] = 'Requested page does not exist. Would you like to <a href="/static/new?document[url_name]=' + params[:url].to_s + '">create it</a>?'
+    else
+      flash[:warning] = 'Sorry, the page you have requested does not exist.'
+    end
+       redirect_to :back;
     return
   end
   @page_title = @page.one_line_summary

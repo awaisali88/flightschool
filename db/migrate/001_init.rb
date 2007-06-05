@@ -38,6 +38,7 @@ class Init < ActiveRecord::Migration
     root_doc = StaticContent.new ({:url_name=>'root',:one_line_summary=>'root',:body=>'root'},admin)
     root_doc.save
     school.root_document = root_doc
+    school.save
     
     #create the main page
     index = StaticContent.new ({:url_name=>'index',:one_line_summary=>'Welcome to FlightSchool',:body=>'Please edit this page throught the admin pages'},admin,school)
