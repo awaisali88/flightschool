@@ -5,6 +5,10 @@ class StaticContent < Document
   end
   
   def initialize params={},user=nil,school=nil
+    if params[:mime_type].nil?
+      params.merge!({:mime_type=>'text/plain'})
+    end
+    
     super params,user
     @attributes['status']='approved'
     @attributes['refers_to']= school.root_document unless school==nil

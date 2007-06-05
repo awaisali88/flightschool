@@ -74,7 +74,8 @@ end
 # create a simple reservation that doesnt span multiple days or require an aircraft in office 
 # other than user's home office (current_user.default_office)
 def quickpick
-  if SchedulingAccessRule.violated_access_rules(current_user).size > 0
+  
+  if (SchedulingAccessRule.violated_access_rules(current_user).size > 0) or Aircraft.find(:first).nil?
     render :text=>''
     return
   end
