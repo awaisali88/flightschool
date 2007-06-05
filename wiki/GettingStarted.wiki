@@ -8,7 +8,7 @@ All of Project FlightSchool source is organized into modules, each responsible f
 
 === Controller Code ===
 
-Typically you would want to be able to locate a piece of code that is responsible for a particular request made to the server. This is very simple in Rails - simply follow the [source:trunk/config/routes.rb routes.rb file] to see URL to controller action bindings. (More info on Rails routes.rb file is available [http://wiki.rubyonrails.org/rails/pages/Routes here]. 
+Typically you would want to be able to locate a piece of code that is responsible for a particular request made to the server. This is very simple in Rails - simply follow the config/routes.rb file to see URL to controller action bindings. (More info on Rails routes.rb file is available [http://wiki.rubyonrails.org/rails/pages/Routes here]). 
 
 === Model Code ===
 
