@@ -6,7 +6,9 @@ can use following two articles as reference.
 http://www.ubuntuforums.org/showthread.php?t=169891
 http://www.debian-administration.org/articles/329
 
-After the install, you will need to checkout the code from repository and initialize the db using "rake migrate"
+After installing the dependencies, you will need to checkout the code from repository and initialize the db.
+
+Edit the db/migrate/001_init.rb file to suit your needs, and then run "rake migrate" to complete initialization.
 
 == Postgres ==
 {{{
