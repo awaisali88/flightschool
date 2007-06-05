@@ -1,3 +1,4 @@
+begin;
 create language plpgsql;
 
 -- Table storing all of the schools/clubs served by the application
@@ -42,7 +43,7 @@ CREATE TABLE users (
 	office            			integer references offices(id),
 	-- user's primary office of the club
 	
-	hourly_rate        			real default 50.0
+	hourly_rate        			real default 50.0,
 	-- for instructors - how much is charged per hour of instruction	
 
 	birthdate					DATE,
@@ -295,7 +296,7 @@ create table documents(
 	id						serial primary key,
 	refers_to				integer	references documents(id),
 	created_by				integer not null references users(id),
-	last_updated_by			not null references users(id),
+	last_updated_by			integer not null references users(id),
 	-- user that last updated this row
 	created_at				timestamp not null,
 	updated_at 				timestamp not null,
@@ -400,3 +401,5 @@ $process_flight_record$ LANGUAGE plpgsql;
 CREATE trigger process_flight_record
   after INSERT ON billing_charges 
   FOR each ROW EXECUTE PROCEDURE update_aircraft_stats();
+
+commit;
