@@ -4,11 +4,27 @@ class FlightRecord < BillingCharge
   before_save :compute_aircraft_params
 
   def validate
-    if aircraft_id!=nil and hobbs_start!=nil and hobbs_end!=nil and tach_start!=nil and tach_end!=nil and aircraft_rate!=nil
-    elsif instructor_id!=nil and instructor_rate!=nil and ground_instruction_time!=nil
-    else
-      errors.add_to_base 'Insufficient information to create a record.'
+    if pilot.nil?
+      errors.add_to_base 'Invalid pilot.'
     end
+        
+    if instructor_id==nil and aircraft_id==nil
+      errors.add_to_base 'Insufficient information to create a record. Please specify either an aircraft or an instructor.'
+    end
+    
+    if aircraft_id!=nil and aircraft_rate==nil
+      errors.add_to_base 'Aircraft rate missing.'
+    end
+
+    if instructor_id!=nil and instructor_rate==nil
+      errors.add_to_base 'Instructor rate missing.'
+    end
+    
+    count = (hobbs_start.nil? ? 0 : 1) + (hobbs_end.nil? ? 0 : 1) + (tach_start.nil? ? 0 : 1) + (tach_end.nil? ? 0 : 1)
+    if count>0 and count<4 
+      errors.add_to_base 'Either all or none of the following must be specified: Hobbs Start, Hobbs End, Tach Start, Tach End'
+    end
+    
   end
   
   def compute_aircraft_params
