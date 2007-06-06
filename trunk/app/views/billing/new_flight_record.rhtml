@@ -60,10 +60,10 @@ function row_changed(i){
 		charge_ok = true;			
 	}
 
-	setElemClass($("charge_amount"+i),'input_normal')
-	setElemClass($("month"+i),'input_normal')
-	setElemClass($("day"+i),'input_normal')
-	setElemClass($("pilot"+i),'input_normal')
+	// setElemClass($("charge_amount"+i),'input_normal')
+	// setElemClass($("month"+i),'input_normal')
+	// setElemClass($("day"+i),'input_normal')
+	// setElemClass($("pilot"+i),'input_normal')
 	
 	if(charge_ok){
 		charge = charge.toFixed(2);
@@ -71,46 +71,46 @@ function row_changed(i){
 	  	$("charge_amount"+i).value =charge 
 		new Effect.Highlight("charge_amount"+i,{restorecolor:'#ffffff'});
 	}else{
-	  	setElemClass($("charge_amount"+i),'input_with_error')
+//	  	setElemClass($("charge_amount"+i),'input_with_error')
 		$("charge_amount"+i).value = ''
 	}
 	
-	var nonempty_count = 0
-	if(notNaN(tstart)) nonempty_count++;
-	if(notNaN(tend)) nonempty_count++;
-	if(notNaN(hstart)) nonempty_count++;
-	if(notNaN(hend)) nonempty_count++;
-	if(nonempty_count > 0 && nonempty_count<4){
-	  	setElemClass($("tach_start"+i),'input_with_error')
-	  	setElemClass($("tach_end"+i),'input_with_error')
-	  	setElemClass($("hobbs_start"+i),'input_with_error')
-	  	setElemClass($("hobbs_end"+i),'input_with_error')		
-	}else{
-		setElemClass($("tach_start"+i),'input_normal')
-	  	setElemClass($("tach_end"+i),'input_normal')
-	  	setElemClass($("hobbs_start"+i),'input_normal')
-	  	setElemClass($("hobbs_end"+i),'input_normal')
-	}
+	// var nonempty_count = 0
+	// if(notNaN(tstart)) nonempty_count++;
+	// if(notNaN(tend)) nonempty_count++;
+	// if(notNaN(hstart)) nonempty_count++;
+	// if(notNaN(hend)) nonempty_count++;
+	// if(nonempty_count > 0 && nonempty_count<4){
+	//   	setElemClass($("tach_start"+i),'input_with_error')
+	//   	setElemClass($("tach_end"+i),'input_with_error')
+	//   	setElemClass($("hobbs_start"+i),'input_with_error')
+	//   	setElemClass($("hobbs_end"+i),'input_with_error')		
+	// }else{
+	// 	setElemClass($("tach_start"+i),'input_normal')
+	//   	setElemClass($("tach_end"+i),'input_normal')
+	//   	setElemClass($("hobbs_start"+i),'input_normal')
+	//   	setElemClass($("hobbs_end"+i),'input_normal')
+	// }
 	
-	if(!validate_date($('year').value,$('month'+i).value,$('day'+i).value)){
-		setElemClass($("month"+i),'input_with_error')
-		setElemClass($("day"+i),'input_with_error')
-	}
+	// if(!validate_date($('year').value,$('month'+i).value,$('day'+i).value)){
+	// 	setElemClass($("month"+i),'input_with_error')
+	// 	setElemClass($("day"+i),'input_with_error')
+	// }
 	
-	var pilot_id = parseInt($('pilot_id_'+i).value);
-	if(isNaN(pilot_id))
-		setElemClass($("pilot"+i),'input_with_error')
+	// var pilot_id = parseInt($('pilot_id_'+i).value);
+	// if(isNaN(pilot_id))
+	// 	setElemClass($("pilot"+i),'input_with_error')
 	
 }
 
 function addRow(src_iteration){
 	var table = $('record_table');
 
-	if(src_iteration+1 < table.rows.length)
-		return;
+	// if(src_iteration+1 < table.rows.length)
+	// 	return;
 		
 	var row = table.insertRow(table.rows.length);
-	var iteration = table.rows.length-1;
+	var iteration = table.rows.length/2;
 	row.id = 'rec'+iteration;
 	
 	var cell = row.insertCell(0);
@@ -213,6 +213,12 @@ function addRow(src_iteration){
 	el.type = 'text';	el.name = 'rec'+iteration+'[charge_amount]';    el.id = 'charge_amount' + iteration;	el.size = 6;
 	cell.appendChild(el);
 
+	//add a status row right below
+	var row = table.insertRow(table.rows.length);	
+	var cell = row.insertCell(0);
+	cell.colSpan = 12;
+	cell.id = 'validation'+iteration
+
 	new Form.Element.Observer('aircraft_rate' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('instructor_rate' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('ground_time' + iteration, 0.25, function(element, value) { row_changed(iteration);});
@@ -220,17 +226,13 @@ function addRow(src_iteration){
 	new Form.Element.Observer('hobbs_end' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('tach_start' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('tach_end' + iteration, 0.25, function(element, value) { row_changed(iteration);});
-	new Form.Element.Observer('month' + iteration, 0.25, function(element, value) { row_changed(iteration);});
-	new Form.Element.Observer('day' + iteration, 0.25, function(element, value) { row_changed(iteration);});
-	new Form.Element.Observer('pilot_id_' + iteration, 0.25, function(element, value) { row_changed(iteration);});
-	
+ 	
+	Field.activate($('month'+iteration))	
 }
 
 function trapKey(e){
 	if( e['shiftKey'] && e.keyCode==40){ //Shift+Down Arrow 
 		addRow();
-		var row_id = $('record_table').rows.length-1
-		Field.activate($('month'+(row_id)))
 	}
 }
 document.onkeydown = trapKey;
@@ -242,7 +244,6 @@ document.onkeydown = trapKey;
 <label>Aircraft </label> <input id="aircraft" class="billing_input" autocomplete="off" size="20" type="text" onclick="this.select()"/>
 <input name="aircraft" id="aircraft_id" autocomplete="off" type="hidden"/>
 <%= observe_field('aircraft_id',:url =>{:action => 'set_aircraft',:controller=>'billing'},:with => "'aircraft=' + escape(value)",:frequency=>0.25)%>
-<small>Press Shift+Down Arrow to add a new row (copying the defaults from the last row).</small>
 <script type="text/javascript">
 new Autocompleter.Local('aircraft', 'aircraft_list', aircraft_list,
  	{fullSearch:true, partialChars:1, selector:autocomplete_selector,
@@ -265,12 +266,19 @@ new Autocompleter.Local('aircraft', 'aircraft_list', aircraft_list,
 	<th style="color:#eeeedd">Amount</th>
 	</tr>
 </table>
+<small><a href="#" onclick="addRow();">Add another row</a>
+	(Alternatively, press <span style="color:green;font-weight:bold">[Shift]+[Down Arrow]</span>, which is a keyboard shortcut for adding a new row)</small>
+
+<br/>	
 <br/>
+<%= submit_tag 'Check Records',:id=>'check', :onclick=>"Form.Element.disable('check'); new Ajax.Request('/billing/check_records', {asynchronous:true, evalScripts:true, parameters:Form.serialize('record_form')})"%>
+
 <%= submit_tag 'Create Records',:id=>'commit', :onclick=>"Form.Element.disable('commit'); new Ajax.Request('/billing/create_records', {asynchronous:true, evalScripts:true, parameters:Form.serialize('record_form')})"%><br/>
-<small>Only rows with nonempty 'Amount' fields will be processed.<br/> Rows highlighted in red contain errors and need to be corrected in order to be recorded by the system.</small>
 <%= end_form_tag %>
+
 <script language=javascript>
  addRow(1);
+ Form.Element.disable('commit');
 </script>
 
 

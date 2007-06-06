@@ -79,7 +79,6 @@ def test
 end
 
 # page for entering flight-related billing charges
-# Handles both GETs and POSTs
 def new_flight_record
   return unless has_permission :can_do_billing
   @page_title = 'New Flight Record Sheet'
@@ -94,17 +93,26 @@ def new_flight_record
   }
   
   @aircrafts = Aircraft.find(:all,:conditions=>['deleted = false'])
-    
+end
+
+def check_records
+  return unless has_permission :can_do_billing
+  @check_records_only = true
+  create_records
 end
 
 def create_records
   return unless has_permission :can_do_billing
   errors_present = false
-  record_count = 0
+  records = []
   FlightRecord.transaction do
     render :update do |page|         
       i = 1
+      
       while params["rec#{i}"]!=nil
+        
+        page.send :record, "$('validation#{i}').innerHTML = ''"
+        
         if params["rec#{i}"][:charge_amount]=="" #empty row - ignore
           page.send :record, "$('rec#{i}').style.background='grey'"
           i=i+1
@@ -112,25 +120,44 @@ def create_records
         end
         
         record = FlightRecord.new(params["rec#{i}"],params[:aircraft],current_user)
+
+        #validate the date
         begin
           record.flight_date = Time.local(params[:year],params["month#{i}"],params["day#{i}"])
+          if record.flight_date.year!=params[:year].to_i or record.flight_date.month!=params["month#{i}"].to_i or record.flight_date.day!=params["day#{i}"].to_i
+            record.errors.add_to_base "Invalid date specified."
+          end
         rescue
+          record.errors.add_to_base "Invalid date specified."
         end
-        if record.save
-            record_count = record_count+1
+
+        #validate the rest
+        record.validate
+        if record.errors.size==0
             page.send :record, "$('rec#{i}').style.background='green'"
         else
             errors_present = true
+            page.send :record, "$('validation#{i}').innerHTML = '<span style=\"color:darkred\"><small><i>#{record.errors.full_messages.join('<br/>')}</i></small></span>'"
             page.send :record, "$('rec#{i}').style.background='red'"
         end
+        records << record
         i=i+1
       end
+      
       if not errors_present
-          flash[:notice] = "#{record_count} records created."
-          page.send :record, "window.location='/billing/new_flight_record';"
+          if not @check_records_only
+            records.each{|r|
+              r.save
+            }
+            flash[:notice] = "#{records.size} records created."
+            page.send :record, "window.location='/billing/new_flight_record';"
+          else
+            page.send :record, "Form.Element.enable('commit');"
+          end
       else
-        page.send :record, "Form.Element.enable('commit');"
+        page.send :record, "Form.Element.disable('commit');"
       end     
+      page.send :record, "Form.Element.enable('check');"
     end
   end
 end
