@@ -238,7 +238,7 @@ def query
   @page_title = 'Batch Admin Action'
   if request.method == :post
     offices = Office.find(:all,:conditions=>['school_id=?',current_school.id])
-    conditions = 'select distinct users.* from users,groups,groups_users where groups.id=groups_users.group_id and users.id=groups_users.user_id'
+    conditions = 'select users.* from users,groups,groups_users where groups.id=groups_users.group_id and users.id=groups_users.user_id'
     binds = []
     if params[:office] == 'all'
       conditions << ' and ('+offices.map{|o| "office=#{o.id}"}.join(' or ')+')'
