@@ -20,9 +20,9 @@ class FlightRecord < BillingCharge
       errors.add_to_base 'Instructor rate missing.'
     end
     
-    count = (hobbs_start.nil? ? 0 : 1) + (hobbs_end.nil? ? 0 : 1) + (tach_start.nil? ? 0 : 1) + (tach_end.nil? ? 0 : 1)
-    if count>0 and count<4 
-      errors.add_to_base 'Either all or none of the following must be specified: Hobbs Start, Hobbs End, Tach Start, Tach End'
+    count = (hobbs_start.nil? ? 0 : 1) + (hobbs_end.nil? ? 0 : 1)
+    if count>0 and count<2
+      errors.add_to_base 'Either all or none of the following must be specified: Hobbs Start, Hobbs End'
     end
     
   end

@@ -389,7 +389,7 @@ CREATE trigger compute_billing_charge
 -- trigger for maintaining tach and hobbs value for aircrafts
 CREATE OR REPLACE function update_aircraft_stats() returns trigger AS $process_flight_record$
 BEGIN       
-  if NEW.type != 'flight' THEN
+  if NEW.type != 'FlightRecord' THEN
     return NEW;
   END if;
   UPDATE aircrafts SET hobbs = greatest(NEW.hobbs_end,hobbs) WHERE id = NEW.aircraft_id;

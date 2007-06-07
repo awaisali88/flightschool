@@ -183,8 +183,14 @@ def set_aircraft
     aircraft = Aircraft.find_by_id(params[:aircraft])
     if not aircraft.nil?
       @rate = aircraft.hourly_rate 
+      @hobbs = truncate_meter(aircraft.hobbs)
+      @tach = truncate_meter(aircraft.tach)
       render :update do |page|   
          page.send :record, "$('aircraft_rate1').value='#{@rate}'" 
+         page.visual_effect :highlight , 'aircraft_rate1', {:restorecolor => "'#ffffff'"}
+         page.send :record, "$('hobbs_start1').value='#{@hobbs}'" 
+         page.visual_effect :highlight , 'aircraft_rate1', {:restorecolor => "'#ffffff'"}
+         page.send :record, "$('tach_start1').value='#{@tach}'" 
          page.visual_effect :highlight , 'aircraft_rate1', {:restorecolor => "'#ffffff'"}
       end 
     end   
@@ -283,5 +289,8 @@ def student_report
   @page_title = "Billing Charges for #{@user.full_name}"
 end
 
+def truncate_meter x
+   return Kernel.sprintf "%.1f", ((x/100.0)-(x/100.0).floor)*100
+end
 
 end
