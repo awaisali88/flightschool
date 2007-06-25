@@ -27,6 +27,12 @@
 			<%= options_for_select([['Any Time','all'],['Within Last Week','7'],['Within Last 4 Weeks','28'],['Within last 12 Weeks','84']],params[:active])%>
 		</select></td>
 	</tr>
+	<tr>
+		<td><label>Flies in:</label></td>
+		<td><select name="aircraft_type" style="width:150px">
+			<%= options_for_select([['Any Aircraft','all']]+AircraftType.find(:all).sort{|a,b| a.type_name<=>b.type_name}.map{|a| [a.type_name,a.id.to_s]},params[:aircraft_type]) %>
+		</select></td>
+	</tr>
 	<tr><td colspan=2><%=submit_tag 'Preview Selection',{:style=>'width:100%'}%></td></tr>	
 </table>
 </td>
