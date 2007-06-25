@@ -261,6 +261,19 @@ def query
       conditions << ' and created_at>?'
       binds << (Date.today - params[:created].to_i).to_time
     end
+
+    if params[:aircraft_type] != 'all'
+      aircrafts = Aircraft.find_all_by_aircraft_type(params[:aircraft_type].to_i)
+      if aircrafts.size>0
+        conditions << " and (select count(*) from reservations where reservation_type='booking' and created_by=users.id and time_start>? and aircraft_id in (#{aircrafts.map{|a| a.id}.join(',')}))>0"
+        binds << (Date.today - 30).to_time
+      end
+    end
+
+    # if true
+    #   render :text=> conditions
+    #   return 
+    # end
     @users = User.find_by_sql([conditions+' order by upper(last_name)']+binds)
 
     case params[:commit]
