@@ -1,3 +1,7 @@
+require 'cms/document'
+require 'cms/static_content'
+require 'cms/forum'
+
 class Init < ActiveRecord::Migration
   def self.up
     #load up the schema from .sql file

@@ -9,15 +9,15 @@
 class NewsController < ApplicationController
   
 before_filter :force_single_column_layout, :except=>[:index]
-before_filter :login_required 
+before_filter :login_required, :except=>[:index]
   
-  # page with paginated new stories  
+  # page with paginated new stories or the main welcome page 
   def index
-    @page_title = user? ? 'Recent News' : 'Welcome'
+    @page_title = 'Recent News' 
     @news_pages, @news = paginate :news_article, :order_by => '-id',:per_page => 6,
             :conditions => ["status='approved'"]
   end
-
+  
   #page with list of news stories
   def list
    return unless has_permission :can_post_news

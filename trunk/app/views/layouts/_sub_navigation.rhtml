@@ -51,12 +51,15 @@
 	<%= link_to "Export Billing Data", :controller => "billing", :action => "raw_export" %>
    <script type="text/javascript">$('billing_tab').className='active_navtab'</script>
 
-<% elsif (params[:controller] == 'news' and params[:action]=='index') or (params[:controller]=='profile' and not admin?) %>
+<% elsif (params[:controller] == 'news' and params[:action]=='index' and user?) or (params[:controller]=='profile' and not admin?) %>
 	<%= link_to "Home", :controller => "news", :action => "index" %>
 	<%= link_to "My Profile", :controller => "profile", :action => "view" %>
 	<script type="text/javascript">$('dashboard_tab').className='active_navtab'</script>
 		
 <% elsif params[:controller] == 'static' or  params[:controller] == 'news' or (not user?) %>
+	<% if not user? %>
+		<%= link_to "News", "/news"%>
+	<% end %>
 	<%= link_to "About Us", "/content/about_us"%>
 	<%= link_to "Instruction", "/content/instruction"%>
 	<%= link_to "FAQ", "/content/faq"%>

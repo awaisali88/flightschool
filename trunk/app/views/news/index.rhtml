@@ -1,20 +1,15 @@
-<%content_for 'sidebar' do%>
-    <%=  render_component(:controller => 'schedule', :action => 'quickpick')%>
-	<%= render_partial 'layouts/sidebox', :box_title => 'Recent Forum Topics',
-	    :box_contents => render_component(:controller=>'forum',:action=>'summary') %>
-<% end %>
-
 <%if user? %>
+	<%content_for 'sidebar' do%>
+	    <%=  render_component(:controller => 'schedule', :action => 'quickpick')%>
+		<%= render_partial 'layouts/sidebox', :box_title => 'Recent Forum Topics',
+		    :box_contents => render_component(:controller=>'forum',:action=>'summary') %>
+	<% end %>
+
  	<%= render_component(:controller => 'schedule', :action => 'reservation_summary')%>
 <% end %>
 
-<% if user? %>
 <div id = "news_page">
-<% for article in @news %>
-<%= render_partial 'news', :document=>article %>
-<% end %>
+	<% for article in @news %>
+	<%= render_partial 'news', :document=>article %>
+	<% end %>
 </div>
-
-<% else %>
-<%=render_component(:controller => 'static', :action => 'index')%>
-<% end %>
