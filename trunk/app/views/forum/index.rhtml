@@ -6,6 +6,7 @@
 <th width="12%">By</th>
 
 <% for topic in @topics %>
+
 	<% if topic.status =='approved' or admin?  %>
 		<tr valign="top">	
 		<% reply_count = topic.reply_count%>
@@ -16,7 +17,7 @@
 		<td><%=reply_count.to_s%></td>
 		<td><%=latest_post.creation_time %></td>
 		<td><%=latest_post.creator.short_name%></td>
-	
+		
 		<%if admin? %>
 			<% if topic.status=='approved' %>
 				<td width="5%"><%= link_to "Hide",:action => 'hide_topic', :id => topic %></td>
@@ -38,3 +39,4 @@
 <script type="text/javascript">
  color_table('forum_table')
 </script>
+

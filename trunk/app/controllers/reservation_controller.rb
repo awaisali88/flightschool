@@ -294,42 +294,41 @@ class ReservationController < ApplicationController
     return unless has_permission :admin
     @page_title = 'Swap Reservations'
     if request.method==:post
-      noerrors = true
-      success = Reservation.transaction do
-        status = {}
-        a1 = Aircraft.find_by_id params[:aircraft1]
-        a2 = Aircraft.find_by_id params[:aircraft2]
-        from = Time.local(params[:s_year],params[:s_month],params[:s_day],params[:s_hour])  
-        r1 = Reservation.find :all, :conditions=>['aircraft_id=? and time_start>?',a1.id,from]
-        r2 = Reservation.find :all, :conditions=>['aircraft_id=? and time_start>?',a2.id,from]
-        r1.each{|r|
-          r.override_acceptance_rules
-          status[r.id]=r.status
-          r.status='canceled'
-          r.aircraft_id = a2.id
-          noerrors &&= r.save
-        }
-        r2.each{|r|
-          r.override_acceptance_rules
-          status[r.id]=r.status
-          r.status='canceled'
-          r.aircraft_id = a1.id
-          noerrors &&= r.save
-        }
-        r1.each{|r|
-          r.override_acceptance_rules
-          r.status = status[r.id]
-          noerrors &&= r.save
-        }
-        r2.each{|r|
-          r.override_acceptance_rules
-          r.status = status[r.id]
-          noerrors &&= r.save
-        }        
-      end
-      if success and noerrors
+      begin 
+        Reservation.transaction do
+          status = {}
+          a1 = Aircraft.find_by_id params[:aircraft1]
+          a2 = Aircraft.find_by_id params[:aircraft2]
+          from = Time.local(params[:s_year],params[:s_month],params[:s_day],params[:s_hour])  
+          r1 = Reservation.find :all, :conditions=>['aircraft_id=? and time_start>?',a1.id,from]
+          r2 = Reservation.find :all, :conditions=>['aircraft_id=? and time_start>?',a2.id,from]
+          r1.each{|r|
+            r.override_acceptance_rules
+            status[r.id]=r.status
+            r.status='canceled'
+            r.aircraft_id = a2.id
+            r.save!
+          }
+          r2.each{|r|
+            r.override_acceptance_rules
+            status[r.id]=r.status
+            r.status='canceled'
+            r.aircraft_id = a1.id
+            r.save!
+          }
+          r1.each{|r|
+            r.override_acceptance_rules
+            r.status = status[r.id]
+            r.save!
+          }
+          r2.each{|r|
+            r.override_acceptance_rules
+            r.status = status[r.id]
+            r.save!
+          }        
+        end
         flash[:notice] = 'Reservations swapped.'
-      else
+      rescue
         flash[:warning] = 'There was a problem with the swap, because of overlapping reservations. Try a different \'From\' date.' 
       end
     end
