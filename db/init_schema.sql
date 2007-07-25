@@ -265,6 +265,24 @@ $update_reservation_changes$ language plpgsql;
 create trigger update_reservation_changes
   before update on reservations
   for each row execute procedure update_reservation_change();
+	
+	
+-- reservation activity logging
+create table reservations_audit as select * from reservations;
+delete from reservations_audit;
+alter table reservations_audit add column modified_at timestamp;
+
+-- trigger to maintain reservations audit table
+CREATE OR REPLACE FUNCTION process_reservations_audit() RETURNS TRIGGER AS $reservations_audit$
+BEGIN 
+INSERT INTO reservations_audit SELECT NEW.*, current_timestamp; 
+RETURN NEW; 
+END; 
+$reservations_audit$ LANGUAGE plpgsql;
+
+CREATE TRIGGER reservations_audit 
+AFTER INSERT OR UPDATE ON reservations 
+FOR EACH ROW EXECUTE PROCEDURE process_reservations_audit();
 
 --  table for storing rules used for automatic reservation verification
 -- all of the rules in this table are run when reservation is made to determine if reservation needs dispatcher's review
@@ -364,7 +382,7 @@ create table billing_charges(
    -- values below are stored as absolute values (not just the end digits)
    hobbs_start      real,
    hobbs_end        real,
-   tach_start         real,
+   tach_start       real,
    tach_end         real,
    ground_instruction_time real,
    aircraft_rate    real,
@@ -401,5 +419,23 @@ $process_flight_record$ LANGUAGE plpgsql;
 CREATE trigger process_flight_record
   after INSERT ON billing_charges 
   FOR each ROW EXECUTE PROCEDURE update_aircraft_stats();
+
+-- activity logging 
+create table requests(
+       id        	 		serial primary key,
+       ip_address 			text,
+       created_at	 		timestamp,
+       http_user_agent	  	text,
+       user_id	  			integer,
+       http_referer 	 	text,
+       request_method  		text,
+       request_uri	  		text,
+	   request_params		text,	
+       request_controller  	text,
+       request_action  		text,
+       request_id   		text,	
+       response_status   	text,
+       elapsed_time 		float
+);
 
 commit;

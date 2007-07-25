@@ -8,18 +8,45 @@ require 'multi_school'
 require 'zlib' 
 require 'stringio'
 
+# Rails 1.2 broke how models dir is loaded, so we need to manually require all the model files in subdirs
+require 'cms/document'
+require 'cms/forum'
+require 'cms/forum_post'
+require 'cms/forum_topic'
+require 'cms/image'
+require 'cms/news_article'
+require 'cms/root_document'
+require 'cms/static_content'
+require 'cms/uploaded_file'
+
+require 'scheduling/maintenance_date'
+require 'scheduling/reservation'
+require 'scheduling/reservation_rule'
+require 'scheduling/reservation_acceptance_rule'
+require 'scheduling/reservation_approval_rule'
+require 'scheduling/reservation_rules_exception'
+require 'scheduling/schedule_mailer'
+require 'scheduling/scheduling_access_rule'
+
+require 'billing/billing_charge'
+require 'billing/correction_record'
+require 'billing/deposit_record'
+require 'billing/fee_record'
+require 'billing/flight_record'
+require 'billing/ground_record'
+require 'billing/supplies_record'
+
+
 class ApplicationController < ActionController::Base
     include LoginEngine
-#    include BreadCrumbs
     include PermissionsChecker
     include MultiSchool
     helper :user
     model :user
       
-#    before_filter :clean_bread_crumbs
-#    after_filter :bread_crumbs
     before_filter :load_permissions
-    
+    before_filter :start_timer
+    after_filter :log_request
 
     protected 
 
@@ -59,7 +86,8 @@ class ApplicationController < ActionController::Base
     end
     
     def browser_supported?
-       return request.env['HTTP_USER_AGENT'].match('Safari').nil?
+      # Safari can't handle the scheduling page javascript... not yet
+      return request.env['HTTP_USER_AGENT'].match('Safari').nil?
     end
 
     def require_schedule_access
@@ -84,8 +112,9 @@ class ApplicationController < ActionController::Base
     end
 
     def log_request 
-      req  = Request.new()
-      req.ip_address = request.remote_ip()
+      req  = Request.new
+      req.request_params = params.to_s
+      req.ip_address = request.remote_ip
       req.http_user_agent = request.env['HTTP_USER_AGENT']
       req.user_id = session[:user].nil? ? nil : session[:user].id
       req.http_referer = request.env['HTTP_REFERER']

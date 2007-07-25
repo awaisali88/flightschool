@@ -9,14 +9,16 @@
 <%= render :partial=>'schedule_browser' %>
 
 <script type="text/javascript">
+		
       function autoposition_reservation_sidebar(){
          $("reservation_sidebar").style.top = "160px";
          sc = getPageScroll()
-         if(sc[1]>160){
+         if(sc[1]>160 && getPageSize()[1]>Element.getHeight('reservation_sidebar')+sc[1]+30){
              $("reservation_sidebar").style.top = sc[1]+"px";                    
          }
-		if(getPageSize()[1]<Element.getHeight('reservation_sidebar')+sc[1]){
-            $("reservation_sidebar").style.top = (getPageSize()[1]-Element.getHeight('reservation_sidebar'))+"px";                    			
+
+		if(getPageSize()[1]<Element.getHeight('reservation_sidebar')+sc[1]+30){
+  			$("reservation_sidebar").style.top = (getPageSize()[1]-Element.getHeight('reservation_sidebar'))-30+"px";                    			
 		}
       }
 
