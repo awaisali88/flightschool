@@ -50,6 +50,7 @@ class Init < ActiveRecord::Migration
     
     #create the forum
     forum = Forum.new 'general'
+    forum.description = 'General Discussion'
     forum.created_by = admin
     forum.last_updated_by = admin
     forum.save

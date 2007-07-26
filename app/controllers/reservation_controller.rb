@@ -362,6 +362,7 @@ class ReservationController < ApplicationController
   
   def process_date_params
     session[:schedule] ||= {}
+    session[:schedule] ||= Time.now
     session[:schedule][:filter] ||= 'true'
     session[:schedule][:filter] = params[:office_filter] unless params[:office_filter].nil?
         

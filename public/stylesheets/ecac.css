@@ -25,6 +25,17 @@ body{
 	font-family: arial;
 }
 
+#site_title{
+	font-size: 34px;
+	color: #DDDDDD;
+	font-weight: bold;
+	font-family: arial black;
+	position: absolute;
+	top:25px;
+	left:50px;
+	cursor: pointer;
+}
+
 #sub_navbar a{
 	color:#ffeeee;
 	font-size: 9pt;
