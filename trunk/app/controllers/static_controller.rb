@@ -7,6 +7,7 @@
 # 
 #####################################################################################
 
+require 'redcloth'
 
 class StaticController < ApplicationController
 
@@ -105,6 +106,10 @@ def view
   @page_title = @page.one_line_summary
 end
 
+def view_info_links
+  @page = StaticContent.find(:first,:conditions =>["url_name='info_links'"]) 
+  render :text=>@page.body
+end
 
 # #Gives interface to create new static page child of linking document
 # def new

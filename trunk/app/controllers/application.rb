@@ -46,10 +46,15 @@ class ApplicationController < ActionController::Base
       
     before_filter :load_permissions
     before_filter :start_timer
+    before_filter :populate_info_links
     after_filter :log_request
 
     protected 
 
+    def populate_info_links
+      @info_links = StaticContent.find(:first,:conditions =>["url_name='info_links'"]).body
+    end
+    
     #compresses the http output for performance
     def compress 
       accepts = request.env['HTTP_ACCEPT_ENCODING'] 
