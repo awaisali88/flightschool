@@ -22,18 +22,18 @@ module LoginEngine
   #++
 
   # Source address for user emails
-  config :email_from, 'noreply@ecas.com'
+  config :email_from, 'noreply@yourflightschool.com'
 
   # Destination email for system errors
-  config :admin_email, 'webmaster@ecas.com'
+  config :admin_email, 'admin@yourflightschool.com'
 
   # Sent in emails to users 
-  config :app_url, 'http://ecacbed.com'
+  config :app_url, 'http://yourflightschool.com'
 
   config :salt, "super-salt"
  
   # Sent in emails to users
-  config :app_name, 'East Coast Aero Club'
+  config :app_name, 'Your Flight School'
 
   # Email charset
   config :mail_charset, 'utf-8'
