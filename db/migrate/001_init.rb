@@ -45,7 +45,7 @@ class Init < ActiveRecord::Migration
     school.save
     
     #create the main page
-    index = StaticContent.new ({:url_name=>'index',:one_line_summary=>'Welcome to FlightSchool',:body=>'Please edit this page throught the admin pages'},admin,school)
+    index = StaticContent.new ({:url_name=>'index',:one_line_summary=>'Welcome to FlightSchool',:body=>'Please edit this page throught the admin interface'},admin,school)
     index.save
     
     #create the forum

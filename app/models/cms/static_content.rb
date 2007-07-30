@@ -5,6 +5,10 @@ class StaticContent < Document
   end
   
   def initialize params={},user=nil,school=nil
+    if params.nil?
+      params = {}
+    end
+    
     if params[:mime_type].nil?
       params.merge!({:mime_type=>'text/plain'})
     end
