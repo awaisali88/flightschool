@@ -23,8 +23,7 @@ function set_schedule_date(year,month,date,days_since_2000){
 	day.setDate(day.getDate()-2*num_days)
 	previous_schedule_date = dateToString(day)
 	$('date').value = schedule_date
-	$('trigger').value = schedule_date
-	
+	$('trigger').value = schedule_date	
 
 	if(displaying_new_reservation_form){
 		$('reservation_start_date').value = schedule_date

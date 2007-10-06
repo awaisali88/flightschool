@@ -256,4 +256,5 @@ style="position:relative; text-align:left; left:-6px; width:<%=graph_width%>px;m
 		num_days = <%= @days %>
 		
 		new Ajax.Request('/reservation/update_schedule', {asynchronous:true, evalScripts:true, parameters:'date=' + '<%= @date.to_s %>'})
+		show_loading_indicator('graph');
 	</script>
