@@ -1,0 +1,34 @@
+<%= render_partial 'report_selector' %>
+
+<% if not params[:date].nil? %>
+
+<table style="margin:auto">
+<h3 style="text-align:center">Aircraft flight statistics</h3>
+<th>Aircraft</th>
+<th>Solo hours flown</th>
+<th>Dual hours flown</th>
+<th>Total hours flown</th>
+<th>Total charges</th>
+<colgroup span="3"></colgroup>
+<colgroup span="1"></colgroup>
+
+<% i=1 %>
+<% @aircrafts.each{|airc|%>
+<%i = i+1 %>
+<tr class="<%= i.even? ? "even_row" : "odd_row" %>" >
+<td style="text-align:right"><%= airc.identifier %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@solo[airc]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@dual[airc]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@solo[airc]||0).to_f+(@dual[airc]||0).to_f%></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.2f",(@charges[airc]||0).to_f %></td>
+</tr>    
+<% }%>
+<tr>
+	<th>Total</th>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @solo_total %></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @dual_total %></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @time_total %></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.2f", @charges_total%></td>
+</tr>
+</table>
+<% end %>

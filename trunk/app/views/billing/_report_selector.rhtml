@@ -1,0 +1,67 @@
+<% if @earliest.nil? %>
+	No flight records exist.
+<% else %>
+	<table style="margin:auto" cellspacing="0" cellpadding="0">
+	<tr><td><label>Aircraft Report</label></td><td>
+	<%= start_form_tag ({:action => 'admin_aircraft_report'},{:method=>'get'}) %>
+	Start from: <select name="date[year]">
+	<%= options_for_select (@earliest.created_at.year..Time.new.year).map{|x| x}, Time.new.year %>
+	</select>
+	<select name="date[month]">
+	<%= options_for_select [['January',1],['February',2],['March',3],['April',4],['May',5],['June',6],['July',7],['August',8],['September',9],['October',10],['November',11],['December',12]], Time.new.month%>
+	</select> 
+	Show: <select name="date[range]">
+	<%= options_for_select [['1 month',1],['6 months',6],['1 year',12]],1 %> 
+	</select>
+	 <%= submit_tag 'Show' %>
+	<%= end_form_tag %>
+	</td></tr>
+
+	<tr><td><label>Instructor Report</label></td><td>
+	<%= start_form_tag ({:action => 'admin_instructor_report'},{:method=>'get'}) %>
+	Start from: <select name="date[year]">
+	<%= options_for_select (@earliest.created_at.year..Time.new.year).map{|x| x}, Time.new.year %>
+	</select>
+	<select name="date[month]">
+	<%= options_for_select [['January',1],['February',2],['March',3],['April',4],['May',5],['June',6],['July',7],['August',8],['September',9],['October',10],['November',11],['December',12]], Time.new.month%>
+	</select> 
+	Show: <select name="date[range]">
+	<%= options_for_select [['1 month',1],['6 months',6],['1 year',12]],1 %> 
+	</select>
+	 <%= submit_tag 'Show' %>
+	<%= end_form_tag %>
+	</td></tr>
+
+	<tr><td><label>Pilot Balance Report</label></td><td>
+	<%= start_form_tag ({:action => 'admin_pilot_report'},{:method=>'get'}) %>
+	Start from: <select name="date[year]">
+	<%= options_for_select (@earliest.created_at.year..Time.new.year).map{|x| x}, Time.new.year %>
+	</select>
+	<select name="date[month]">
+	<%= options_for_select [['January',1],['February',2],['March',3],['April',4],['May',5],['June',6],['July',7],['August',8],['September',9],['October',10],['November',11],['December',12]], Time.new.month%>
+	</select> 
+	Show: <select name="date[range]">
+	<%= options_for_select [['1 month',1],['6 months',6],['1 year',12]],1 %> 
+	</select>
+	 <%= submit_tag 'Show' %>
+	(<%= check_box_tag "negative_only", "true"%> <small>Negative Balances Only</small> )
+	<%= end_form_tag %>
+	</td></tr>
+
+	<tr><td><label>Charges Breakdown Report</label></td><td>
+	<%= start_form_tag ({:action => 'admin_charges_report'},{:method=>'get'}) %>
+	Start from: <select name="date[year]">
+	<%= options_for_select (@earliest.created_at.year..Time.new.year).map{|x| x}, Time.new.year %>
+	</select>
+	<select name="date[month]">
+	<%= options_for_select [['January',1],['February',2],['March',3],['April',4],['May',5],['June',6],['July',7],['August',8],['September',9],['October',10],['November',11],['December',12]], Time.new.month%>
+	</select> 
+	Show: <select name="date[range]">
+	<%= options_for_select [['1 month',1],['6 months',6],['1 year',12]],1 %> 
+	</select>
+	 <%= submit_tag 'Show' %>
+	<%= end_form_tag %>
+	</td></tr>
+	</table>
+	<br/>
+<% end %>

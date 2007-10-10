@@ -1,0 +1,30 @@
+<%= render_partial 'report_selector' %>
+<% if not params[:date].nil? %>
+
+<table style="margin:auto">
+<h3 style="text-align:center">Per-pilot flight statistics</h3>
+<th>Pilot</th>
+<th>Total hours flown</th>
+<th>Total charges</th>
+<th>Current balance</th>
+<th>Phone number</th>
+<colgroup span="3"></colgroup>
+<colgroup span="1"></colgroup>
+
+<% i=1 %>
+<% @pilots.each{|pilot|%>
+	<% if params[:negative_only]!=nil and (@balances[pilot.id]||0)<=0 %>
+		<% next %>
+	<% end %>
+<%i = i+1 %>
+<tr class="<%= i.even? ? "even_row" : "odd_row" %>" >
+<td style="text-align:left"><%= pilot.full_name_rev_link %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@hours[pilot.id]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.2f",(@charges[pilot.id]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.2f", (-1*(@balances[pilot.id]||0)).to_f%></td>
+<% numbers = pilot.phone_numbers %>
+<td style="text-align:right"> <%= numbers.empty? ? '' : numbers[0].phone_number %> </td>
+</tr>    
+<% }%>
+</table>
+<% end %>

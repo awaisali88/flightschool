@@ -64,6 +64,9 @@ def new_record
   case request.method
     when :post
       @record = BillingCharge.new(params[:record],current_user)    
+      if params[:record][:type] == 'DepositRecord'
+        @record.charge_amount = -1 * @record.charge_amount
+      end
       if @record.save
         flash[:notice] = "[#{@record.created_at.min}:#{@record.created_at.sec}] Record Created: #{@record.pilot.full_name}, $#{@record.charge_amount}"
         redirect_to :back
@@ -261,7 +264,7 @@ def edit_rates
 end
 
 # admin report displaying aircraft usage and revenue statistics
-def admin_report
+def admin_aircraft_report
   return unless has_permission :can_do_billing
   @page_title = "Billing Report"
   @earliest = FlightRecord.find(:first, :order => "flight_date")
@@ -273,11 +276,84 @@ def admin_report
 
   @solo = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:aircraft,
     :conditions=>['aircraft_id is not NULL and instructor_id is NULL and flight_date>=? and flight_date<?',@start_date,@end_date])
-  @duo = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:aircraft,
+  @dual = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:aircraft,
     :conditions=>['aircraft_id is not NULL and instructor_id is not NULL and flight_date>=? and flight_date<?',@start_date,@end_date])
   @charges = FlightRecord.sum('charge_amount',:group=>:aircraft,
     :conditions=>['aircraft_id is not NULL and flight_date>=? and flight_date<?',@start_date,@end_date])
   @aircrafts = Aircraft.find(:all,:conditions=>['deleted=false'],:order=>'identifier')
+  
+  @solo_total = @solo.inject(0){|s,e| s = s + e[1].to_f}
+  @dual_total = @dual.inject(0){|s,e| s = s + e[1].to_f}
+  @time_total = @solo_total + @dual_total
+  @charges_total = @charges.inject(0){|s,e| s = s + e[1].to_f}  
+end
+
+def admin_instructor_report
+  return unless has_permission :can_do_billing
+  @page_title = "Billing Report"
+  @earliest = FlightRecord.find(:first, :order => "flight_date")
+  if @earliest.nil? or  params[:date].nil? then return end
+
+  @start_date = Time.local(params[:date][:year].to_i, params[:date][:month].to_i)
+  @end_date = @start_date.months_since params[:date][:range].to_i 
+  @page_title = "Billing Report for " + @start_date.strftime("%b %Y") + " to " + @end_date.strftime("%b %Y")
+
+  @flight_hours = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:instructor,
+     :conditions=>['aircraft_id is NOT NULL and flight_date>=? and flight_date<?',@start_date,@end_date])
+  @ground_hours = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:instructor,
+     :conditions=>['aircraft_id is NULL and flight_date>=? and flight_date<?',@start_date,@end_date])
+  @charges = FlightRecord.sum('charge_amount',:group=>:instructor,
+     :conditions=>['flight_date>=? and flight_date<?',@start_date,@end_date])
+  @instructors = Group.users_in_group 'instructor'
+  
+  @flight_hours_total = @flight_hours.inject(0){|s,e| s = s + e[1].to_f}
+  @ground_hours_total = @ground_hours.inject(0){|s,e| s = s + e[1].to_f}
+  @charges_total = @charges.inject(0){|s,e| s = s + e[1].to_f}  
+end
+
+def admin_pilot_report
+  return unless has_permission :can_do_billing
+  @page_title = "Billing Report"
+  @earliest = FlightRecord.find(:first, :order => "flight_date")
+  if @earliest.nil? or  params[:date].nil? then return end
+
+  @start_date = Time.local(params[:date][:year].to_i, params[:date][:month].to_i)
+  @end_date = @start_date.months_since params[:date][:range].to_i 
+  @page_title = "Billing Report for " + @start_date.strftime("%b %Y") + " to " + @end_date.strftime("%b %Y")
+
+  @hours = FlightRecord.sum('hobbs_end-hobbs_start',:group=>:user_id,
+     :conditions=>['(aircraft_id is not NULL or instructor_id is NOT NULL) and created_at>=? and created_at<?',@start_date,@end_date])
+  @charges = BillingCharge.sum('charge_amount',:group=>:user_id,
+     :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @balances = BillingCharge.sum('charge_amount',:group=>:user_id)
+  @pilots = User.find :all, :order=>:last_name
+  
+  @hours_total = @hours.inject(0){|s,e| s = s + e[1].to_f}
+  @charges_total = @charges.inject(0){|s,e| s = s + e[1].to_f}  
+end
+
+def admin_charges_report
+  return unless has_permission :can_do_billing
+  @page_title = "Billing Report"
+  @earliest = FlightRecord.find(:first, :order => "flight_date")
+  if @earliest.nil? or  params[:date].nil? then return end
+
+  @start_date = Time.local(params[:date][:year].to_i, params[:date][:month].to_i)
+  @end_date = @start_date.months_since params[:date][:range].to_i 
+  @page_title = "Billing Report for " + @start_date.strftime("%b %Y") + " to " + @end_date.strftime("%b %Y")
+
+  @deposits = DepositRecord.sum('charge_amount',
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @flights = FlightRecord.sum('charge_amount', 
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @supplies = SuppliesRecord.sum('charge_amount', 
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @corrections = CorrectionRecord.sum('charge_amount', 
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @fees = FeeRecord.sum('charge_amount', 
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
+  @ground = GroundRecord.sum('charge_amount', 
+    :conditions=>['created_at>=? and created_at<?',@start_date,@end_date])
 end
 
 # student report showing billing transactions with running totals
