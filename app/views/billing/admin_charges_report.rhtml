@@ -1,0 +1,32 @@
+<%= render_partial 'report_selector' %>
+
+<% if not params[:date].nil? %>
+
+<table style="margin:auto">
+<h3 style="text-align:center">Charges Breakdown Report</h3>
+<th>Charge type</th>
+<th>Total charges</th>
+<colgroup span="3"></colgroup>
+<colgroup span="1"></colgroup>
+
+<tr>
+	<td style="text-align:left">Deposits </td> 
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", -1*(@deposits||0) %></td>
+</tr><tr>	
+	<td style="text-align:left">Flight Charges </td> 
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", @flights||0 %></td>
+</tr><tr>	
+	<td style="text-align:left">Fee Charges </td> 
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", @fees||0 %></td>
+</tr><tr>	
+	<td style="text-align:left">Ground Fee Charges </td>
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", @ground||0 %></td>
+</tr><tr>	
+	<td style="text-align:left">Supplies Charges </td> 
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", @supplies||0 %></td>
+</tr><tr>	
+	<td style="text-align:left">Corrections </td> 
+	<td style="text-align:right"><%= Kernel.sprintf "%.2f", @corrections||0 %></td>
+</tr>
+</table>
+<% end %>

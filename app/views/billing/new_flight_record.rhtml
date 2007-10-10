@@ -73,34 +73,7 @@ function row_changed(i){
 	}else{
 //	  	setElemClass($("charge_amount"+i),'input_with_error')
 		$("charge_amount"+i).value = ''
-	}
-	
-	// var nonempty_count = 0
-	// if(notNaN(tstart)) nonempty_count++;
-	// if(notNaN(tend)) nonempty_count++;
-	// if(notNaN(hstart)) nonempty_count++;
-	// if(notNaN(hend)) nonempty_count++;
-	// if(nonempty_count > 0 && nonempty_count<4){
-	//   	setElemClass($("tach_start"+i),'input_with_error')
-	//   	setElemClass($("tach_end"+i),'input_with_error')
-	//   	setElemClass($("hobbs_start"+i),'input_with_error')
-	//   	setElemClass($("hobbs_end"+i),'input_with_error')		
-	// }else{
-	// 	setElemClass($("tach_start"+i),'input_normal')
-	//   	setElemClass($("tach_end"+i),'input_normal')
-	//   	setElemClass($("hobbs_start"+i),'input_normal')
-	//   	setElemClass($("hobbs_end"+i),'input_normal')
-	// }
-	
-	// if(!validate_date($('year').value,$('month'+i).value,$('day'+i).value)){
-	// 	setElemClass($("month"+i),'input_with_error')
-	// 	setElemClass($("day"+i),'input_with_error')
-	// }
-	
-	// var pilot_id = parseInt($('pilot_id_'+i).value);
-	// if(isNaN(pilot_id))
-	// 	setElemClass($("pilot"+i),'input_with_error')
-	
+	}	
 }
 
 function addRow(src_iteration){
@@ -119,6 +92,8 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 2); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){nextBox(event,this,2, "day"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(1);
 	el = document.createElement('input');
@@ -126,15 +101,21 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 2); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){nextBox(event,this,2, "pilot"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
+	
 	
 	cell = row.insertCell(2);
 	el = document.createElement('input');
 	el.type = 'text';  el.id = 'pilot' + iteration;	el.size = 24; 
-	el.value=iteration==1?'':$('pilot' + (iteration-1)).value
+//	el.value=iteration==1?'':$('pilot' + (iteration-1)).value
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
+	
 	el = document.createElement('input');
 	el.type = 'hidden';	el.name = 'rec'+iteration+'[user_id]';    el.id = 'pilot_id_' + iteration; 
-	el.value=iteration==1?'':$('pilot_id_' + (iteration-1)).value
+//	el.value=iteration==1?'':$('pilot_id_' + (iteration-1)).value
 	cell.appendChild(el);
 	new Autocompleter.Local('pilot'+iteration, 'pilot_list', pilot_list,
 	 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
@@ -145,17 +126,30 @@ function addRow(src_iteration){
 	cell = row.insertCell(3);
 	el = document.createElement('input');
 	el.type = 'text';    el.id = 'instructor' + iteration;	el.size = 24; 
-	el.value=iteration==1?'':$('instructor' + (iteration-1)).value
+//	el.value=iteration==1?'':$('instructor' + (iteration-1)).value
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
+	
 	el = document.createElement('input');
 	el.type = 'hidden';	el.name = 'rec'+iteration+'[instructor_id]';    el.id = 'instructor_id_' + iteration; 
-	el.value=iteration==1?'':$('instructor_id_' + (iteration-1)).value
+//	el.value=iteration==1?'':$('instructor_id_' + (iteration-1)).value
 	cell.appendChild(el);
+	
 	new Autocompleter.Local('instructor'+iteration, 'instructor_list', instructor_list,
 	 	{fullSearch:false, partialChars:1, selector:autocomplete_selector,
 		afterUpdateElement:function(text,li){
 			$('instructor_id_'+iteration).value = li.id;
 	}});
+	
+	// clear up the instructor_id_ field if there is nothing in the box
+	new Form.Element.Observer('instructor' + iteration, 0.25, function(element, value) {
+		if($('instructor' + iteration).value == '') {
+			$('instructor_id_'+iteration).value = '';
+			$('instructor_rate'+iteration).value = '';
+		}
+	});
+	
 	new Form.Element.Observer('instructor_id_' + iteration, 0.25, function(element, value) {new Ajax.Request('/billing/set_instructor', {asynchronous:true, evalScripts:true, parameters:'instructor=' + escape(value)+'&rec_id='+iteration})});
 	
 		
@@ -166,6 +160,8 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "hobbs_end"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(5);
 	el = document.createElement('input');
@@ -173,6 +169,8 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_start"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(6);
 	el = document.createElement('input');
@@ -181,6 +179,8 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "tach_end"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 
 	cell = row.insertCell(7);
 	el = document.createElement('input');
@@ -188,6 +188,8 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){addDot(this,event); nextBox(event,this,4, "ground_time"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 
 	cell = row.insertCell(8);
 	el = document.createElement('input');
@@ -195,23 +197,31 @@ function addRow(src_iteration){
 	el.setAttribute('maxLength', 4); el.onkeydown = function(){keyDown=true};
 	el.onkeyup=function(event){ nextBox(event,this,4, "aircraft_rate"+iteration);};
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(9);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[aircraft_rate]';    el.id = 'aircraft_rate' + iteration;	el.size = 5; 
 	el.value=iteration==1?'':$('aircraft_rate' + (iteration-1)).value
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(10);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[instructor_rate]';    el.id = 'instructor_rate' + iteration;	el.size = 5;
-   el.value=iteration==1?'':$('instructor_rate' + (iteration-1)).value
+//   el.value=iteration==1?'':$('instructor_rate' + (iteration-1)).value
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 	
 	cell = row.insertCell(11);
 	el = document.createElement('input');
 	el.type = 'text';	el.name = 'rec'+iteration+'[charge_amount]';    el.id = 'charge_amount' + iteration;	el.size = 6;
 	cell.appendChild(el);
+	el.onkeypress = trapKey;
+	el.onfocus = onformfocus; el.onblur = onformblur;
 
 	//add a status row right below
 	var row = table.insertRow(table.rows.length);	
@@ -226,16 +236,62 @@ function addRow(src_iteration){
 	new Form.Element.Observer('hobbs_end' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('tach_start' + iteration, 0.25, function(element, value) { row_changed(iteration);});
 	new Form.Element.Observer('tach_end' + iteration, 0.25, function(element, value) { row_changed(iteration);});
+	new Form.Element.Observer('charge_amount' + iteration, 0.25, function(element, value) { 
+		if(eval(value)>1000)
+			element.style.border = '2px solid orange';
+		else
+			element.style.border = '1px solid black';
+});
+
  	
-	Field.activate($('month'+iteration))	
+	Field.activate($('day'+iteration))	
 }
 
 function trapKey(e){
 	if( e['shiftKey'] && e.keyCode==40){ //Shift+Down Arrow 
 		addRow();
 	}
+	if(e.keyCode == 13) {
+		// check if this is the last row of the table
+		var iteration = ($('record_table').rows.length-1)/2;
+		var rowName = 'rec'+iteration;
+		if(getTarget(e).parentNode.parentNode.id == rowName)
+			addRow();			
+		else {
+			rowName = getTarget(e).parentNode.parentNode.id;
+			Field.activate($('day'+(eval(rowName.substring(3))+1)));
+		}
+		
+		return false;
+	}
 }
-document.onkeydown = trapKey;
+
+function trapKey2(event){
+	if(event.keyCode == 8) {
+		var regRule = /input/i;
+		return (regRule.test(event.target)) ? true : false;
+	}
+}
+
+function getTarget(e){
+	var targ;
+	if (!e) var e = window.event;
+	if (e.target) targ = e.target;
+	else if (e.srcElement) targ = e.srcElement;
+	if (targ.nodeType == 3) // defeat Safari bug
+		targ = targ.parentNode;
+	return targ;	
+}
+
+function onformfocus(e){
+	getTarget(e).style.background = 'lightblue';
+}
+
+function onformblur(e){
+	getTarget(e).style.background = '#ffffee';
+}
+
+document.onkeypress = trapKey2;
 
 </script>
 
@@ -267,7 +323,7 @@ new Autocompleter.Local('aircraft', 'aircraft_list', aircraft_list,
 	</tr>
 </table>
 <small><a href="#" onclick="addRow();">Add another row</a>
-	(Alternatively, press <span style="color:green;font-weight:bold">[Shift]+[Down Arrow]</span>, which is a keyboard shortcut for adding a new row)</small>
+	(Alternatively, press <span style="color:green;font-weight:bold">[Enter]</span>, which is a keyboard shortcut for adding a new row)</small>
 
 <br/>	
 <br/>

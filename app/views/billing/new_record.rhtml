@@ -25,20 +25,33 @@ new Autocompleter.Local('pilot', 'pilot_list', <%=user_array @users%>,
 
 <tr>
 	<td colspan="2" >
-		<label style="color:green">Amount Charged </label> <%= text_field_tag('charge',"0.00",:size=>'6',:id=>"charge",:class=>'billing_input')%> + 
+		<label id="charge_label" style="color:green"> </label> <%= text_field_tag('charge',"0.00",:size=>'6',:id=>"charge",:class=>'billing_input')%> + 
  		<%= text_field_tag('tax',"0.00",:size=>'4',:id=>'tax',:class=>'billing_input')%>(Tax) =  <input type="text" name="record[charge_amount]" value="" id="record_charge_amount" size="6" readonly="readonly" />
 	   <%= submit_tag 'Add Record', :id=>'submit', :style=>'margin-left:100px;'%> 
 	</td>
 </tr>
 
 <tr>
-	<td colspan="2"><span style="font-style:italic;font-size:10pt;">Amount Charged is always the amount SUBTRACTED from account balance.<br/> Therefore Balance Deposits must be entered as negative values.</span></td>
+<!--	<td colspan="2"><span style="font-style:italic;font-size:10pt;">Amount Charged is always the amount SUBTRACTED from account balance.<br/> Therefore Balance Deposits must be entered as negative values.</span></td> -->
 </tr>
 
 </table>
 <%= end_form_tag %>
 
 <script type="text/javascript">
+	function setDescriptions(){
+		if($F('record[type]') == 'DepositRecord')
+			$('charge_label').innerHTML = "Amount Credited: ";
+		else
+			$('charge_label').innerHTML = "Amount Charged: ";
+	}
+
+  new Form.Element.Observer('record[type]',0.1,function(){
+		setDescriptions();
+	});
+
+	setDescriptions();
+	
   new Form.Element.Observer('charge',0.1,function(){
 		var val;
 		if($F('record[type]') == 'SuppliesRecord'){

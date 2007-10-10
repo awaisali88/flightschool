@@ -1,0 +1,35 @@
+<%= render_partial 'report_selector' %>
+
+<% if not params[:date].nil? %>
+
+<table style="margin:auto">
+<h3 style="text-align:center">Instructor flight statistics</h3>
+<th>Instructor</th>
+<th>Total hours flown</th>
+<th>Total ground hours</th>
+<th>Total hours</th>
+<th>Total charges</th>
+<colgroup span="3"></colgroup>
+<colgroup span="1"></colgroup>
+
+<% i=1 %>
+<% @instructors.each{|inst|%>
+<%i = i+1 %>
+<tr class="<%= i.even? ? "even_row" : "odd_row" %>" >
+<td style="text-align:left"><%= inst.full_name %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@flight_hours[inst]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",(@ground_hours[inst]||0).to_f %></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.1f",
+ 	(@flight_hours[inst]||0).to_f + (@ground_hours[inst]||0).to_f%></td>
+<td style="text-align:right"><%= Kernel.sprintf "%.2f",(@charges[inst]||0).to_f %></td>
+</tr>    
+<% }%>
+<tr>
+	<th>Total</th>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @flight_hours_total %></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @ground_hours_total %></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @flight_hours_total + @ground_hours_total%></td>
+	<th style="text-align:right"> <%= Kernel.sprintf "%.1f", @charges_total %></td>
+</tr>
+</table>
+<% end %>
